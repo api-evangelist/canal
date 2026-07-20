@@ -1,0 +1,27 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/canal-openapi-original.yml
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: basicAuth
+  type: http
+  scheme: basic
+  sources:
+  - openapi/canal-openapi-original.yml
+- name: platformAppId
+  type: apiKey
+  in: header
+  parameter: X-CANAL-APP-ID
+  sources:
+  - openapi/canal-openapi-original.yml
+- name: platformAppToken
+  type: apiKey
+  in: header
+  parameter: X-CANAL-APP-TOKEN
+  sources:
+  - openapi/canal-openapi-original.yml
