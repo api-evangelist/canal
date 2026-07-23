@@ -1,0 +1,843 @@
+openapi: 3.0.3
+info:
+  title: Rokt Catalog csv variants API
+  version: 1.0.1
+  description: Integrate with Rokt Catalog
+servers:
+- url: https://api.shopcanal.com/platform
+  description: Rokt Catalog Storefront Public API
+tags:
+- name: variants
+paths:
+  /variants/:
+    get:
+      operationId: variants_list
+      description: '
+
+        **[Supplier Only]** Retrieve a paginated list of **all** product variants associated with **all** products owned by your Supplier account.
+
+
+        This endpoint provides a flat list of variant details, independent of their parent products. Use this if you need to query or manage variants across your entire catalog.
+
+
+        Results are returned using cursor-based pagination (`PlatformPagination`). Available ordering fields include `created_at`, `updated_at`, `price`, and `compare_at_price`. The default order is `-created_at`.
+
+
+        '
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      tags:
+      - variants
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVariantList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    post:
+      operationId: variants_create
+      description: '
+
+        **[Supplier Only]** Add a new variant to an existing product within your Rokt Catalog Supplier account.
+
+
+        The request body must conform to the `CreateVariantSerializer` structure, requiring the `product_id` (UUID) of the parent product and the full details of the new variant (including `price`, `sku`, `inventory_quantity`, `option1`, etc.).
+
+
+        Upon successful creation, the new variant is added to the specified product. By default, it will be assigned the next available `position` (typically appearing last in the variant list, unless explicitly reordered later using the `/products/{product_id}/reorder_variants/` endpoint).
+
+
+        **Synchronization:** This addition is automatically propagated **asynchronously** to connected Storefronts that are selling the parent product.
+
+
+        A successful creation returns `201 Created` with the full details of the **parent product** (`ProductSerializer`), now including the newly added variant and its assigned Catalog ID (UUID).
+
+
+        '
+      tags:
+      - variants
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVariant'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateVariant'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateVariant'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /variants/{id}/:
+    get:
+      operationId: variants_retrieve
+      description: '
+
+        **[Supplier Only]** Retrieve the full details for a specific product variant, identified by its Rokt Catalog `ID` (UUID) provided in the URL path.
+
+
+        This endpoint returns data only for variants that belong to products owned by your Supplier account.
+
+
+        The response (`VariantSerializer`) includes all attributes of the variant, such as price, SKU, inventory, options, weight, timestamps, and its parent product ID.
+
+
+        If the provided variant `ID` is invalid or belongs to a product owned by another shop, a `404 Not Found` error is returned.
+
+
+        '
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - variants
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Variant'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    put:
+      operationId: variants_update
+      description: '
+
+        **[Supplier Only]** Update attributes of a specific product variant, identified by its Rokt Catalog `ID` (UUID) in the URL path.
+
+
+        Provide the fields you wish to change in the request body using the `VariantSerializer` structure (partial updates are allowed). Common updatable fields include `price`, `compare_at_price`, `sku`, `inventory_quantity`, `option1`, `option2`, `option3`, `weight`, `weight_unit`, etc.
+
+
+        **Synchronization:** Changes to critical attributes like price and inventory are automatically propagated to connected Storefronts that are selling this variant. This synchronization occurs **asynchronously**.
+
+
+        **Pricing Update:** When updating `price` or `compare_at_price`, the system also updates the associated variant listing''s default price, considering the shop''s feature flags for sale price syncing.
+
+
+        A successful update returns `200 OK` with the full details of the **parent product** (`ProductSerializer`), reflecting the changes made to the specific variant.
+
+
+        '
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - variants
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Variant'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Variant'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Variant'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    patch:
+      operationId: variants_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - variants
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVariant'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedVariant'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedVariant'
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Variant'
+          description: ''
+    delete:
+      operationId: variants_destroy
+      description: '
+
+        **[Supplier Only]** Permanently remove a specific product variant, identified by its Rokt Catalog `ID` (UUID) in the URL path, from its parent product.
+
+
+        **Warning:** This action is **irreversible**.
+
+
+        **Constraint:** You **cannot** delete the last remaining variant of a product using this endpoint. If you need to remove the product entirely, use the `/products/{product_id}/` delete endpoint instead.
+
+
+        **Synchronization:** Deleting a variant automatically triggers an **asynchronous** update (emitting a `PRODUCT_UPDATE` webhook) to propagate this change to connected Storefronts, effectively removing the variant from their listings.
+
+
+        **Position Update:** The `position` attribute of the remaining variants on the parent product will be automatically recalculated and updated to maintain a contiguous sequence.
+
+
+        A successful deletion returns `200 OK` with the full details of the **parent product** (`ProductSerializer`), reflecting the variant''s removal and the updated positions of the remaining variants.
+
+
+        '
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - variants
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+components:
+  schemas:
+    PaginatedVariantList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Variant'
+    PatchedVariant:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        shop:
+          allOf:
+          - $ref: '#/components/schemas/Shop'
+          readOnly: true
+        inventory_policy:
+          type: string
+          nullable: true
+          maxLength: 123
+        inventory_quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        inventory_item_cost:
+          type: number
+          format: double
+        option1:
+          type: string
+          nullable: true
+          maxLength: 255
+        option2:
+          type: string
+          nullable: true
+          maxLength: 256
+        option3:
+          type: string
+          nullable: true
+          maxLength: 257
+        position:
+          type: integer
+          readOnly: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          description: The price of the variant to be sold at.
+        compare_at_price:
+          type: string
+          nullable: true
+          maxLength: 128
+        origin_supplier_currency:
+          type: string
+          nullable: true
+          readOnly: true
+        title:
+          type: string
+        sku:
+          type: string
+          nullable: true
+          readOnly: true
+        upc:
+          type: string
+          nullable: true
+          maxLength: 253
+        grams:
+          type: number
+          format: double
+          nullable: true
+        weight:
+          type: number
+          format: double
+          nullable: true
+        weight_unit:
+          type: string
+          nullable: true
+          maxLength: 3
+        pause_selling:
+          type: boolean
+        origin_supplier_id:
+          type: string
+          nullable: true
+          readOnly: true
+        origin_supplier_name:
+          type: string
+          nullable: true
+          readOnly: true
+        available_for_ordering:
+          type: boolean
+          readOnly: true
+        supplier_sku:
+          type: string
+          nullable: true
+          readOnly: true
+        is_exclusive_offer:
+          type: boolean
+          description: An exclusive offer is a variant that is discounted lower than the variant's actual price on the supplier's website.
+          readOnly: true
+        sup_price:
+          type: string
+          nullable: true
+          description: The connected supplier variant's price, sourced from the supplier directly.
+          readOnly: true
+        sup_compare_at_price:
+          type: string
+          nullable: true
+          description: The connected supplier variant's compare-at price, sourced from the supplier directly.
+          readOnly: true
+    CreateVariant:
+      type: object
+      properties:
+        title:
+          type: string
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          description: The price of the variant to be sold at.
+        compare_at_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          nullable: true
+          description: The original price of the product from before the sale price. Should be greater than "price". If you elect to not allow sale price passthrough, Connected Storefronts will sell items at this price.
+        inventory_policy:
+          $ref: '#/components/schemas/InventoryPolicyEnum'
+        inventory_quantity:
+          type: integer
+        option1:
+          type: string
+        option2:
+          type: string
+        option3:
+          type: string
+        sku:
+          type: string
+        position:
+          type: integer
+        image_src:
+          type: string
+        weight:
+          type: number
+          format: double
+        weight_unit:
+          type: string
+        product_id:
+          type: string
+          format: uuid
+      required:
+      - inventory_policy
+      - inventory_quantity
+      - option1
+      - price
+      - product_id
+    InventoryPolicyEnum:
+      enum:
+      - continue
+      - deny
+      type: string
+      description: '* `continue` - continue
+
+        * `deny` - deny'
+    Image:
+      type: object
+      properties:
+        id:
+          type: string
+        position:
+          type: integer
+        src:
+          type: string
+          format: uri
+        display_src:
+          type: string
+          format: uri
+          nullable: true
+        width:
+          type: integer
+        height:
+          type: integer
+        canal_variant_ids:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        variant_ids:
+          type: array
+          items:
+            type: string
+        origin_supplier_image_id:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+      - canal_variant_ids
+      - src
+    Variant:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        shop:
+          allOf:
+          - $ref: '#/components/schemas/Shop'
+          readOnly: true
+        inventory_policy:
+          type: string
+          nullable: true
+          maxLength: 123
+        inventory_quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        inventory_item_cost:
+          type: number
+          format: double
+        option1:
+          type: string
+          nullable: true
+          maxLength: 255
+        option2:
+          type: string
+          nullable: true
+          maxLength: 256
+        option3:
+          type: string
+          nullable: true
+          maxLength: 257
+        position:
+          type: integer
+          readOnly: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          description: The price of the variant to be sold at.
+        compare_at_price:
+          type: string
+          nullable: true
+          maxLength: 128
+        origin_supplier_currency:
+          type: string
+          nullable: true
+          readOnly: true
+        title:
+          type: string
+        sku:
+          type: string
+          nullable: true
+          readOnly: true
+        upc:
+          type: string
+          nullable: true
+          maxLength: 253
+        grams:
+          type: number
+          format: double
+          nullable: true
+        weight:
+          type: number
+          format: double
+          nullable: true
+        weight_unit:
+          type: string
+          nullable: true
+          maxLength: 3
+        pause_selling:
+          type: boolean
+        origin_supplier_id:
+          type: string
+          nullable: true
+          readOnly: true
+        origin_supplier_name:
+          type: string
+          nullable: true
+          readOnly: true
+        available_for_ordering:
+          type: boolean
+          readOnly: true
+        supplier_sku:
+          type: string
+          nullable: true
+          readOnly: true
+        is_exclusive_offer:
+          type: boolean
+          description: An exclusive offer is a variant that is discounted lower than the variant's actual price on the supplier's website.
+          readOnly: true
+        sup_price:
+          type: string
+          nullable: true
+          description: The connected supplier variant's price, sourced from the supplier directly.
+          readOnly: true
+        sup_compare_at_price:
+          type: string
+          nullable: true
+          description: The connected supplier variant's compare-at price, sourced from the supplier directly.
+          readOnly: true
+      required:
+      - available_for_ordering
+      - id
+      - is_exclusive_offer
+      - origin_supplier_currency
+      - origin_supplier_id
+      - origin_supplier_name
+      - position
+      - price
+      - shop
+      - sku
+      - sup_compare_at_price
+      - sup_price
+      - supplier_sku
+      - title
+    Shop:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type: string
+          nullable: true
+          readOnly: true
+        phone:
+          type: string
+          nullable: true
+          maxLength: 128
+        name:
+          type: string
+          maxLength: 129
+        description:
+          type: string
+          nullable: true
+          maxLength: 6144
+        myshopify_domain:
+          type: string
+          maxLength: 128
+        province:
+          type: string
+          nullable: true
+          maxLength: 122
+        country:
+          type: string
+          maxLength: 64
+        domain:
+          type: string
+          nullable: true
+          maxLength: 128
+        display_domain:
+          type: string
+          nullable: true
+          readOnly: true
+        privacy_policy_url:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 500
+        terms_of_service_url:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 500
+      required:
+      - country
+      - display_domain
+      - email
+      - id
+      - myshopify_domain
+      - name
+    Status2eaEnum:
+      enum:
+      - active
+      - draft
+      - archived
+      - unlisted
+      type: string
+      description: '* `active` - active
+
+        * `draft` - draft
+
+        * `archived` - archived
+
+        * `unlisted` - unlisted'
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        shop:
+          allOf:
+          - $ref: '#/components/schemas/Shop'
+          readOnly: true
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/Variant'
+          readOnly: true
+        body_html:
+          type: string
+          nullable: true
+          maxLength: 60000
+        handle:
+          type: string
+          nullable: true
+          maxLength: 258
+        image_src:
+          type: string
+          nullable: true
+          maxLength: 1043
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+        options:
+          nullable: true
+        product_type:
+          type: string
+          nullable: true
+          maxLength: 1044
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        published_at:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          $ref: '#/components/schemas/Status2eaEnum'
+        title:
+          type: string
+          maxLength: 1029
+        vendor:
+          type: string
+          nullable: true
+          maxLength: 227
+        tags:
+          type: string
+          nullable: true
+          maxLength: 63750
+        permalink:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 2000
+        number_of_reviews:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        star_rating:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - id
+      - shop
+      - title
+      - updated_at
+      - variants
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    platformAppId:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-ID
+    platformAppToken:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-TOKEN

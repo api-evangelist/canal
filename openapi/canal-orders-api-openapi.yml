@@ -1,0 +1,1470 @@
+openapi: 3.0.3
+info:
+  title: Rokt Catalog csv orders API
+  version: 1.0.1
+  description: Integrate with Rokt Catalog
+servers:
+- url: https://api.shopcanal.com/platform
+  description: Rokt Catalog Storefront Public API
+tags:
+- name: orders
+paths:
+  /orders/:
+    get:
+      operationId: orders_list
+      description: '
+
+        **[Storefront Only]** Retrieve a paginated list of orders recorded in Rokt Catalog that originated from your Storefront and contain items sourced from Catalog Suppliers.
+
+
+        This provides your Storefront''s view of these cross-shop orders.
+
+
+        Results are returned using cursor-based pagination (`PlatformPagination`). Available ordering fields are `created_at` and `updated_at`. The default order is `-created_at`.
+
+
+        '
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      tags:
+      - orders
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrderList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    post:
+      operationId: orders_create
+      description: "\n**[Storefront Only]** Record a new customer order placed on your external platform (e.g., your Shopify store) that contains items sourced from Rokt Catalog Suppliers.\n\nThe request body (`OrderCreateSerializer`) must include:\n\n`order_name` (your unique identifier for this order), `currency`, `email`, `customer_locale`, `shipping_address` (full address object), `billing_address` (optional), and a list of `line_items`.\n\nEach object in `line_items` requires the Catalog `variant_id` (UUID of the *Storefront's* variant record, which links to the Supplier variant) and `quantity`.\n\n**Process:**\n\n1. **Validation:** Checks if input variants are valid, active, and listed by the supplier. If variants are paused or unlisted, returns `422 Unprocessable Entity`. Basic format validation returns `400 Bad Request`.\n\n2. **Locking:** Acquires a temporary lock based on customer name/phone to prevent duplicate order creation during concurrent requests. If lock fails, returns `503 Service Unavailable`.\n\n3. **Storefront Order Creation:** Creates the primary order record in Catalog representing the Storefront's view of the order.\n\n4. **Supplier Order Dispatch:** Based on the Storefront's `order_forwarding_delay` setting:\n\n   - If delay > 0: Schedules an **asynchronous** task to forward order details to relevant Suppliers after the delay. Returns `202 Accepted` with the created Storefront order data.\n\n   - If delay == 0: **Synchronously** attempts to dispatch orders to Suppliers. If successful, returns `201 Created` with Storefront order data. If dispatch fails (e.g., Supplier API issue), attempts to cancel any partially created Supplier orders and raises an error (likely resulting in a `500 Internal Server Error` response).\n\n**Error Handling:** Catches various exceptions, including dispatch errors, database connection issues, and general exceptions, logging them and potentially returning `500 Internal Server Error`.\n\n"
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /orders/{id}/:
+    get:
+      operationId: orders_retrieve
+      description: '
+
+        **[Storefront Only]** Retrieve the full details for a specific Rokt Catalog order, identified by its Catalog `ID` (UUID) in the URL path.
+
+
+        This endpoint provides the Storefront''s perspective on the order. Access is restricted to orders associated with the authenticated Storefront (`request.shop`).
+
+
+        The response (`OrderSerializer`) includes comprehensive information: customer details (`email`, `customer_locale`), `shipping_address`, `billing_address`, `currency`, `order_name`, `line_items` (with Catalog variant IDs and quantities), overall `fulfillment_status`, `financial_status`, `cancelled_at` timestamp (if applicable), calculated totals (`total_price`, `subtotal_price`, etc.), and potentially links or references to the corresponding connected orders created on the Supplier side.
+
+
+        If the provided order `ID` is invalid or the order does not belong to your Storefront, a `404 Not Found` error is returned.
+
+
+        '
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - orders
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /orders/{id}/cancel/:
+    post:
+      operationId: orders_cancel_create
+      description: '
+
+        **[Storefront Only]** Cancel a Rokt Catalog order associated with your Storefront.
+
+
+        Identify the order to be cancelled by its Catalog `ID` (UUID) provided in the URL path.
+
+
+        **Process:**
+
+
+        1. **Update Storefront Order:** Sets the `cancelled_at` field on the Storefront''s order record in Catalog to the current timestamp.
+
+
+        2. **Cancel Supplier Orders:** Triggers an **asynchronous** operation. This attempts to cancel the corresponding order(s) that were previously dispatched to the relevant Supplier(s)'' external platforms (e.g., calling the Shopify API to cancel the order on the Supplier''s store).
+
+
+        3. **Webhook:** Emits an `ORDER_CANCEL` webhook event containing the details of the cancelled Storefront order.
+
+
+        **Permissions:** Requires valid platform integration settings for the Storefront. If settings are missing, returns `403 Forbidden`.
+
+
+        A successful cancellation returns `200 OK` with the updated Storefront order details (`OrderSerializer`), including the `cancelled_at` timestamp.
+
+
+        '
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - orders
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /orders/create_or_get/:
+    post:
+      operationId: orders_create_or_get_create
+      description: '
+
+        **[Storefront Only]** Safely create or retrieve a Catalog order using your Storefront''s unique order identifier (`order_name`) to ensure idempotency.
+
+
+        **Behavior:**
+
+
+        1. **Check Existing:** The system first queries for an existing active (non-cancelled) order associated with your shop that matches the provided `order_name`.
+
+
+        2. **Return Existing:** If exactly one such active order is found, the endpoint immediately returns `200 OK` with the details of that existing order (`OrderSerializer`). This prevents duplicate creation.
+
+
+        3. **Handle Duplicates:** If multiple active orders are found with the same `order_name` (which indicates a potential issue), it returns a `400 Bad Request` validation error.
+
+
+        4. **Create New:** If no active order with the given `order_name` is found, the endpoint proceeds to call the standard `create` method (the `/orders/` POST endpoint logic) using the **entire request payload**.
+
+
+        **Payload Requirement:** Even though this endpoint might retrieve an existing order, you **must** provide the full order creation payload (identical to the standard `/orders/` create request) in the request body. This payload is used only if a new order needs to be created.
+
+
+        **Use Case:** This endpoint is ideal for scenarios where order creation requests might be retried (e.g., due to network issues). It guarantees that submitting the same request multiple times will result in only one Catalog order being created.
+
+
+        **Responses & Errors:** If creating a new order, the responses (`201 Created`, `202 Accepted`) and potential errors (`400`, `422`, `500`, `503`) are identical to those of the standard `create` endpoint.
+
+
+        '
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /orders/v1/create-and-charge/:
+    post:
+      operationId: orders_v1_create_and_charge_create
+      description: '
+
+        **[Storefront Only]** Create a new order with immediate payment processing.
+
+
+
+        This endpoint combines order creation and payment processing in a single request.
+
+
+        The request body follows the same structure as the standard order creation endpoint, with additional payment fields.
+
+
+        **Process:**
+
+
+        1. **Validation:** Checks if input variants are valid, active, and listed by the supplier. If variants are paused or unlisted, returns `422 Unprocessable Entity`. Basic format validation returns `400 Bad Request`.
+
+
+        2. **Payment Processing:** Processes the payment with a third party payment service provider.
+
+
+        3. **Storefront Order Creation:** Creates the primary order record in Catalog representing the Storefront''s view of the order.
+
+
+        4. **Supplier Order Dispatch:** Schedules an **asynchronous** task to forward order details to relevant Suppliers. Returns `202 Accepted` with the created Storefront order data.
+
+
+        **Responses & Errors:**
+
+
+        **Response:** Returns the created order details on success, or payment/validation errors on failure.
+
+
+        **Error Handling:** Catches various exceptions, including dispatch errors, database connection issues, and general exceptions, logging them and potentially returning `500 Internal Server Error`. If payment fails, will not continue with order creation.
+
+
+        '
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreateAndCharge'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderCreateAndCharge'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderCreateAndCharge'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderCreateAndChargeV1Response'
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderCreateAndChargeV1Response'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /orders/v1/initialize-order/:
+    post:
+      operationId: orders_v1_initialize_order_create
+      description: '
+
+        **[Storefront Only]** Create a new order and receive a Stripe PaymentIntent client secret for frontend payment confirmation.
+
+
+        This endpoint allows Storefronts to initiate order creation and receive a Stripe `client_secret`, which must be passed to the Stripe frontend payment element (such as Stripe Elements) to collect payment authorization from the customer.
+
+
+        The request payload mirrors the standard post purchase upsell order creation structure, but payment details are not required.
+
+
+        **Process:**
+
+
+        1. **Validation:** Ensures input variants are valid, active, and listed by the supplier. If variants are paused, unlisted, or invalid, returns `422 Unprocessable Entity`. If the input data format is invalid, returns `400 Bad Request`.
+
+
+        2. **Stripe PaymentIntent Creation:** Generates a Stripe PaymentIntent and returns its `client_secret`. The client secret must be used with the Stripe frontend integration to complete payment.
+
+
+        3. **Order Creation:** Creates the primary Storefront order record in Catalog, associated with the PaymentIntent.
+
+
+        4. **Supplier Dispatch:** After payment confirmation from the frontend, supplier orders are asynchronously dispatched.
+
+
+        **Responses & Errors:**
+
+
+        **Response:** On success, returns order details and the Stripe `client_secret` for the PaymentIntent. The frontend must use this secret to proceed with payment authorization.
+
+
+        **Error Handling:** Returns specific errors for failed validation, payment intent creation issues, or unexpected exceptions (such as dispatch or database failures). If payment intent creation fails, order creation will not proceed.
+
+
+        '
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostPurchaseOrderCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PostPurchaseOrderCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PostPurchaseOrderCreate'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderInitializeAndChargeResponse'
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderInitializeAndChargeResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+components:
+  schemas:
+    PaymentDetailsResponse:
+      type: object
+      properties:
+        payment_status:
+          type: string
+        payment_confirmation_id:
+          type: string
+        statement_descriptor:
+          type: string
+      required:
+      - payment_status
+    PartialAddressPaymentDetails:
+      type: object
+      properties:
+        billing_address:
+          $ref: '#/components/schemas/TaxAndShippingAddress'
+    Fulfillment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        order_id:
+          type: string
+          format: uuid
+        shop:
+          $ref: '#/components/schemas/Shop'
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItemRead'
+        service:
+          type: string
+          nullable: true
+          maxLength: 258
+        shipment_status:
+          type: string
+          nullable: true
+          maxLength: 32
+        status:
+          type: string
+          nullable: true
+          maxLength: 32
+        tracking_company:
+          type: string
+          nullable: true
+          maxLength: 257
+        tracking_numbers:
+          type: array
+          items:
+            type: string
+            maxLength: 128
+          nullable: true
+        tracking_urls:
+          type: array
+          items:
+            type: string
+            maxLength: 256
+          nullable: true
+      required:
+      - id
+      - line_items
+      - name
+      - order_id
+      - shop
+    CreateOrderLineItem:
+      type: object
+      properties:
+        variant_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+      required:
+      - quantity
+      - variant_id
+    RefundLineItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        line_item:
+          $ref: '#/components/schemas/LineItemRead'
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        subtotal:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          nullable: true
+      required:
+      - id
+      - line_item
+      - quantity
+    TokenizedCardResponse:
+      type: object
+      properties:
+        payment_reference_id:
+          type: string
+      required:
+      - payment_reference_id
+    OrderInitializeAndChargePaymentDetailsResponse:
+      type: object
+      properties:
+        payment_status:
+          type: string
+        payment_confirmation_id:
+          type: string
+        statement_descriptor:
+          type: string
+        client_secret:
+          type: string
+        line_item_total_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+        shipping_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+        tax_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+        currency:
+          type: string
+        brand_account_id:
+          type: string
+      required:
+      - brand_account_id
+      - client_secret
+      - currency
+      - line_item_total_amount
+      - payment_status
+      - shipping_amount
+      - statement_descriptor
+      - tax_amount
+    ReturnReasonEnum:
+      enum:
+      - color
+      - defective
+      - not_as_described
+      - other
+      - size_too_large
+      - size_too_small
+      - style
+      - unknown
+      - unwanted
+      - wrong_item
+      type: string
+      description: '* `color` - color
+
+        * `defective` - defective
+
+        * `not_as_described` - not_as_described
+
+        * `other` - other
+
+        * `size_too_large` - size_too_large
+
+        * `size_too_small` - size_too_small
+
+        * `style` - style
+
+        * `unknown` - unknown
+
+        * `unwanted` - unwanted
+
+        * `wrong_item` - wrong_item'
+    Shop:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type: string
+          nullable: true
+          readOnly: true
+        phone:
+          type: string
+          nullable: true
+          maxLength: 128
+        name:
+          type: string
+          maxLength: 129
+        description:
+          type: string
+          nullable: true
+          maxLength: 6144
+        myshopify_domain:
+          type: string
+          maxLength: 128
+        province:
+          type: string
+          nullable: true
+          maxLength: 122
+        country:
+          type: string
+          maxLength: 64
+        domain:
+          type: string
+          nullable: true
+          maxLength: 128
+        display_domain:
+          type: string
+          nullable: true
+          readOnly: true
+        privacy_policy_url:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 500
+        terms_of_service_url:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 500
+      required:
+      - country
+      - display_domain
+      - email
+      - id
+      - myshopify_domain
+      - name
+    OrderCreate:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        customer:
+          $ref: '#/components/schemas/OrderCreateCustomer'
+        order_name:
+          type: string
+        total_tax:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+        note_attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderNoteAttribute'
+          description: 'This field is useful for passing customization options for Supplier products that support customization (gift messages, logos, custom text).
+
+            Example: {"name": "Variant 1 Custom Text", "value": "<custom text value>"}'
+        shipping_address:
+          $ref: '#/components/schemas/Address'
+        billing_address:
+          $ref: '#/components/schemas/Address'
+      required:
+      - line_items
+      - shipping_address
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type: string
+          format: email
+          nullable: true
+          title: Email address
+          maxLength: 403
+        first_name:
+          type: string
+          nullable: true
+          maxLength: 255
+        last_name:
+          type: string
+          nullable: true
+          maxLength: 256
+        orders_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+      required:
+      - id
+    OrderNoteAttribute:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+      required:
+      - name
+      - value
+    OrderCreateAndChargeV1Response:
+      type: object
+      properties:
+        confirmation_details:
+          $ref: '#/components/schemas/ConfirmationDetails'
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        customer:
+          $ref: '#/components/schemas/OrderCreateCustomer'
+        shipping_address:
+          $ref: '#/components/schemas/Address'
+        display_metadata:
+          type: object
+          additionalProperties: {}
+        payment_details:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/PaymentDetailsResponse'
+      required:
+      - confirmation_details
+      - line_items
+    ConfirmationDetails:
+      type: object
+      properties:
+        confirmation_number:
+          type: string
+        catalog_order_id:
+          type: string
+        order_id:
+          type: string
+        order_date:
+          type: string
+          format: date-time
+        order_status:
+          type: string
+        fulfillment_status:
+          type: string
+        tracking_info:
+          type: array
+          items:
+            type: string
+      required:
+      - confirmation_number
+      - order_date
+      - order_id
+    TaxAndShippingAddress:
+      type: object
+      description: Address serializer for tax and shipping calculations where address1 and name are optional
+      properties:
+        name:
+          type: string
+        address1:
+          type: string
+        address2:
+          type: string
+        city:
+          type: string
+        province:
+          type: string
+        province_code:
+          type: string
+        country:
+          type: string
+        country_code:
+          type: string
+        zip:
+          type: string
+        phone:
+          type: string
+      required:
+      - city
+      - country
+      - province
+      - zip
+    PostPurchaseOrderCreate:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        customer:
+          $ref: '#/components/schemas/OrderCreateCustomer'
+        order_name:
+          type: string
+        total_tax:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+        note_attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderNoteAttribute'
+          description: 'This field is useful for passing customization options for Supplier products that support customization (gift messages, logos, custom text).
+
+            Example: {"name": "Variant 1 Custom Text", "value": "<custom text value>"}'
+        partner_name:
+          type: string
+        shipping_details:
+          $ref: '#/components/schemas/OrderShippingDetails'
+        ppu_transaction_id:
+          type: string
+          description: The Post Purchase Upsell session id for the tax calculation. This matches the tax calculation request.
+        payment_details:
+          allOf:
+          - $ref: '#/components/schemas/PartialAddressPaymentDetails'
+          description: This field is the response from the vault. It is used to charge the customer.
+      required:
+      - line_items
+      - ppu_transaction_id
+      - shipping_details
+    Return:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        order:
+          type: string
+          format: uuid
+        return_line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReturnLineItem'
+        status:
+          $ref: '#/components/schemas/Status602Enum'
+        name:
+          type: string
+          nullable: true
+          maxLength: 501
+        total_return_line_items:
+          type: integer
+          maximum: 32767
+          minimum: -32768
+          description: The sum of all return line item quantities for the return.
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        tracking:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReverseDelivery'
+        rma:
+          type: string
+          nullable: true
+          description: '"Return merchandise authorization" -- used as reference number for SK to SUP comms'
+          maxLength: 501
+      required:
+      - created_at
+      - id
+      - order
+      - return_line_items
+      - total_return_line_items
+      - tracking
+      - updated_at
+    ReverseDelivery:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        carrier_name:
+          type: string
+          nullable: true
+          maxLength: 100
+        tracking_number:
+          type: string
+          nullable: true
+          maxLength: 100
+        tracking_url:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+        shipping_label_file_url:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 1279
+      required:
+      - id
+    Refund:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        order_id:
+          type: string
+        amount:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        note:
+          type: string
+          nullable: true
+          maxLength: 1025
+        duties:
+          nullable: true
+        restock:
+          type: boolean
+          nullable: true
+        processed_at:
+          type: string
+          format: date-time
+        refund_line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefundLineItem'
+        shipping_refund_amount:
+          type: string
+          nullable: true
+          maxLength: 128
+        failed_to_create_refund_line_items:
+          type: string
+          readOnly: true
+      required:
+      - amount
+      - failed_to_create_refund_line_items
+      - id
+      - order_id
+      - processed_at
+      - refund_line_items
+    OrderInitializeAndChargeResponse:
+      type: object
+      properties:
+        confirmation_details:
+          $ref: '#/components/schemas/ConfirmationDetails'
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        customer:
+          $ref: '#/components/schemas/OrderCreateCustomer'
+        shipping_address:
+          $ref: '#/components/schemas/Address'
+        display_metadata:
+          type: object
+          additionalProperties: {}
+        payment_details:
+          $ref: '#/components/schemas/OrderInitializeAndChargePaymentDetailsResponse'
+      required:
+      - confirmation_details
+      - line_items
+      - payment_details
+    PaginatedOrderList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+    LineItemRead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        variant_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        fulfillable_quantity:
+          type: integer
+        price:
+          type: number
+          format: double
+        requires_shipping:
+          type: boolean
+        title:
+          type: string
+        sku:
+          type: string
+      required:
+      - fulfillable_quantity
+      - id
+      - price
+      - quantity
+      - variant_id
+    ReturnLineItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        line_item_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        customer_note:
+          type: string
+          nullable: true
+          maxLength: 300
+        return_reason:
+          $ref: '#/components/schemas/ReturnReasonEnum'
+        return_reason_note:
+          type: string
+          nullable: true
+          maxLength: 255
+      required:
+      - id
+      - line_item_id
+      - quantity
+    Status602Enum:
+      enum:
+      - canceled
+      - closed
+      - declined
+      - open
+      - requested
+      type: string
+      description: '* `canceled` - canceled
+
+        * `closed` - closed
+
+        * `declined` - declined
+
+        * `open` - open
+
+        * `requested` - requested'
+    PaymentDetailsWithTokenizedCardResponse:
+      type: object
+      properties:
+        tokenized_card_response:
+          $ref: '#/components/schemas/TokenizedCardResponse'
+        billing_address:
+          $ref: '#/components/schemas/Address'
+      required:
+      - tokenized_card_response
+    OrderCreateAndCharge:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        customer:
+          $ref: '#/components/schemas/OrderCreateCustomer'
+        order_name:
+          type: string
+        total_tax:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+        note_attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderNoteAttribute'
+          description: 'This field is useful for passing customization options for Supplier products that support customization (gift messages, logos, custom text).
+
+            Example: {"name": "Variant 1 Custom Text", "value": "<custom text value>"}'
+        partner_name:
+          type: string
+        shipping_details:
+          $ref: '#/components/schemas/OrderShippingDetails'
+        ppu_transaction_id:
+          type: string
+          description: The Post Purchase Upsell session id for the tax calculation. This matches the tax calculation request.
+        payment_details:
+          allOf:
+          - $ref: '#/components/schemas/PaymentDetailsWithTokenizedCardResponse'
+          description: This field is the response from the vault. It is used to charge the customer.
+      required:
+      - line_items
+      - payment_details
+      - ppu_transaction_id
+      - shipping_details
+    Address:
+      type: object
+      properties:
+        name:
+          type: string
+        address1:
+          type: string
+        address2:
+          type: string
+        city:
+          type: string
+        province:
+          type: string
+        province_code:
+          type: string
+        country:
+          type: string
+        country_code:
+          type: string
+        zip:
+          type: string
+        phone:
+          type: string
+      required:
+      - address1
+      - city
+      - country
+      - name
+      - province
+      - zip
+    OrderCreateCustomer:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        first_name:
+          type: string
+        last_name:
+          type: string
+          default: ''
+      required:
+      - email
+      - first_name
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        remote_rid:
+          type: string
+          maxLength: 48
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        shop:
+          $ref: '#/components/schemas/Shop'
+        customer:
+          $ref: '#/components/schemas/Customer'
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        total_price:
+          type: string
+          maxLength: 18
+        currency:
+          type: string
+          maxLength: 6
+        name:
+          type: string
+          maxLength: 256
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItemRead'
+          readOnly: true
+        fulfillments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fulfillment'
+          readOnly: true
+        billing_address:
+          nullable: true
+        shipping_address:
+          nullable: true
+        shipping_lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShippingRate'
+          readOnly: true
+        cancelled_at:
+          type: string
+          format: date-time
+          nullable: true
+        refunds:
+          type: array
+          items:
+            $ref: '#/components/schemas/Refund'
+          readOnly: true
+        connected_supplier_order_numbers:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+          nullable: true
+          readOnly: true
+        cancel_reason:
+          type: string
+          nullable: true
+          maxLength: 14
+        note_attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderNoteAttribute'
+        returns:
+          type: array
+          items:
+            $ref: '#/components/schemas/Return'
+          readOnly: true
+      required:
+      - connected_supplier_order_numbers
+      - created_at
+      - currency
+      - customer
+      - email
+      - fulfillments
+      - id
+      - line_items
+      - name
+      - note_attributes
+      - refunds
+      - remote_rid
+      - returns
+      - shipping_lines
+      - shop
+      - total_price
+    OrderShippingDetails:
+      type: object
+      properties:
+        code:
+          type: string
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          default: '0.0000'
+        use_override_amount:
+          type: boolean
+          default: false
+        shipping_address:
+          $ref: '#/components/schemas/TaxAndShippingAddress'
+      required:
+      - code
+      - shipping_address
+    ShippingRate:
+      type: object
+      properties:
+        code:
+          type: string
+        title:
+          type: string
+        price:
+          type: number
+          format: double
+        currency:
+          type: string
+          default: USD
+      required:
+      - code
+      - price
+      - title
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    platformAppId:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-ID
+    platformAppToken:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-TOKEN

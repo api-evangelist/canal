@@ -1,0 +1,343 @@
+openapi: 3.0.3
+info:
+  title: Rokt Catalog csv refunds API
+  version: 1.0.1
+  description: Integrate with Rokt Catalog
+servers:
+- url: https://api.shopcanal.com/platform
+  description: Rokt Catalog Storefront Public API
+tags:
+- name: refunds
+paths:
+  /refunds/:
+    get:
+      operationId: refunds_list
+      description: '
+
+        Retrieve a paginated list of refund records associated with the authenticated store, reflecting its role in the order process.
+
+
+        - **If called by a Storefront:** Returns refund records linked to orders originating from the Storefront. This includes refunds initiated *by* the Storefront and refunds initiated *by* connected Suppliers for those orders.
+
+
+        - **If called by a Supplier:** Returns refund records linked to orders received by the Supplier from connected Storefronts. This includes refunds initiated *by* the Supplier and refunds initiated *by* the originating Storefronts for those orders.
+
+
+        The response (`RefundSerializer`, paginated) includes details for each refund, such as the calculated `total_refunded_amount`, `currency`, the list of `refund_line_items` (with quantities and amounts), associated `order_id`, and timestamps.
+
+
+        Pagination is cursor-based (`PlatformPagination`). Ordering is available on `created_at` and `updated_at`, defaulting to `-created_at`.
+
+
+        '
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      tags:
+      - refunds
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRefundList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    post:
+      operationId: refunds_create
+      description: "\nInitiate a refund for specific quantities of line items within a Rokt Catalog order. This endpoint handles refund requests originating from both Storefronts and Suppliers.\n\n**Request Body (`RefundCreateSerializer`):**\n\n- `order_id` (UUID, required): The Catalog ID of the order to be refunded.\n\n- `line_items` (list, required): A list of objects, each specifying:\n\n  - `id` (UUID, required): The Catalog ID of the line item to refund.\n\n  - `quantity` (integer, required): The quantity of this line item to refund.\n\n- `should_refund_shipping` (boolean, optional, **Storefront only**): If `true`, attempts to refund the original shipping cost associated with the Storefront order.\n\n- `extra_amount` (decimal string, optional, **restricted use**): Allows refunding an additional amount beyond line items/shipping (currently restricted to specific shops like SHEIN).\n\n**Process & Permissions:**\n\n1. **Identify Initiator:** Determines if the request comes from the Storefront or the Supplier by checking the order's relationships.\n\n2. **Lock Order:** Acquires a lock on the order record to prevent concurrent modifications.\n\n3. **Validate Quantities:** Checks if the requested `quantity` for each line item exceeds the currently refundable quantity (original quantity minus previously refunded quantity). If validation fails, returns `400 Bad Request` with `error_code: ITEMS_ALREADY_REFUNDED` and details of affected items.\n\n4. **Storefront-Initiated Refund:**\n\n   - **Permission Check:** Verifies the Storefront has the required scope (`write_sk_refunds`). Returns `403 Forbidden` if missing.\n\n   - **Dispatch:** Calculates refund amounts, creates the refund record for the Storefront in Catalog, and **asynchronously** triggers tasks to create corresponding refund records on the connected Supplier(s)' systems (e.g., via Shopify API).\n\n   - **Error Handling:** If downstream Supplier refund creation fails, returns `400 Bad Request` with `error_code: SUPPLIER_REFUND_FAILED`.\n\n5. **Supplier-Initiated Refund:**\n\n   - **Permission Check:** Implicitly requires the `write_refunds` scope.\n\n   - **Create Supplier Refund:** Creates the refund record for the Supplier in Catalog.\n\n   - **Dispatch to Storefront:** If the Supplier order originated from a Storefront with integration settings, **synchronously** attempts to create a corresponding refund record on the Storefront's order in Catalog.\n\n   - **Error Handling:** If downstream Storefront refund creation fails, returns `400 Bad Request` with `error_code: SK_REFUND_FAILED`.\n\n6. **Extra Amount:** If `extra_amount` is provided and valid, creates an associated record (restricted use).\n\n**Response:** On success, returns `201 Created` with the details of the primary refund record created (either the Storefront's or the Supplier's) using `RefundSerializer`. The serializer might include details about failed downstream refunds in the `failed_to_create_refund_line_items` field for Storefront-initiated refunds.\n\n"
+      tags:
+      - refunds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RefundCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RefundCreate'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Refund'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /refunds/{id}/:
+    get:
+      operationId: refunds_retrieve
+      description: '
+
+        Retrieve the full details for a specific refund record, identified by its Rokt Catalog `ID` (UUID) in the URL path.
+
+
+        Access is restricted to refunds associated with orders linked to the authenticated store (`request.shop`).
+
+
+        The response (`RefundSerializer`) includes the `total_refunded_amount`, `currency`, the list of `refund_line_items` (specifying the exact items, quantities, and subtotal refunded), the associated `order_id`, `note` (if any), `processed_at` timestamp, and other relevant details.
+
+
+        If the refund `ID` is invalid or the refund is not associated with an order linked to your store, a `404 Not Found` error is returned.
+
+
+        '
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - refunds
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Refund'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+components:
+  schemas:
+    RefundCreate:
+      type: object
+      properties:
+        order_id:
+          type: string
+          format: uuid
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItem'
+        should_refund_shipping:
+          type: boolean
+        extra_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: Only available to select retailers.
+      required:
+      - line_items
+      - order_id
+    Refund:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        order_id:
+          type: string
+        amount:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        note:
+          type: string
+          nullable: true
+          maxLength: 1025
+        duties:
+          nullable: true
+        restock:
+          type: boolean
+          nullable: true
+        processed_at:
+          type: string
+          format: date-time
+        refund_line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefundLineItem'
+        shipping_refund_amount:
+          type: string
+          nullable: true
+          maxLength: 128
+        failed_to_create_refund_line_items:
+          type: string
+          readOnly: true
+      required:
+      - amount
+      - failed_to_create_refund_line_items
+      - id
+      - order_id
+      - processed_at
+      - refund_line_items
+    PaginatedRefundList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Refund'
+    RefundLineItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        line_item:
+          $ref: '#/components/schemas/LineItemRead'
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        subtotal:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          nullable: true
+      required:
+      - id
+      - line_item
+      - quantity
+    LineItemRead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        variant_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        fulfillable_quantity:
+          type: integer
+        price:
+          type: number
+          format: double
+        requires_shipping:
+          type: boolean
+        title:
+          type: string
+        sku:
+          type: string
+      required:
+      - fulfillable_quantity
+      - id
+      - price
+      - quantity
+      - variant_id
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+    LineItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+      required:
+      - id
+      - quantity
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    platformAppId:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-ID
+    platformAppToken:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-TOKEN

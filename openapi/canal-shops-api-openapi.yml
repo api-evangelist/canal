@@ -1,0 +1,300 @@
+openapi: 3.0.3
+info:
+  title: Rokt Catalog csv shops API
+  version: 1.0.1
+  description: Integrate with Rokt Catalog
+servers:
+- url: https://api.shopcanal.com/platform
+  description: Rokt Catalog Storefront Public API
+tags:
+- name: shops
+paths:
+  /shops/:
+    get:
+      operationId: shops_list
+      description: '
+
+        **[Storefront Only]** Retrieve a paginated list of Supplier shops with whom your Storefront has an **active and approved** partnership connection.
+
+
+        This endpoint provides essential details for each connected Supplier, such as their name, Rokt Catalog ID, contact information, and domain.
+
+
+        Use this to get an overview of your current Supplier network within Catalog.
+
+
+        You can filter this list to find a specific Supplier by providing their `canal_contact_email` using the `email` query parameter (ensure proper URL encoding if the email contains special characters like ''+'').
+
+
+        Results are returned using cursor-based pagination, ordered by `updated_at` descending by default. Standard ordering fields like `created_at` and `name` are also available.
+
+
+        '
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - in: query
+        name: email
+        schema:
+          type: string
+          format: email
+        description: Filter by the Supplier's primary contact email address.
+      tags:
+      - shops
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedShopList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    post:
+      operationId: shops_create
+      description: '
+
+        **[Storefront Only]** Initiate partnership connection requests with one or more existing Rokt Catalog Suppliers by specifying their primary contact email addresses.
+
+
+        In the request body, provide a list of strings under the key `canal_contact_emails`.
+
+
+        For each email address that corresponds to an active Catalog Supplier shop, Catalog will record your request to connect, initially in a **pending** state.
+
+
+        The Supplier must then **approve** this request (usually through the Catalog web application) for the connection to become active.
+
+
+        Once approved, the Supplier will appear in your ''My Suppliers'' list within the Catalog app, and you will gain access to view and potentially sell their products based on the agreed terms.
+
+
+        This endpoint returns a `201 Created` status along with the details (using `ShopSerializer`) of the Supplier shops for which pending connection requests were successfully created. It does not wait for Supplier approval. If an email does not match an active Supplier, no request is created for that email.
+
+
+        '
+      tags:
+      - shops
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkCreateSupplierPartnership'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BulkCreateSupplierPartnership'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BulkCreateSupplierPartnership'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shop'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /shops/{id}/:
+    get:
+      operationId: shops_retrieve
+      description: '
+
+        **[Storefront Only]** Retrieve the full profile details for a specific Supplier shop, identified by its unique Rokt Catalog `ID` (UUID) provided in the URL path.
+
+
+        Access is restricted: this endpoint will only return data if an **active and approved** partnership connection exists between your Storefront and the specified Supplier.
+
+
+        The response includes comprehensive details like shop name, ID, contact info, address, configured settings (if applicable), etc.
+
+
+        If the provided `ID` is invalid, does not correspond to a Supplier shop, or if no approved connection exists, a `404 Not Found` error will be returned.
+
+
+        '
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - shops
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shop'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+components:
+  schemas:
+    Shop:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type: string
+          nullable: true
+          readOnly: true
+        phone:
+          type: string
+          nullable: true
+          maxLength: 128
+        name:
+          type: string
+          maxLength: 129
+        description:
+          type: string
+          nullable: true
+          maxLength: 6144
+        myshopify_domain:
+          type: string
+          maxLength: 128
+        province:
+          type: string
+          nullable: true
+          maxLength: 122
+        country:
+          type: string
+          maxLength: 64
+        domain:
+          type: string
+          nullable: true
+          maxLength: 128
+        display_domain:
+          type: string
+          nullable: true
+          readOnly: true
+        privacy_policy_url:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 500
+        terms_of_service_url:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 500
+      required:
+      - country
+      - display_domain
+      - email
+      - id
+      - myshopify_domain
+      - name
+    PaginatedShopList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Shop'
+    BulkCreateSupplierPartnership:
+      type: object
+      properties:
+        canal_contact_emails:
+          type: array
+          items:
+            type: string
+            format: email
+      required:
+      - canal_contact_emails
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    platformAppId:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-ID
+    platformAppToken:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-TOKEN

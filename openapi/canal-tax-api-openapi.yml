@@ -1,0 +1,189 @@
+openapi: 3.0.3
+info:
+  title: Rokt Catalog csv tax API
+  version: 1.0.1
+  description: Integrate with Rokt Catalog
+servers:
+- url: https://api.shopcanal.com/platform
+  description: Rokt Catalog Storefront Public API
+tags:
+- name: tax
+paths:
+  /tax/calculate/:
+    post:
+      operationId: tax_calculate_create
+      description: '**[Storefront Only]** Calculate estimated tax lines for a set of line items and a shipping address.'
+      tags:
+      - tax
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaxCalculationQuery'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TaxCalculationQuery'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TaxCalculationQuery'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxLinePerSupplierResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+components:
+  schemas:
+    CreateOrderLineItem:
+      type: object
+      properties:
+        variant_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+      required:
+      - quantity
+      - variant_id
+    TaxLineResponse:
+      type: object
+      properties:
+        tax_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: The tax amount for the line item
+        currency:
+          type: string
+          default: USD
+        title:
+          type: string
+          description: The name of the tax line
+        rate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: The tax rate for the line item
+      required:
+      - rate
+      - tax_amount
+      - title
+    TaxAndShippingAddress:
+      type: object
+      description: Address serializer for tax and shipping calculations where address1 and name are optional
+      properties:
+        name:
+          type: string
+        address1:
+          type: string
+        address2:
+          type: string
+        city:
+          type: string
+        province:
+          type: string
+        province_code:
+          type: string
+        country:
+          type: string
+        country_code:
+          type: string
+        zip:
+          type: string
+        phone:
+          type: string
+      required:
+      - city
+      - country
+      - province
+      - zip
+    TaxCalculationQuery:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        shipping_address:
+          allOf:
+          - $ref: '#/components/schemas/TaxAndShippingAddress'
+          description: The destination address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
+        billing_address:
+          allOf:
+          - $ref: '#/components/schemas/TaxAndShippingAddress'
+          description: The billing address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
+      required:
+      - line_items
+      - shipping_address
+    TaxLinePerSupplierResponse:
+      type: object
+      properties:
+        tax_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: The total tax amount for the order
+        currency:
+          type: string
+          default: USD
+        tax_lines_per_supplier:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TaxLineResponse'
+          description: Dictionary mapping a supplier's id to a list of tax line responses.
+        calculation_errors:
+          type: array
+          items:
+            type: string
+          description: Error messages
+      required:
+      - calculation_errors
+      - tax_amount
+      - tax_lines_per_supplier
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    platformAppId:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-ID
+    platformAppToken:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-TOKEN

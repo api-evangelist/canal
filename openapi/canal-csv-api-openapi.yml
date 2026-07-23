@@ -1,0 +1,63 @@
+openapi: 3.0.3
+info:
+  title: Rokt Catalog csv API
+  version: 1.0.1
+  description: Integrate with Rokt Catalog
+servers:
+- url: https://api.shopcanal.com/platform
+  description: Rokt Catalog Storefront Public API
+tags:
+- name: csv
+paths:
+  /csv/download_shopkeep_line_items/:
+    get:
+      operationId: csv_download_shopkeep_line_items_retrieve
+      tags:
+      - csv
+      security:
+      - basicAuth: []
+      - platformAppId: []
+        platformAppToken: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /csv/download_unfulfilled_supplier_line_items/:
+    get:
+      operationId: csv_download_unfulfilled_supplier_line_items_retrieve
+      tags:
+      - csv
+      security:
+      - basicAuth: []
+      - platformAppId: []
+        platformAppToken: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /csv/product/template/:
+    get:
+      operationId: csv_product_template_retrieve
+      tags:
+      - csv
+      security:
+      - basicAuth: []
+      - platformAppId: []
+        platformAppToken: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    platformAppId:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-ID
+    platformAppToken:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-TOKEN

@@ -1,0 +1,379 @@
+openapi: 3.0.3
+info:
+  title: Rokt Catalog csv tax-and-shipping API
+  version: 1.0.1
+  description: Integrate with Rokt Catalog
+servers:
+- url: https://api.shopcanal.com/platform
+  description: Rokt Catalog Storefront Public API
+tags:
+- name: tax-and-shipping
+paths:
+  /tax-and-shipping/calculate/:
+    post:
+      operationId: tax_and_shipping_calculate_create
+      description: "\n**[Storefront Only]** Calculate estimated tax lines and available shipping options and costs, given a set of line items, shipping address, and optionally a billing address.\n\nThis endpoint is typically used during the checkout process after the customer has provided their shipping address.\n\n**Request Body (`TaxCalculationQuerySerializer`):**\n\n- `line_items` (list, required): A list of objects, each specifying:\n\n  - `variant_id` (UUID, required): The Catalog ID of the *Storefront's* variant record.\n\n  - `quantity` (integer, required): The quantity of this variant.\n\n- `shipping_address` (object, required): The destination address, including fields like `address1`, `city`, `province_code`, `country_code`, `zip`. `name` and `phone` are optional but recommended.\n\n- `billing_address` (object, optional): The billing address, with the same fields as `shipping_address`.\n\n**Process:**\n\n1. **Identify Suppliers:** Catalog determines which unique Suppliers are involved based on the `variant_id`s provided.\n\n2. **Query Suppliers:** For each unique Supplier, Catalog queries their integrated shipping rate provider (e.g., Shopify's API) using the provided `shipping_address` and the subset of `line_items` belonging to that Supplier.\n\n3. **Aggregate Rates:** Catalog aggregates the rates returned from all involved Suppliers. The exact aggregation logic might vary (e.g., summing costs for the same shipping service level across suppliers, presenting distinct options per supplier).\n\n4. **Tax Calculation:** Catalog queries an integrated tax rate provider (e.g., Shopify's API) using the provided `shipping_address` and `billing_address` to calculate the tax line items for this order.\n\n**Response (`TaxAndShippingResponseSerializer`):**\n\n- `rates` (list): A list of available shipping rate options. Each object contains:\n\n  - `title` (string): The name of the shipping service (e.g., 'Standard Ground', 'Express Overnight').\n\n  - `price` (Money object): The calculated cost for this shipping option, including `amount` (decimal string) and `currency` (string).\n\n  - Potentially other fields depending on the Supplier's integration.\n\n- `tax_amount` (string): Total sum of the taxes applied to this order.\n\n- `currency` (string): Currency for the current order.\n\n- `tax_lines_per_supplier`: Dictionary mapping a supplier's id to a list of tax line responses.\n\nThis response allows the Storefront to present the customer with accurate shipping choices and costs before finalizing the order.\n\n"
+      tags:
+      - tax-and-shipping
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaxCalculationQuery'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TaxCalculationQuery'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TaxCalculationQuery'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxAndShippingResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /tax-and-shipping/v1/calculate/:
+    post:
+      operationId: tax_and_shipping_v1_calculate_create
+      description: '
+
+        **[Storefront Only]** Calculate estimated tax lines and available shipping options and costs, given a set of line items, shipping address, and optionally a billing address.
+
+
+        This endpoint is typically used during the checkout process after the customer has provided their shipping address.
+
+
+        **Process:**
+
+
+        1. **Tax Calculation:** Rokt Catalog queries an integrated tax rate provider (e.g., Shopify''s API) using the provided `shipping_address` and `billing_address` to calculate the tax line items for this order.
+
+
+        2. **Shipping Calculation:** Catalog queries an integrated shipping rate provider (e.g., Shopify''s API) using the provided `shipping_address` and the subset of `line_items` belonging to that Supplier.
+
+
+        '
+      tags:
+      - tax-and-shipping
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaxCalculationQuerySerializerV1'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TaxCalculationQuerySerializerV1'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TaxCalculationQuerySerializerV1'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxAndShippingResponseSerializerV1'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+components:
+  schemas:
+    ShippingDetails:
+      type: object
+      properties:
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: The price of shipping
+        code:
+          type: string
+          description: The shipping code
+        title:
+          type: string
+          description: The shipping title
+        description:
+          type: string
+          description: The shipping description
+      required:
+      - code
+      - price
+      - title
+    TaxLineResponse:
+      type: object
+      properties:
+        tax_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: The tax amount for the line item
+        currency:
+          type: string
+          default: USD
+        title:
+          type: string
+          description: The name of the tax line
+        rate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: The tax rate for the line item
+      required:
+      - rate
+      - tax_amount
+      - title
+    CreateOrderLineItem:
+      type: object
+      properties:
+        variant_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+      required:
+      - quantity
+      - variant_id
+    TaxCalculationQuerySerializerV1:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        shipping_address:
+          allOf:
+          - $ref: '#/components/schemas/TaxAndShippingAddress'
+          description: The destination address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
+        billing_address:
+          allOf:
+          - $ref: '#/components/schemas/TaxAndShippingAddress'
+          description: The billing address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
+        ppu_transaction_id:
+          type: string
+          description: The Post Purchase Upsell session id for the tax calculation. This will be reused at order creation time to match the tax calculation request.
+      required:
+      - line_items
+      - ppu_transaction_id
+      - shipping_address
+    TaxAndShippingAddress:
+      type: object
+      description: Address serializer for tax and shipping calculations where address1 and name are optional
+      properties:
+        name:
+          type: string
+        address1:
+          type: string
+        address2:
+          type: string
+        city:
+          type: string
+        province:
+          type: string
+        province_code:
+          type: string
+        country:
+          type: string
+        country_code:
+          type: string
+        zip:
+          type: string
+        phone:
+          type: string
+      required:
+      - city
+      - country
+      - province
+      - zip
+    ShippingRate:
+      type: object
+      properties:
+        code:
+          type: string
+        title:
+          type: string
+        price:
+          type: number
+          format: double
+        currency:
+          type: string
+          default: USD
+      required:
+      - code
+      - price
+      - title
+    TaxCalculationQuery:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        shipping_address:
+          allOf:
+          - $ref: '#/components/schemas/TaxAndShippingAddress'
+          description: The destination address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
+        billing_address:
+          allOf:
+          - $ref: '#/components/schemas/TaxAndShippingAddress'
+          description: The billing address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
+      required:
+      - line_items
+      - shipping_address
+    TaxAndShippingResponseSerializerV1:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxAndShippingLineItemResponse'
+          description: Dictionary mapping a line item's id to a list of tax line responses.
+        calculation_errors:
+          type: array
+          items:
+            type: string
+          description: Error messages
+        request_id:
+          type: string
+          format: uuid
+          description: The id of the tax request
+      required:
+      - calculation_errors
+      - line_items
+    TaxAndShippingResponse:
+      type: object
+      properties:
+        shipping_rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShippingRate'
+        tax_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: The total tax amount for the order
+        currency:
+          type: string
+          default: USD
+        tax_lines_per_supplier:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TaxLineResponse'
+          description: Dictionary mapping a supplier's id to a list of tax line responses.
+        calculation_errors:
+          type: array
+          items:
+            type: string
+          description: Error messages
+      required:
+      - calculation_errors
+      - shipping_rates
+      - tax_amount
+      - tax_lines_per_supplier
+    TaxAndShippingLineItemResponse:
+      type: object
+      properties:
+        tax_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: The tax amount for the line item
+        currency:
+          type: string
+          default: USD
+        variant_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        shipping_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: The shipping amount for the line item
+        shipping_details:
+          allOf:
+          - $ref: '#/components/schemas/ShippingDetails'
+          description: Shipping details including price, code, and title
+      required:
+      - quantity
+      - shipping_amount
+      - tax_amount
+      - variant_id
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    platformAppId:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-ID
+    platformAppToken:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-TOKEN

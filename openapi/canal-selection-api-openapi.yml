@@ -1,0 +1,37 @@
+openapi: 3.0.3
+info:
+  title: Rokt Catalog csv selection API
+  version: 1.0.1
+  description: Integrate with Rokt Catalog
+servers:
+- url: https://api.shopcanal.com/platform
+  description: Rokt Catalog Storefront Public API
+tags:
+- name: selection
+paths:
+  /selection/ai-select/:
+    post:
+      operationId: selection_ai_select_create
+      description: "AI-powered product selection endpoint.\n\nAccepts arbitrary JSON for items and context, uses parallel per-item GPT calls,\nand returns the zero-based index of the best item with reasoning and confidence.\n\nRequest format:\n{\n  \"items\": [arbitrary JSON objects, at least one],\n  \"context\": {arbitrary JSON object, non-empty},\n  \"session_id\": \"optional string\",\n  \"timeout_ms\": optional int or null,\n  \"metadata\": {\n    \"temperature\": 0.5,\n    \"llmModel\": \"gpt-4o\",\n    \"embeddingModel\": \"text-embedding-3-small\",\n    \"prompt\": \"default\",\n    \"verbosity\": \"low\",  // GPT-5 only: \"low\", \"medium\", or \"high\"\n    \"reasoningEffort\": \"low\"  // reasoning models: \"low\" or \"medium\";\n                              // newer GPT-5 models may also use \"none\"\n  }\n}\n\nResponse format:\n{\n  \"chosenIndex\": 0,\n  \"reasoning\": \"I would buy the Nike shoe cleaner...\",\n  \"confidence\": 0.82,\n  \"processingTimeMs\": 1245\n}"
+      tags:
+      - selection
+      security:
+      - basicAuth: []
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          description: No response body
+components:
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    platformAppId:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-ID
+    platformAppToken:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-TOKEN

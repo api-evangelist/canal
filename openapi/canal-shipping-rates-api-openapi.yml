@@ -1,0 +1,160 @@
+openapi: 3.0.3
+info:
+  title: Rokt Catalog csv shipping-rates API
+  version: 1.0.1
+  description: Integrate with Rokt Catalog
+servers:
+- url: https://api.shopcanal.com/platform
+  description: Rokt Catalog Storefront Public API
+tags:
+- name: shipping-rates
+paths:
+  /shipping-rates/:
+    post:
+      operationId: shipping_rates_create
+      description: "\n**[Storefront Only]** Calculate available shipping options and their estimated costs for a given destination address and a set of line items containing products sourced from Rokt Catalog Suppliers.\n\nThis endpoint is typically used during the checkout process after the customer has provided their shipping address.\n\n**Request Body (`ShippingQuerySerializer`):**\n\n- `shipping_address` (object, required): The destination address, including fields like `address1`, `city`, `province_code`, `country_code`, `zip`. `name` and `phone` are optional but recommended.\n\n- `line_items` (list, required): A list of objects, each specifying:\n\n  - `variant_id` (UUID, required): The Rokt Catalog ID of the *Storefront's* variant record.\n\n  - `quantity` (integer, required): The quantity of this variant.\n\n**Process:**\n\n1. **Identify Suppliers:** Catalog determines which unique Suppliers are involved based on the `variant_id`s provided.\n\n2. **Query Suppliers:** For each unique Supplier, Catalog queries their integrated shipping rate provider (e.g., Shopify's API) using the provided `shipping_address` and the subset of `line_items` belonging to that Supplier.\n\n3. **Aggregate Rates:** Catalog aggregates the rates returned from all involved Suppliers. The exact aggregation logic might vary (e.g., summing costs for the same shipping service level across suppliers, presenting distinct options per supplier).\n\n**Response (`ShippingRateResponseSerializer`):**\n\n- `rates` (list): A list of available shipping rate options. Each object contains:\n\n  - `title` (string): The name of the shipping service (e.g., 'Standard Ground', 'Express Overnight').\n\n  - `price` (Money object): The calculated cost for this shipping option, including `amount` (decimal string) and `currency` (string).\n\n  - Potentially other fields depending on the Supplier's integration.\n\nThis response allows the Storefront to present the customer with accurate shipping choices and costs before finalizing the order.\n\n"
+      tags:
+      - shipping-rates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShippingQuery'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ShippingQuery'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ShippingQuery'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShippingRateResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+components:
+  schemas:
+    CreateOrderLineItem:
+      type: object
+      properties:
+        variant_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+      required:
+      - quantity
+      - variant_id
+    Address:
+      type: object
+      properties:
+        name:
+          type: string
+        address1:
+          type: string
+        address2:
+          type: string
+        city:
+          type: string
+        province:
+          type: string
+        province_code:
+          type: string
+        country:
+          type: string
+        country_code:
+          type: string
+        zip:
+          type: string
+        phone:
+          type: string
+      required:
+      - address1
+      - city
+      - country
+      - name
+      - province
+      - zip
+    ShippingRate:
+      type: object
+      properties:
+        code:
+          type: string
+        title:
+          type: string
+        price:
+          type: number
+          format: double
+        currency:
+          type: string
+          default: USD
+      required:
+      - code
+      - price
+      - title
+    ShippingQuery:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        shipping_address:
+          $ref: '#/components/schemas/Address'
+      required:
+      - line_items
+      - shipping_address
+    ShippingRateResponse:
+      type: object
+      properties:
+        shipping_rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShippingRate'
+      required:
+      - shipping_rates
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    platformAppId:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-ID
+    platformAppToken:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-TOKEN

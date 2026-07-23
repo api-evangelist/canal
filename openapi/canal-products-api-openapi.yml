@@ -1,0 +1,1242 @@
+openapi: 3.0.3
+info:
+  title: Rokt Catalog csv products API
+  version: 1.0.1
+  description: Integrate with Rokt Catalog
+servers:
+- url: https://api.shopcanal.com/platform
+  description: Rokt Catalog Storefront Public API
+tags:
+- name: products
+paths:
+  /products/:
+    get:
+      operationId: products_list
+      description: '
+
+        **[Storefront Only]** Retrieve a paginated list of products accessible to your Storefront through your established Rokt Catalog connections.
+
+
+        This endpoint returns products from Suppliers with whom you have an **active and approved** partnership. It includes products you might have already added/linked to your Storefront platform, as well as other products listed by those Suppliers that are available to you based on your connection terms.
+
+
+        You can filter the results to view products exclusively from one Supplier by providing their Catalog `supplier_id` (UUID) as a query parameter.
+
+
+        Results are returned using cursor-based pagination (`PlatformPagination`). Available ordering fields include `created_at`, `updated_at`, and `title`. The default order is `-created_at`.
+
+
+        '
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - in: query
+        name: supplier_id
+        schema:
+          type: string
+          format: uuid
+        description: Filter products by the Catalog ID of a specific connected Supplier.
+      - in: query
+        name: qa_review_complete
+        schema:
+          type: boolean
+        description: Filter products by whether they have been reviewed and approved.
+      tags:
+      - products
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedExternalProductList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    post:
+      operationId: products_create
+      description: '
+
+        **[Supplier Only]** Create a new product listing within your Rokt Catalog Supplier account. This makes the product manageable through Catalog and potentially available to your connected Storefront partners.
+
+
+        The request body must conform to the `PushProductSerializer` structure. Key fields include:
+
+
+        `title` (string, required), `body_html` (string, product description), `product_type` (string), `vendor` (string), `tags` (string, comma-separated), and a list of `variants` (required, at least one).
+
+
+        Each object in the `variants` list requires `price` (decimal string), `sku` (string), `inventory_quantity` (integer), and option values (`option1`, `option2`, `option3`). `compare_at_price` (decimal string) is optional for sale pricing.
+
+
+        You can also include a list of `images`, each with a `src` (URL) and optional `position`.
+
+
+        Successfully creating a product (HTTP `201 Created`) makes it visible in your Catalog dashboard. Its availability to Storefronts depends on its listing status (`supplier_has_listed_on_canal` flag on variants) and the terms established with each partner.
+
+
+        The response body contains the full details of the newly created product and its variants, including their assigned Catalog IDs (UUIDs), using the `ProductSerializer`.
+
+
+        '
+      tags:
+      - products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushProduct'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PushProduct'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PushProduct'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /products/{id}/:
+    get:
+      operationId: products_retrieve
+      description: '
+
+        **[Storefront Only]** Retrieve comprehensive details for a single product, identified by its Rokt Catalog `ID` (UUID) in the URL path.
+
+
+        Access is restricted: this endpoint only returns data for products sourced from Suppliers with whom your Storefront has an **active and approved** partnership connection.
+
+
+        The response (`ExternalProductSerializer`) includes all product-level information (title, description, vendor, etc.), a list of associated `images`, and a list of `variants`.
+
+
+        Crucially, the variant information includes pricing (`price`, `compare_at_price`) and `inventory_quantity` that are specific to **your connection** with the Supplier, reflecting any agreed-upon terms or markups managed by Catalog.
+
+
+        If the provided product `ID` is invalid, or if the product belongs to a Supplier you are not actively connected with, a `404 Not Found` error is returned.
+
+
+        '
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - products
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalProduct'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    put:
+      operationId: products_update
+      description: '
+
+        **[Supplier Only]** Update attributes of an existing product listing, identified by its Rokt Catalog `ID` (UUID) in the URL path.
+
+
+        This endpoint is used for modifying **product-level** details. Provide the fields you wish to change in the request body (e.g., `title`, `body_html`, `product_type`, `vendor`, `tags`).
+
+
+        **Important:** To modify variant-specific details like price, SKU, inventory, or options, you **must** use the dedicated `/variants/{variant_id}/` endpoint. Updates to variants are not supported here.
+
+
+        Changes made to product-level fields via this endpoint (like updating the description) are automatically synchronized to any connected Storefronts that are currently selling this product. This synchronization process runs **asynchronously** in the background.
+
+
+        A successful update returns `200 OK` with the complete, updated product details (including all variants) using the `ProductSerializer`.
+
+
+        '
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Product'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    patch:
+      operationId: products_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProduct'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProduct'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProduct'
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+    delete:
+      operationId: products_destroy
+      description: '
+
+        **[Supplier Only]** Permanently remove a product listing, identified by its Rokt Catalog `ID` (UUID) in the URL path, from the Catalog platform.
+
+
+        **Warning:** This action is **irreversible**. Ensure you intend to delete this product permanently.
+
+
+        You can only delete products that are directly owned by your Supplier account. Attempting to delete a product belonging to another shop will result in a `403 Forbidden` error.
+
+
+        **Effect on Storefronts:** When a product is deleted, Catalog automatically **pauses** the corresponding product listings on any connected Storefronts that were actively selling it. An asynchronous task is initiated to inform these Storefronts about the product''s removal.
+
+
+        A successful deletion returns an HTTP `204 No Content` status with an empty response body.
+
+
+        '
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - products
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '204':
+          description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /products/{id}/reorder_variants/:
+    post:
+      operationId: products_reorder_variants_create
+      description: '
+
+        **[Supplier Only]** Update the display sequence of variants for a specific product. The product is identified by its Rokt Catalog `ID` (UUID) in the URL path.
+
+
+        The request body must contain a field named `variant_order`, which is a list of Catalog variant `ID`s (UUIDs) sorted in the desired display order (0-indexed).
+
+
+        **Requirement:** The `variant_order` list **must** include the IDs of **all** currently existing variants for the specified product. Omitting or adding incorrect IDs will result in a validation error (400 Bad Request).
+
+
+        This reordering affects how variants are presented within the Catalog platform (e.g., in the Supplier dashboard). It may also influence the display order on connected Storefronts if their integration respects the `position` attribute of the variants.
+
+
+        A successful update returns `200 OK` with the full product details (`ProductSerializer`), reflecting the new `position` values for each variant.
+
+
+        '
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReorderVariant'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReorderVariant'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReorderVariant'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /products/{id}/resync/:
+    post:
+      operationId: products_resync_create
+      description: '
+
+        Resynchronize a retailer (Shopkeep) product with its origin supplier product.
+
+
+        If `fields_to_resync` is provided, only those fields will be updated; otherwise all fields are resynced.
+
+
+        On success, returns the updated product data. If the resync is queued to run asynchronously (e.g. due to rate limits), returns a message indicating the resync has started.
+
+
+        '
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResyncShopkeepProduct'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResyncShopkeepProduct'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResyncShopkeepProduct'
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResyncShopkeepProductResponse'
+          description: ''
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResyncShopkeepProductResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /products/upsell_products/:
+    get:
+      operationId: products_upsell_products_list
+      description: '
+
+        **[Storefront Only]** Retrieve a paginated list of active products that are eligible for upselling.
+
+
+        This endpoint returns products from Suppliers with whom you have an active and approved partnership.
+
+
+        Products must meet the following criteria:
+
+
+        1) Have status=''active'',
+
+
+        2) Have at least one variant that is connected to a supplier variant, listed on Catalog, and not paused for selling,
+
+
+        3) Have passed ads eligibility checks,
+
+
+        4) Have at least one available variant in a non-deleted product set,
+
+
+        '
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - in: query
+        name: supplier_id
+        schema:
+          type: string
+          format: uuid
+        description: Filter products by the Catalog ID of a specific connected Supplier.
+      tags:
+      - products
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedExternalProductList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+components:
+  schemas:
+    ReorderVariant:
+      type: object
+      properties:
+        variant_order:
+          type: array
+          items:
+            type: string
+            format: uuid
+      required:
+      - variant_order
+    ResyncShopkeepProduct:
+      type: object
+      properties:
+        fields_to_resync:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldsToResyncEnum'
+    ResyncShopkeepProductResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        status:
+          type: string
+          nullable: true
+        shopify_product:
+          allOf:
+          - $ref: '#/components/schemas/Product'
+          nullable: true
+      required:
+      - ok
+    PatchedProduct:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        shop:
+          allOf:
+          - $ref: '#/components/schemas/Shop'
+          readOnly: true
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/Variant'
+          readOnly: true
+        body_html:
+          type: string
+          nullable: true
+          maxLength: 60000
+        handle:
+          type: string
+          nullable: true
+          maxLength: 258
+        image_src:
+          type: string
+          nullable: true
+          maxLength: 1043
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+        options:
+          nullable: true
+        product_type:
+          type: string
+          nullable: true
+          maxLength: 1044
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        published_at:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          $ref: '#/components/schemas/Status2eaEnum'
+        title:
+          type: string
+          maxLength: 1029
+        vendor:
+          type: string
+          nullable: true
+          maxLength: 227
+        tags:
+          type: string
+          nullable: true
+          maxLength: 63750
+        permalink:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 2000
+        number_of_reviews:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        star_rating:
+          type: number
+          format: double
+          nullable: true
+    FieldsToResyncEnum:
+      enum:
+      - images
+      - product_title
+      - description
+      - tags
+      - variants
+      - vendor
+      - permalink
+      type: string
+      description: '* `images` - images
+
+        * `product_title` - product_title
+
+        * `description` - description
+
+        * `tags` - tags
+
+        * `variants` - variants
+
+        * `vendor` - vendor
+
+        * `permalink` - permalink'
+    InventoryPolicyEnum:
+      enum:
+      - continue
+      - deny
+      type: string
+      description: '* `continue` - continue
+
+        * `deny` - deny'
+    Image:
+      type: object
+      properties:
+        id:
+          type: string
+        position:
+          type: integer
+        src:
+          type: string
+          format: uri
+        display_src:
+          type: string
+          format: uri
+          nullable: true
+        width:
+          type: integer
+        height:
+          type: integer
+        canal_variant_ids:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        variant_ids:
+          type: array
+          items:
+            type: string
+        origin_supplier_image_id:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+      - canal_variant_ids
+      - src
+    PaginatedExternalProductList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalProduct'
+    Variant:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        shop:
+          allOf:
+          - $ref: '#/components/schemas/Shop'
+          readOnly: true
+        inventory_policy:
+          type: string
+          nullable: true
+          maxLength: 123
+        inventory_quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        inventory_item_cost:
+          type: number
+          format: double
+        option1:
+          type: string
+          nullable: true
+          maxLength: 255
+        option2:
+          type: string
+          nullable: true
+          maxLength: 256
+        option3:
+          type: string
+          nullable: true
+          maxLength: 257
+        position:
+          type: integer
+          readOnly: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          description: The price of the variant to be sold at.
+        compare_at_price:
+          type: string
+          nullable: true
+          maxLength: 128
+        origin_supplier_currency:
+          type: string
+          nullable: true
+          readOnly: true
+        title:
+          type: string
+        sku:
+          type: string
+          nullable: true
+          readOnly: true
+        upc:
+          type: string
+          nullable: true
+          maxLength: 253
+        grams:
+          type: number
+          format: double
+          nullable: true
+        weight:
+          type: number
+          format: double
+          nullable: true
+        weight_unit:
+          type: string
+          nullable: true
+          maxLength: 3
+        pause_selling:
+          type: boolean
+        origin_supplier_id:
+          type: string
+          nullable: true
+          readOnly: true
+        origin_supplier_name:
+          type: string
+          nullable: true
+          readOnly: true
+        available_for_ordering:
+          type: boolean
+          readOnly: true
+        supplier_sku:
+          type: string
+          nullable: true
+          readOnly: true
+        is_exclusive_offer:
+          type: boolean
+          description: An exclusive offer is a variant that is discounted lower than the variant's actual price on the supplier's website.
+          readOnly: true
+        sup_price:
+          type: string
+          nullable: true
+          description: The connected supplier variant's price, sourced from the supplier directly.
+          readOnly: true
+        sup_compare_at_price:
+          type: string
+          nullable: true
+          description: The connected supplier variant's compare-at price, sourced from the supplier directly.
+          readOnly: true
+      required:
+      - available_for_ordering
+      - id
+      - is_exclusive_offer
+      - origin_supplier_currency
+      - origin_supplier_id
+      - origin_supplier_name
+      - position
+      - price
+      - shop
+      - sku
+      - sup_compare_at_price
+      - sup_price
+      - supplier_sku
+      - title
+    PushProduct:
+      type: object
+      properties:
+        title:
+          type: string
+        body_html:
+          type: string
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushProductVariant'
+        permalink:
+          type: string
+        handle:
+          type: string
+        image_src:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+        product_type:
+          type: string
+        tags:
+          type: string
+        vendor:
+          type: string
+        shopify_taxonomy:
+          type: string
+          nullable: true
+        is_listed:
+          type: boolean
+          default: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/PushProductStatusEnum'
+          default: active
+      required:
+      - title
+      - variants
+    Shop:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type: string
+          nullable: true
+          readOnly: true
+        phone:
+          type: string
+          nullable: true
+          maxLength: 128
+        name:
+          type: string
+          maxLength: 129
+        description:
+          type: string
+          nullable: true
+          maxLength: 6144
+        myshopify_domain:
+          type: string
+          maxLength: 128
+        province:
+          type: string
+          nullable: true
+          maxLength: 122
+        country:
+          type: string
+          maxLength: 64
+        domain:
+          type: string
+          nullable: true
+          maxLength: 128
+        display_domain:
+          type: string
+          nullable: true
+          readOnly: true
+        privacy_policy_url:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 500
+        terms_of_service_url:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 500
+      required:
+      - country
+      - display_domain
+      - email
+      - id
+      - myshopify_domain
+      - name
+    Status2eaEnum:
+      enum:
+      - active
+      - draft
+      - archived
+      - unlisted
+      type: string
+      description: '* `active` - active
+
+        * `draft` - draft
+
+        * `archived` - archived
+
+        * `unlisted` - unlisted'
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        shop:
+          allOf:
+          - $ref: '#/components/schemas/Shop'
+          readOnly: true
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/Variant'
+          readOnly: true
+        body_html:
+          type: string
+          nullable: true
+          maxLength: 60000
+        handle:
+          type: string
+          nullable: true
+          maxLength: 258
+        image_src:
+          type: string
+          nullable: true
+          maxLength: 1043
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+        options:
+          nullable: true
+        product_type:
+          type: string
+          nullable: true
+          maxLength: 1044
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        published_at:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          $ref: '#/components/schemas/Status2eaEnum'
+        title:
+          type: string
+          maxLength: 1029
+        vendor:
+          type: string
+          nullable: true
+          maxLength: 227
+        tags:
+          type: string
+          nullable: true
+          maxLength: 63750
+        permalink:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 2000
+        number_of_reviews:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        star_rating:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - id
+      - shop
+      - title
+      - updated_at
+      - variants
+    PushProductStatusEnum:
+      enum:
+      - active
+      - draft
+      - archived
+      type: string
+      description: '* `active` - active
+
+        * `draft` - draft
+
+        * `archived` - archived'
+    PushProductVariant:
+      type: object
+      properties:
+        title:
+          type: string
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          description: The price of the variant to be sold at.
+        compare_at_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          nullable: true
+          description: The original price of the product from before the sale price. Should be greater than "price". If you elect to not allow sale price passthrough, Connected Storefronts will sell items at this price.
+        inventory_policy:
+          $ref: '#/components/schemas/InventoryPolicyEnum'
+        inventory_quantity:
+          type: integer
+        option1:
+          type: string
+        option2:
+          type: string
+        option3:
+          type: string
+        sku:
+          type: string
+        position:
+          type: integer
+        image_src:
+          type: string
+        weight:
+          type: number
+          format: double
+        weight_unit:
+          type: string
+      required:
+      - inventory_policy
+      - inventory_quantity
+      - option1
+      - price
+    ExternalProduct:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        shop:
+          allOf:
+          - $ref: '#/components/schemas/Shop'
+          readOnly: true
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/Variant'
+          readOnly: true
+        body_html:
+          type: string
+          nullable: true
+          maxLength: 60000
+        handle:
+          type: string
+          nullable: true
+          maxLength: 258
+        image_src:
+          type: string
+          nullable: true
+          maxLength: 1043
+        images:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+          readOnly: true
+        options:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+          description: Flatten option.values into a list of strings
+          readOnly: true
+        product_type:
+          type: string
+          nullable: true
+          maxLength: 1044
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        published_at:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          $ref: '#/components/schemas/Status2eaEnum'
+        title:
+          type: string
+          maxLength: 1029
+        vendor:
+          type: string
+          nullable: true
+          maxLength: 227
+        tags:
+          type: string
+          nullable: true
+          maxLength: 63750
+        permalink:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 2000
+        number_of_reviews:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        star_rating:
+          type: number
+          format: double
+          nullable: true
+        product_type_category:
+          type: string
+          nullable: true
+          description: Get Shoppable Ads product type category breadcrumb path if available.
+          readOnly: true
+        customer_charge_amount:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          readOnly: true
+      required:
+      - customer_charge_amount
+      - id
+      - images
+      - options
+      - product_type_category
+      - shop
+      - title
+      - updated_at
+      - variants
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    platformAppId:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-ID
+    platformAppToken:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-TOKEN

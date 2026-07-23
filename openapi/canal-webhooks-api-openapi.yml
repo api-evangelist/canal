@@ -1,0 +1,448 @@
+openapi: 3.0.3
+info:
+  title: Rokt Catalog csv webhooks API
+  version: 1.0.1
+  description: Integrate with Rokt Catalog
+servers:
+- url: https://api.shopcanal.com/platform
+  description: Rokt Catalog Storefront Public API
+tags:
+- name: webhooks
+paths:
+  /webhooks/:
+    get:
+      operationId: webhooks_list
+      description: '
+
+        Retrieve a paginated list of all webhook subscriptions currently registered and active for the authenticated application (identified by the API credentials used in the request).
+
+
+        The response (`RegisteredWebhookSerializer`, paginated) includes the unique Rokt Catalog `ID` (UUID), the subscribed `topic`, and the target `address` (URL) for each registered webhook.
+
+
+        Results are returned using cursor-based pagination (`PlatformPagination`).
+
+
+        '
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      tags:
+      - webhooks
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRegisteredWebhookList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    post:
+      operationId: webhooks_create
+      description: '
+
+        Register a new endpoint URL to receive notifications (webhooks) from Rokt Catalog when specific events occur related to your store.
+
+
+        The request body (`CreateUpdateWebhookSerializer`) requires:
+
+
+        `topic`: A string representing the event type you want to subscribe to (e.g., `product/update`, `order/cancel`, `fulfillment/update`). See Catalog documentation for the full list of available topics.
+
+
+        `address`: The HTTPS URL of your application''s endpoint that will receive the webhook POST requests from Catalog.
+
+
+        **Process:** Catalog validates the topic and creates a webhook subscription record associated with your application''s integration settings. When an event matching the `topic` occurs for a resource linked to your store (e.g., an order associated with your shop is cancelled), Catalog will send an HTTP POST request containing the relevant event payload (JSON format) to the registered `address`.
+
+
+        A successful registration returns `201 Created` with the details of the new subscription (`RegisteredWebhookSerializer`), including its unique Catalog `ID` (UUID).
+
+
+        '
+      tags:
+      - webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUpdateWebhook'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateUpdateWebhook'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateUpdateWebhook'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisteredWebhook'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /webhooks/{id}/:
+    get:
+      operationId: webhooks_retrieve
+      description: '
+
+        Retrieve the details for a single, specific webhook subscription, identified by its Rokt Catalog `ID` (UUID) provided in the URL path.
+
+
+        Access is restricted to subscriptions belonging to the authenticated application.
+
+
+        The response (`RegisteredWebhookSerializer`) includes the `id`, `topic`, and `address`.
+
+
+        If the provided `ID` is invalid or does not correspond to a webhook registered by your application, a `404 Not Found` error is returned.
+
+
+        '
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - webhooks
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisteredWebhook'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    put:
+      operationId: webhooks_update
+      description: '
+
+        Update the configuration of an existing webhook subscription. Identify the subscription by its Rokt Catalog `ID` (UUID) in the URL path.
+
+
+        The request body (`CreateUpdateWebhookSerializer`) can include the new `topic` and/or `address` you want to set. Partial updates are allowed (only include the fields you want to change).
+
+
+        **Validation:** If provided, the `topic` must be one of the valid `WEBHOOK_TOPICS`.
+
+
+        A successful update returns `200 OK` with the complete, updated details of the webhook subscription (`RegisteredWebhookSerializer`).
+
+
+        '
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUpdateWebhook'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateUpdateWebhook'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateUpdateWebhook'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisteredWebhook'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    patch:
+      operationId: webhooks_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRegisteredWebhook'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedRegisteredWebhook'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedRegisteredWebhook'
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisteredWebhook'
+          description: ''
+    delete:
+      operationId: webhooks_destroy
+      description: '
+
+        Permanently remove an existing webhook subscription, identified by its Rokt Catalog `ID` (UUID) in the URL path.
+
+
+        Access is restricted to subscriptions belonging to the authenticated application.
+
+
+        Once deleted, Catalog will immediately stop sending notifications for the associated `topic` to the registered `address`.
+
+
+        **Warning:** This action is **irreversible**. To resume receiving notifications, you must create a new subscription.
+
+
+        A successful deletion returns an HTTP `200 OK` status with an empty response body.
+
+
+        '
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - webhooks
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+components:
+  schemas:
+    RegisteredWebhook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        topic:
+          $ref: '#/components/schemas/TopicEnum'
+        address:
+          type: string
+          maxLength: 512
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - address
+      - created_at
+      - id
+      - topic
+      - updated_at
+    CreateUpdateWebhook:
+      type: object
+      properties:
+        topic:
+          type: string
+        address:
+          type: string
+      required:
+      - address
+      - topic
+    TopicEnum:
+      enum:
+      - order/create
+      - order/update
+      - order/cancel
+      - product/create
+      - product/update
+      - fulfillment/create
+      - fulfillment/update
+      type: string
+      description: '* `order/create` - order/create
+
+        * `order/update` - order/update
+
+        * `order/cancel` - order/cancel
+
+        * `product/create` - product/create
+
+        * `product/update` - product/update
+
+        * `fulfillment/create` - fulfillment/create
+
+        * `fulfillment/update` - fulfillment/update'
+    PaginatedRegisteredWebhookList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegisteredWebhook'
+    PatchedRegisteredWebhook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        topic:
+          $ref: '#/components/schemas/TopicEnum'
+        address:
+          type: string
+          maxLength: 512
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    platformAppId:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-ID
+    platformAppToken:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-TOKEN

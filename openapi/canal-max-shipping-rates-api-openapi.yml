@@ -1,0 +1,127 @@
+openapi: 3.0.3
+info:
+  title: Rokt Catalog csv max-shipping-rates API
+  version: 1.0.1
+  description: Integrate with Rokt Catalog
+servers:
+- url: https://api.shopcanal.com/platform
+  description: Rokt Catalog Storefront Public API
+tags:
+- name: max-shipping-rates
+paths:
+  /max-shipping-rates/:
+    post:
+      operationId: max_shipping_rates_create
+      description: "\n**[Storefront Only]** Provide a rough, potentially overestimated shipping cost for a set of line items, useful for display *before* a customer provides their full address (e.g., showing 'Shipping from $X' on a product page).\n\n**Request Body (`MaxShippingQuerySerializer`):**\n\n- `line_items` (list, required): A list of objects, each specifying:\n\n  - `variant_id` (UUID, required): The Rokt Catalog ID of the *Storefront's* variant record.\n\n  - `quantity` (integer, required): The quantity of this variant.\n\n**Process:**\n\n1. **Default Address:** This endpoint **ignores** any address provided and instead uses a **hardcoded default address** (currently hardcoded to San Francisco, CA: 655 Montgomery St, 94111).\n\n2. **Query Suppliers:** It queries the relevant Suppliers for shipping rates to this *default* address using the provided `line_items`.\n\n3. **Find Maximum:** It identifies the **single highest shipping rate** returned across all involved Suppliers for the default address.\n\n**Response (`ShippingRateResponseSerializer`):**\n\n- `rates` (list): Typically contains **only one** rate object representing the maximum cost found for the default address. The object includes `title` and `price` (Money object).\n\n**Disclaimer:** This is an **estimate** based on a fixed location. The actual shipping cost calculated using the customer's real address via the `/shipping_rates` endpoint during checkout may be significantly different (higher or lower).\n\n"
+      tags:
+      - max-shipping-rates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MaxShippingQuery'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MaxShippingQuery'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MaxShippingQuery'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShippingRateResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+components:
+  schemas:
+    CreateOrderLineItem:
+      type: object
+      properties:
+        variant_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+      required:
+      - quantity
+      - variant_id
+    MaxShippingQuery:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+      required:
+      - line_items
+    ShippingRate:
+      type: object
+      properties:
+        code:
+          type: string
+        title:
+          type: string
+        price:
+          type: number
+          format: double
+        currency:
+          type: string
+          default: USD
+      required:
+      - code
+      - price
+      - title
+    ShippingRateResponse:
+      type: object
+      properties:
+        shipping_rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShippingRate'
+      required:
+      - shipping_rates
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    platformAppId:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-ID
+    platformAppToken:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-TOKEN

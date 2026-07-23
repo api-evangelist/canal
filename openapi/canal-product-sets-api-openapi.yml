@@ -1,0 +1,315 @@
+openapi: 3.0.3
+info:
+  title: Rokt Catalog csv product_sets API
+  version: 1.0.1
+  description: Integrate with Rokt Catalog
+servers:
+- url: https://api.shopcanal.com/platform
+  description: Rokt Catalog Storefront Public API
+tags:
+- name: product_sets
+paths:
+  /product_sets/:
+    get:
+      operationId: product_sets_list
+      description: '
+
+        Returns a paginated list of product sets (IDs and lightweight metadata) for suppliers
+
+        connected to the authenticated store. Each result includes: product_set_id, supplier_id,
+
+        name, description, type (e.g., MANUAL, RULE_BASED), created_at, updated_at.
+
+        **Optional filters:** supplier_id (UUID), updated_since (ISO 8601).
+
+        Results use cursor-based pagination, ordered by updated_at descending.
+
+        '
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - in: query
+        name: supplier_id
+        schema:
+          type: string
+          format: uuid
+        description: Restrict results to product sets belonging to this supplier.
+      - in: query
+        name: updated_since
+        schema:
+          type: string
+          format: date-time
+        description: Returns only sets updated after this date (ISO 8601 format).
+      tags:
+      - product_sets
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductSetList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /product_sets/items/:
+    get:
+      operationId: product_sets_items_list
+      description: '
+
+        Returns a paginated list of variants that belong to product sets. Each result includes:
+
+        variant_id, product_id, product_set_id, created_at, updated_at.
+
+        **Optional filters:** product_set_id (UUID), updated_since (ISO 8601).
+
+        Results use cursor-based pagination, ordered by updated_at descending.
+
+        '
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - in: query
+        name: product_set_id
+        schema:
+          type: string
+          format: uuid
+        description: 'If present: only variants in this product set. If absent: variants across all product sets.'
+      - in: query
+        name: updated_since
+        schema:
+          type: string
+          format: date-time
+        description: Returns only items updated after this date (ISO 8601 format).
+      tags:
+      - product_sets
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductSetItemList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+components:
+  schemas:
+    PaginatedProductSetList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductSet'
+    PaginatedProductSetItemList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductSetItem'
+    ProductSetItem:
+      type: object
+      properties:
+        variant_id:
+          type: string
+          format: uuid
+          readOnly: true
+        product_id:
+          type: string
+          format: uuid
+          description: Get product_id from the sk_variant's product.
+          readOnly: true
+        product_set_id:
+          type: string
+          format: uuid
+          readOnly: true
+        inventory_quantity:
+          type: integer
+          readOnly: true
+          nullable: true
+        price:
+          type: string
+          readOnly: true
+          nullable: true
+        product_type_category:
+          type: string
+          nullable: true
+          description: Get Shoppable Ads product type category breadcrumb path for the variant's product.
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - inventory_quantity
+      - price
+      - product_id
+      - product_set_id
+      - product_type_category
+      - updated_at
+      - variant_id
+    ProductSet:
+      type: object
+      properties:
+        product_set_id:
+          type: string
+          format: uuid
+          readOnly: true
+        supplier_id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+        type:
+          allOf:
+          - $ref: '#/components/schemas/TypeEnum'
+          description: 'Whether the product set is manual or rule-based.
+
+
+            * `MANUAL` - Manual
+
+            * `RULE_BASED` - Rule-based'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - name
+      - product_set_id
+      - supplier_id
+      - updated_at
+    TypeEnum:
+      enum:
+      - MANUAL
+      - RULE_BASED
+      type: string
+      description: '* `MANUAL` - Manual
+
+        * `RULE_BASED` - Rule-based'
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    platformAppId:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-ID
+    platformAppToken:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-TOKEN
