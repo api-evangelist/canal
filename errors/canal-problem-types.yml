@@ -1,0 +1,111 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/canal-openapi-original.yml
+docs: https://docs.shopcanal.com/reference/refunds_create
+format: custom-error-envelope
+envelope:
+  media_type: application/json
+  schema: Error
+  fields:
+  - error_code
+  - message
+  note: Errors are returned as a custom JSON envelope keyed on error_code + message, not RFC 9457 application/problem+json.
+problems:
+- status: 400
+  title: Bad Request
+  remediation: Validation error in the request body or parameters. Inspect the error_code and message.
+    Correct the payload and retry.
+  occurs_on:
+  - fulfillments_create
+  - fulfillments_list
+  - fulfillments_retrieve
+  - fulfillments_update
+  - max_shipping_rates_create
+  - orders_cancel_create
+  - orders_create
+  - orders_create_or_get_create
+- status: 401
+  title: Unauthorized
+  remediation: Missing or invalid x-canal-app-id / x-canal-app-token credentials. Verify your Application
+    ID and API Access Token from the Developer tab.
+  occurs_on:
+  - fulfillments_create
+  - fulfillments_list
+  - fulfillments_retrieve
+  - fulfillments_update
+  - max_shipping_rates_create
+  - orders_cancel_create
+  - orders_create
+  - orders_create_or_get_create
+- status: 403
+  title: Forbidden
+  remediation: The authenticated store lacks the required scope/permission for this action (e.g. write_sk_refunds)
+    or is missing platform integration settings.
+  occurs_on:
+  - orders_cancel_create
+  - product_sets_items_list
+  - product_sets_list
+  - refunds_create
+  - returns_close_create
+  - returns_create
+  - shipping_v1_calculate_create
+- status: 404
+  title: Not Found
+  remediation: The referenced resource (UUID) does not exist or is not associated with the authenticated
+    store.
+  occurs_on:
+  - fulfillments_create
+  - fulfillments_list
+  - fulfillments_retrieve
+  - fulfillments_update
+  - max_shipping_rates_create
+  - orders_cancel_create
+  - orders_create
+  - orders_create_or_get_create
+- status: 422
+  title: Unprocessable Entity
+  remediation: A referenced product variant is paused, unlisted, or otherwise not orderable. Re-check
+    variant availability before ordering.
+  occurs_on:
+  - orders_create
+  - orders_create_or_get_create
+  - orders_v1_create_and_charge_create
+  - orders_v1_initialize_order_create
+- status: 500
+  title: Internal Server Error
+  remediation: An unexpected server error, often during downstream dispatch to a Supplier/Storefront platform.
+    Safe to retry idempotently via create_or_get.
+  occurs_on:
+  - orders_create
+  - orders_create_or_get_create
+  - orders_v1_create_and_charge_create
+  - orders_v1_initialize_order_create
+  - product_sets_items_list
+  - product_sets_list
+  - tax_and_shipping_calculate_create
+  - tax_and_shipping_v1_calculate_create
+- status: 503
+  title: Service Unavailable
+  remediation: A temporary lock could not be acquired (concurrent order creation) or a downstream dependency
+    is unavailable. Retry after a short backoff.
+  occurs_on:
+  - orders_create
+  - orders_create_or_get_create
+  - orders_v1_create_and_charge_create
+  - orders_v1_initialize_order_create
+documented_error_codes:
+- error_code: ITEMS_ALREADY_REFUNDED
+  http_status: 400
+  meaning: One or more line items in a refund request exceed the currently refundable quantity (original
+    minus previously refunded).
+  operation: refunds_create
+- error_code: SUPPLIER_REFUND_FAILED
+  http_status: 400
+  meaning: A Storefront-initiated refund succeeded in Catalog but the downstream Supplier refund creation
+    failed.
+  operation: refunds_create
+- error_code: SK_REFUND_FAILED
+  http_status: 400
+  meaning: A Supplier-initiated refund succeeded in Catalog but the downstream Storefront refund creation
+    failed.
+  operation: refunds_create

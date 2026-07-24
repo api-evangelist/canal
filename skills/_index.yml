@@ -1,0 +1,16 @@
+generated: '2026-07-18'
+method: generated
+source: openapi/canal-openapi-original.yml
+note: >-
+  Agent Skills generated from the Rokt Catalog OpenAPI; every operationId is
+  verified present in openapi/canal-openapi-original.yml. No provider-published
+  AGENTS.md/skills were found.
+skills:
+  - file: canal-storefront-order.md
+    name: Place and track a Rokt Catalog (Canal) order from a Storefront
+    api: openapi/canal-openapi-original.yml
+    operations: [shipping_rates_create, orders_create_or_get_create, orders_retrieve, orders_cancel_create, fulfillments_list]
+  - file: canal-supplier-catalog.md
+    name: Manage a Rokt Catalog (Canal) supplier catalog and fulfill orders
+    api: openapi/canal-openapi-original.yml
+    operations: [products_create, variants_create, variants_update, fulfillments_create, fulfillments_update, refunds_create]

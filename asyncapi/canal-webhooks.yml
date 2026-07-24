@@ -1,0 +1,44 @@
+generated: '2026-07-18'
+method: searched
+source: https://docs.shopcanal.com/docs/webhooks-1
+type: Webhooks
+spec_type: webhook-catalog
+transport: https-post
+payload: >-
+  Each webhook POST body carries the affected object in the same JSON shape a
+  GET on that resource would return.
+subscription:
+  api:
+    create: 'POST /webhooks/ (topic + address)'
+    list: 'GET /webhooks/'
+    delete: 'DELETE /webhooks/{id}/'
+  ui: Rokt Catalog app > Settings > Developer tab > Add Webhooks
+signing:
+  algorithm: HMAC-SHA256
+  signature_header: X-CANAL-EVENT-HASH
+  context_headers:
+    - X-CANAL-APP-ID
+    - X-CANAL-TOPIC
+  verification: >-
+    Compute HMAC-SHA256 over the raw request body keyed with your API Access
+    Token and compare against X-CANAL-EVENT-HASH.
+topics:
+  partner:
+    - topic: product/create
+      description: A product became available to the Storefront.
+    - topic: product/update
+      description: A product or one of its variants was updated (price, inventory, deletion propagation).
+    - topic: order/update
+      description: An order the Storefront placed changed state.
+    - topic: fulfillment/create
+      description: A Supplier created a fulfillment (shipment) for the Storefront's order.
+    - topic: fulfillment/update
+      description: Tracking on a fulfillment was updated.
+  brand:
+    - topic: order/create
+      description: A new order was forwarded to the Supplier.
+    - topic: order/update
+      description: An order the Supplier received changed state.
+    - topic: order/cancel
+      description: An order the Supplier received was cancelled by the Storefront.
+enum_source: openapi/canal-openapi-original.yml#/components/schemas/TopicEnum

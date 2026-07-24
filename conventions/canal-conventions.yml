@@ -1,0 +1,66 @@
+generated: '2026-07-18'
+method: searched
+source: https://docs.shopcanal.com/docs/getting-started
+docs:
+  authentication: https://docs.shopcanal.com/docs/authentication
+  environments: https://docs.shopcanal.com/docs/environments
+  webhooks: https://docs.shopcanal.com/docs/webhooks-1
+authentication:
+  style: api-key-headers
+  headers:
+    - X-CANAL-APP-ID
+    - X-CANAL-APP-TOKEN
+  also_supported: [http-basic]
+  note: >-
+    Application ID + API Access Token are generated at account creation and
+    found in the Rokt Catalog app Developer tab under API Credentials.
+idempotency:
+  supported: true
+  mechanism: business-key
+  operation: orders_create_or_get
+  key_field: order_name
+  note: >-
+    POST /orders/create_or_get/ is the idempotent order-creation entry point:
+    it is keyed on the Storefront's own unique order_name so retried requests
+    (network failures) return the existing order (200) instead of creating a
+    duplicate. Standard POST /orders/ is not idempotent on its own.
+pagination:
+  style: cursor
+  implementation: PlatformPagination
+  ordering_params: [ordering]
+  default_order: '-created_at'
+  ordering_fields_common: [created_at, updated_at]
+  response_shape: 'Paginated<Resource>List (next/previous cursor + results[])'
+versioning:
+  scheme: path-embedded
+  base_path: /platform
+  current: 1.0.1
+  note: >-
+    The OpenAPI info.version is 1.0.1. Newer operations are namespaced with a
+    /v1/ path segment (e.g. /orders/v1/initialize-order/, /shipping/v1/calculate/)
+    while legacy operations remain unversioned under the same /platform base.
+error_envelope:
+  media_type: application/json
+  format: custom-error-envelope
+  fields: [error_code, message]
+  reference: errors/canal-problem-types.yml
+webhook_signing:
+  algorithm: HMAC-SHA256
+  signature_header: X-CANAL-EVENT-HASH
+  context_headers: [X-CANAL-APP-ID, X-CANAL-TOPIC]
+  signed_over: raw request body, keyed with your API Access Token
+  reference: asyncapi/canal-webhooks.yml
+identifiers:
+  format: UUID
+  note: All primary resource identifiers (products, variants, orders, fulfillments, refunds, returns, shops, webhooks) are UUIDs.
+rate_limits:
+  documented: unknown
+  note: >-
+    Some write operations (e.g. products resync) may be queued asynchronously
+    when rate limits are hit, returning a 202 with a "resync has started"
+    message rather than an inline result. No numeric public rate-limit table
+    was found in the docs.
+cross_reference:
+  authentication: authentication/canal-authentication.yml
+  errors: errors/canal-problem-types.yml
+  lifecycle: lifecycle/canal-lifecycle.yml

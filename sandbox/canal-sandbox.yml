@@ -1,0 +1,17 @@
+generated: '2026-07-18'
+method: searched
+source: https://docs.shopcanal.com/docs/environments
+model: production-with-test-accounts
+separate_sandbox_host: false
+base_url: https://api.shopcanal.com/platform
+how_to_test:
+  - Authenticate with the API Token from your designated test partner account.
+  - During testing you are connected only to Rokt Catalog's designated test brands.
+  - Orders placed with test brands are for testing only and do not result in actual transactions.
+  - Use only the test brands and test payment methods provided by Rokt Catalog.
+notes: >-
+  Rokt Catalog does not publish a separate sandbox/staging hostname. Test mode
+  is achieved by using test partner (Storefront) credentials that are connected
+  only to Catalog-provided test brand accounts and test payment methods. No
+  static magic card/identifier values are published in the public docs, so none
+  are recorded here (no fabrication).

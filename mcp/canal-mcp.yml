@@ -1,0 +1,219 @@
+generated: '2026-07-18'
+method: derived
+status: candidate
+source: openapi/canal-openapi-original.yml
+note: Candidate tool list derived one-per-operation from the Rokt Catalog OpenAPI. No official hosted
+  Canal MCP server was found as of the generated date.
+server:
+  name: canal
+  transport: http
+tools:
+- name: csv_download_shopkeep_line_items_retrieve
+  description: GET /csv/download_shopkeep_line_items/
+  source_operation: openapi/canal-openapi-original.yml#csv_download_shopkeep_line_items_retrieve
+- name: csv_download_unfulfilled_supplier_line_items_retrieve
+  description: GET /csv/download_unfulfilled_supplier_line_items/
+  source_operation: openapi/canal-openapi-original.yml#csv_download_unfulfilled_supplier_line_items_retrieve
+- name: csv_product_template_retrieve
+  description: GET /csv/product/template/
+  source_operation: openapi/canal-openapi-original.yml#csv_product_template_retrieve
+- name: fulfillments_list
+  description: Retrieve a paginated list of fulfillment records associated with the authenticated store,
+    reflecting its role in the order process
+  source_operation: openapi/canal-openapi-original.yml#fulfillments_list
+- name: fulfillments_create
+  description: '**[Supplier Only]** Create a fulfillment record for items in an order received from a
+    connected Storefront'
+  source_operation: openapi/canal-openapi-original.yml#fulfillments_create
+- name: fulfillments_retrieve
+  description: Retrieve the full details for a specific fulfillment record, identified by its Rokt Catalog
+    `ID` (UUID) in the URL path
+  source_operation: openapi/canal-openapi-original.yml#fulfillments_retrieve
+- name: fulfillments_update
+  description: '**[Supplier Only]** Update an existing fulfillment record created by your Supplier account'
+  source_operation: openapi/canal-openapi-original.yml#fulfillments_update
+- name: fulfillments_partial_update
+  description: PATCH /fulfillments/{id}/
+  source_operation: openapi/canal-openapi-original.yml#fulfillments_partial_update
+- name: markets_prices_import_create
+  description: POST /markets/prices/import/
+  source_operation: openapi/canal-openapi-original.yml#markets_prices_import_create
+- name: max_shipping_rates_create
+  description: '**[Storefront Only]** Provide a rough, potentially overestimated shipping cost for a set
+    of line items, useful for display *before* a custom'
+  source_operation: openapi/canal-openapi-original.yml#max_shipping_rates_create
+- name: orders_list
+  description: '**[Storefront Only]** Retrieve a paginated list of orders recorded in Rokt Catalog that
+    originated from your Storefront and contain items so'
+  source_operation: openapi/canal-openapi-original.yml#orders_list
+- name: orders_create
+  description: '**[Storefront Only]** Record a new customer order placed on your external platform (e'
+  source_operation: openapi/canal-openapi-original.yml#orders_create
+- name: orders_retrieve
+  description: '**[Storefront Only]** Retrieve the full details for a specific Rokt Catalog order, identified
+    by its Catalog `ID` (UUID) in the URL path'
+  source_operation: openapi/canal-openapi-original.yml#orders_retrieve
+- name: orders_cancel_create
+  description: '**[Storefront Only]** Cancel a Rokt Catalog order associated with your Storefront'
+  source_operation: openapi/canal-openapi-original.yml#orders_cancel_create
+- name: orders_create_or_get_create
+  description: '**[Storefront Only]** Safely create or retrieve a Catalog order using your Storefront''s
+    unique order identifier (`order_name`) to ensure ide'
+  source_operation: openapi/canal-openapi-original.yml#orders_create_or_get_create
+- name: orders_v1_create_and_charge_create
+  description: '**[Storefront Only]** Create a new order with immediate payment processing'
+  source_operation: openapi/canal-openapi-original.yml#orders_v1_create_and_charge_create
+- name: orders_v1_initialize_order_create
+  description: '**[Storefront Only]** Create a new order and receive a Stripe PaymentIntent client secret
+    for frontend payment confirmation'
+  source_operation: openapi/canal-openapi-original.yml#orders_v1_initialize_order_create
+- name: product_sets_list
+  description: 'Returns a paginated list of product sets (IDs and lightweight metadata) for suppliers
+
+    connected to the authenticated store'
+  source_operation: openapi/canal-openapi-original.yml#product_sets_list
+- name: product_sets_items_list
+  description: Returns a paginated list of variants that belong to product sets
+  source_operation: openapi/canal-openapi-original.yml#product_sets_items_list
+- name: products_list
+  description: '**[Storefront Only]** Retrieve a paginated list of products accessible to your Storefront
+    through your established Rokt Catalog connections'
+  source_operation: openapi/canal-openapi-original.yml#products_list
+- name: products_create
+  description: '**[Supplier Only]** Create a new product listing within your Rokt Catalog Supplier account'
+  source_operation: openapi/canal-openapi-original.yml#products_create
+- name: products_retrieve
+  description: '**[Storefront Only]** Retrieve comprehensive details for a single product, identified
+    by its Rokt Catalog `ID` (UUID) in the URL path'
+  source_operation: openapi/canal-openapi-original.yml#products_retrieve
+- name: products_update
+  description: '**[Supplier Only]** Update attributes of an existing product listing, identified by its
+    Rokt Catalog `ID` (UUID) in the URL path'
+  source_operation: openapi/canal-openapi-original.yml#products_update
+- name: products_partial_update
+  description: PATCH /products/{id}/
+  source_operation: openapi/canal-openapi-original.yml#products_partial_update
+- name: products_destroy
+  description: '**[Supplier Only]** Permanently remove a product listing, identified by its Rokt Catalog
+    `ID` (UUID) in the URL path, from the Catalog platf'
+  source_operation: openapi/canal-openapi-original.yml#products_destroy
+- name: products_reorder_variants_create
+  description: '**[Supplier Only]** Update the display sequence of variants for a specific product'
+  source_operation: openapi/canal-openapi-original.yml#products_reorder_variants_create
+- name: products_resync_create
+  description: Resynchronize a retailer (Shopkeep) product with its origin supplier product
+  source_operation: openapi/canal-openapi-original.yml#products_resync_create
+- name: products_upsell_products_list
+  description: '**[Storefront Only]** Retrieve a paginated list of active products that are eligible for
+    upselling'
+  source_operation: openapi/canal-openapi-original.yml#products_upsell_products_list
+- name: refunds_list
+  description: Retrieve a paginated list of refund records associated with the authenticated store, reflecting
+    its role in the order process
+  source_operation: openapi/canal-openapi-original.yml#refunds_list
+- name: refunds_create
+  description: Initiate a refund for specific quantities of line items within a Rokt Catalog order
+  source_operation: openapi/canal-openapi-original.yml#refunds_create
+- name: refunds_retrieve
+  description: Retrieve the full details for a specific refund record, identified by its Rokt Catalog
+    `ID` (UUID) in the URL path
+  source_operation: openapi/canal-openapi-original.yml#refunds_retrieve
+- name: returns_list
+  description: Retrieve a paginated list of return requests associated with the authenticated store, reflecting
+    its role
+  source_operation: openapi/canal-openapi-original.yml#returns_list
+- name: returns_create
+  description: '**[Storefront Only]** Initiate a return process for items purchased in a Rokt Catalog-facilitated
+    order'
+  source_operation: openapi/canal-openapi-original.yml#returns_create
+- name: returns_retrieve
+  description: GET /returns/{id}/
+  source_operation: openapi/canal-openapi-original.yml#returns_retrieve
+- name: returns_close_create
+  description: '**[Supplier Only]** Mark a return request that your Supplier account received from a Storefront
+    as ''CLOSED'''
+  source_operation: openapi/canal-openapi-original.yml#returns_close_create
+- name: returns_update_tracking_create
+  description: '**[Storefront Only]** Add or update the tracking information for the shipment returning
+    items back to the Supplier(s)'
+  source_operation: openapi/canal-openapi-original.yml#returns_update_tracking_create
+- name: selection_ai_select_create
+  description: AI-powered product selection endpoint
+  source_operation: openapi/canal-openapi-original.yml#selection_ai_select_create
+- name: shipping_rates_create
+  description: '**[Storefront Only]** Calculate available shipping options and their estimated costs for
+    a given destination address and a set of line items'
+  source_operation: openapi/canal-openapi-original.yml#shipping_rates_create
+- name: shipping_v1_calculate_create
+  description: Calculate shipping rates for supplier variants identified by `supplier_variant_rid` and
+    `supplier_id`
+  source_operation: openapi/canal-openapi-original.yml#shipping_v1_calculate_create
+- name: shops_list
+  description: '**[Storefront Only]** Retrieve a paginated list of Supplier shops with whom your Storefront
+    has an **active and approved** partnership conne'
+  source_operation: openapi/canal-openapi-original.yml#shops_list
+- name: shops_create
+  description: '**[Storefront Only]** Initiate partnership connection requests with one or more existing
+    Rokt Catalog Suppliers by specifying their primary '
+  source_operation: openapi/canal-openapi-original.yml#shops_create
+- name: shops_retrieve
+  description: '**[Storefront Only]** Retrieve the full profile details for a specific Supplier shop,
+    identified by its unique Rokt Catalog `ID` (UUID) prov'
+  source_operation: openapi/canal-openapi-original.yml#shops_retrieve
+- name: tax_and_shipping_calculate_create
+  description: '**[Storefront Only]** Calculate estimated tax lines and available shipping options and
+    costs, given a set of line items, shipping address, a'
+  source_operation: openapi/canal-openapi-original.yml#tax_and_shipping_calculate_create
+- name: tax_and_shipping_v1_calculate_create
+  description: '**[Storefront Only]** Calculate estimated tax lines and available shipping options and
+    costs, given a set of line items, shipping address, a'
+  source_operation: openapi/canal-openapi-original.yml#tax_and_shipping_v1_calculate_create
+- name: tax_calculate_create
+  description: '**[Storefront Only]** Calculate estimated tax lines for a set of line items and a shipping
+    address'
+  source_operation: openapi/canal-openapi-original.yml#tax_calculate_create
+- name: variants_list
+  description: '**[Supplier Only]** Retrieve a paginated list of **all** product variants associated with
+    **all** products owned by your Supplier account'
+  source_operation: openapi/canal-openapi-original.yml#variants_list
+- name: variants_create
+  description: '**[Supplier Only]** Add a new variant to an existing product within your Rokt Catalog
+    Supplier account'
+  source_operation: openapi/canal-openapi-original.yml#variants_create
+- name: variants_retrieve
+  description: '**[Supplier Only]** Retrieve the full details for a specific product variant, identified
+    by its Rokt Catalog `ID` (UUID) provided in the URL'
+  source_operation: openapi/canal-openapi-original.yml#variants_retrieve
+- name: variants_update
+  description: '**[Supplier Only]** Update attributes of a specific product variant, identified by its
+    Rokt Catalog `ID` (UUID) in the URL path'
+  source_operation: openapi/canal-openapi-original.yml#variants_update
+- name: variants_partial_update
+  description: PATCH /variants/{id}/
+  source_operation: openapi/canal-openapi-original.yml#variants_partial_update
+- name: variants_destroy
+  description: '**[Supplier Only]** Permanently remove a specific product variant, identified by its Rokt
+    Catalog `ID` (UUID) in the URL path, from its pare'
+  source_operation: openapi/canal-openapi-original.yml#variants_destroy
+- name: webhooks_list
+  description: 'Retrieve a paginated list of all webhook subscriptions currently registered and active
+    for the authenticated application (identified by the '
+  source_operation: openapi/canal-openapi-original.yml#webhooks_list
+- name: webhooks_create
+  description: Register a new endpoint URL to receive notifications (webhooks) from Rokt Catalog when
+    specific events occur related to your store
+  source_operation: openapi/canal-openapi-original.yml#webhooks_create
+- name: webhooks_retrieve
+  description: Retrieve the details for a single, specific webhook subscription, identified by its Rokt
+    Catalog `ID` (UUID) provided in the URL path
+  source_operation: openapi/canal-openapi-original.yml#webhooks_retrieve
+- name: webhooks_update
+  description: Update the configuration of an existing webhook subscription
+  source_operation: openapi/canal-openapi-original.yml#webhooks_update
+- name: webhooks_partial_update
+  description: PATCH /webhooks/{id}/
+  source_operation: openapi/canal-openapi-original.yml#webhooks_partial_update
+- name: webhooks_destroy
+  description: Permanently remove an existing webhook subscription, identified by its Rokt Catalog `ID`
+    (UUID) in the URL path
+  source_operation: openapi/canal-openapi-original.yml#webhooks_destroy

@@ -1,0 +1,122 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/canal-openapi-original.yml
+docs: https://docs.shopcanal.com/reference/brand
+id_format: UUID (all primary resource ids are UUIDs)
+entities:
+- name: Product
+  schema: Product
+  id: UUID
+  domain: catalog
+  summary: A supplier product listing; owned by a Supplier, exposed to connected Storefronts.
+- name: Variant
+  schema: Variant
+  id: UUID
+  domain: catalog
+  summary: A purchasable variant of a Product (price, sku, inventory, options).
+- name: Order
+  schema: Order
+  id: UUID
+  domain: orders
+  summary: A Storefront order containing Catalog-sourced line items; forwarded to Suppliers.
+- name: LineItem
+  schema: LineItem
+  id: UUID
+  domain: orders
+  summary: A single ordered variant + quantity within an Order.
+- name: Fulfillment
+  schema: Fulfillment
+  id: UUID
+  domain: orders
+  summary: A shipment record created by a Supplier against an Order, carrying tracking.
+- name: Refund
+  schema: Refund
+  id: UUID
+  domain: orders
+  summary: A refund of specific line-item quantities on an Order.
+- name: Return
+  schema: Return
+  id: UUID
+  domain: orders
+  summary: A return request (RMA) for fulfilled line items, with reverse delivery tracking.
+- name: Shop
+  schema: Shop
+  id: UUID
+  domain: network
+  summary: A Supplier or Storefront store; partnerships connect Storefronts to Suppliers.
+- name: RegisteredWebhook
+  schema: RegisteredWebhook
+  id: UUID
+  domain: platform
+  summary: A webhook subscription (topic + address) for the authenticated application.
+- name: ProductSet
+  schema: ProductSet
+  id: UUID
+  domain: catalog
+  summary: A curated set/collection of products.
+relationships:
+- from: Variant
+  to: Product
+  type: belongs_to
+  via: product_id
+- from: Product
+  to: Variant
+  type: has_many
+  via: variants
+- from: Product
+  to: Image
+  type: has_many
+  via: images
+- from: Product
+  to: Shop
+  type: belongs_to
+  via: supplier_id
+- from: Order
+  to: LineItem
+  type: has_many
+  via: line_items
+- from: Order
+  to: Customer
+  type: has_one
+  via: customer
+- from: Order
+  to: Address
+  type: has_many
+  via: shipping_address,billing_address
+- from: LineItem
+  to: Variant
+  type: belongs_to
+  via: variant_id
+- from: Fulfillment
+  to: Order
+  type: belongs_to
+  via: order_id
+- from: Fulfillment
+  to: LineItem
+  type: has_many
+  via: line_items
+- from: Refund
+  to: Order
+  type: belongs_to
+  via: order_id
+- from: Refund
+  to: RefundLineItem
+  type: has_many
+  via: refund_line_items
+- from: Return
+  to: Order
+  type: belongs_to
+  via: order_id
+- from: Return
+  to: ReturnLineItem
+  type: has_many
+  via: return_line_items
+- from: Return
+  to: ReverseDelivery
+  type: has_many
+  via: reverse_deliveries
+- from: ProductSet
+  to: ProductSetItem
+  type: has_many
+  via: items
+schema_count: 91

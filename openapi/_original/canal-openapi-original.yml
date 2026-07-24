@@ -1,0 +1,5817 @@
+openapi: 3.0.3
+info:
+  title: Rokt Catalog API
+  version: 1.0.1
+  description: Integrate with Rokt Catalog
+paths:
+  /csv/download_shopkeep_line_items/:
+    get:
+      operationId: csv_download_shopkeep_line_items_retrieve
+      tags:
+      - csv
+      security:
+      - basicAuth: []
+      - platformAppId: []
+        platformAppToken: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /csv/download_unfulfilled_supplier_line_items/:
+    get:
+      operationId: csv_download_unfulfilled_supplier_line_items_retrieve
+      tags:
+      - csv
+      security:
+      - basicAuth: []
+      - platformAppId: []
+        platformAppToken: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /csv/product/template/:
+    get:
+      operationId: csv_product_template_retrieve
+      tags:
+      - csv
+      security:
+      - basicAuth: []
+      - platformAppId: []
+        platformAppToken: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /fulfillments/:
+    get:
+      operationId: fulfillments_list
+      description: |2+
+
+        Retrieve a paginated list of fulfillment records associated with the authenticated store, reflecting its role in the order process.
+
+        - **If called by a Storefront:** Returns fulfillments created by connected Suppliers for orders originating from the Storefront. This allows the Storefront to track shipments for items their customers ordered.
+
+        - **If called by a Supplier:** Returns fulfillments created *by* this Supplier for orders they received from connected Storefronts.
+
+        Results (`FulfillmentSerializer`) include tracking details when present, status, associated line items, and timestamps.
+
+        Pagination is cursor-based (`PlatformPagination`). Ordering is available on `created_at` and `updated_at`, defaulting to `-created_at`.
+
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      tags:
+      - fulfillments
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedFulfillmentList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    post:
+      operationId: fulfillments_create
+      description: |2+
+
+        **[Supplier Only]** Create a fulfillment record for items in an order received from a connected Storefront.
+
+        The request body (`CreateFulfillmentSerializer`) must specify:
+
+        `order_id` (UUID of the *Supplier's* Rokt Catalog order record) and a list of `line_items`.
+
+        Each object in `line_items` needs the Catalog `id` (UUID) of the *Supplier's* line item record and the `quantity` being fulfilled.
+
+        For physical shipments, include tracking information (`tracking_company`, `tracking_numbers`, `tracking_urls`) when available. For digital/email fulfillment with no shipment, omit the tracking fields.
+
+        **Process:**
+
+        1. **Validation:** Checks if the order exists, belongs to the Supplier, is a connected order, and if the provided line items are valid. Returns `400 Bad Request` or `404 Not Found` on failure.
+
+        2. **Create Supplier Fulfillment:** Creates the fulfillment record associated with the Supplier's order in Catalog. Considers feature flags to determine if the `notify_customer` flag should be set during downstream sync.
+
+        3. **Sync to Storefront:** Triggers a synchronization process. This attempts to create or update the corresponding fulfillment record on the original Storefront's order (e.g., via Shopify API), including tracking information when present.
+
+        4. **Webhook:** Emits a `FULFILLMENT_UPDATE` webhook event containing details of the **Supplier's** newly created fulfillment record.
+
+        A successful creation returns `201 Created` with the details of the Supplier's fulfillment record (`FulfillmentSerializer`).
+
+      tags:
+      - fulfillments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateFulfillment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateFulfillment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateFulfillment'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fulfillment'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /fulfillments/{id}/:
+    get:
+      operationId: fulfillments_retrieve
+      description: |2+
+
+        Retrieve the full details for a specific fulfillment record, identified by its Rokt Catalog `ID` (UUID) in the URL path.
+
+        Access is restricted to fulfillments associated with the authenticated store (`request.shop`). This means:
+
+        - **Storefronts** can retrieve details of fulfillments created by their Suppliers for their orders.
+
+        - **Suppliers** can retrieve details of fulfillments they created.
+
+        The response (`FulfillmentSerializer`) includes the fulfillment `status` (e.g., 'fulfilled', 'cancelled'), optional `tracking_company`, optional `tracking_numbers`, optional `tracking_urls`, the list of `line_items` included in this fulfillment (with quantities), and relevant timestamps.
+
+        If the fulfillment `ID` is invalid or not associated with an order linked to your store, a `404 Not Found` error is returned.
+
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - fulfillments
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fulfillment'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    put:
+      operationId: fulfillments_update
+      description: |2+
+
+        **[Supplier Only]** Update an existing fulfillment record created by your Supplier account. Identify the fulfillment by its Rokt Catalog `ID` (UUID) in the URL path.
+
+        The request body (`UpdateFulfillmentSerializer`) should contain the fields to update, such as `tracking_company`, `tracking_numbers`, and/or `tracking_urls` for physical shipments. Tracking fields are optional and can be omitted for digital/email fulfillments with no shipment. Partial updates are allowed (only include the fields you want to change).
+
+        **Process:**
+
+        1. **Update Supplier Fulfillment:** Updates the specified fields on the Supplier's fulfillment record in Catalog.
+
+        2. **Sync to Storefront:** Triggers a synchronization process. This attempts to update the corresponding fulfillment record on the original Storefront's order (e.g., via Shopify API) with the new tracking information when present.
+
+        3. **Webhook:** Emits a `FULFILLMENT_UPDATE` webhook event containing details of the **Supplier's** updated fulfillment record. If the sync to the Storefront also resulted in an update to the Storefront's fulfillment record in Catalog, a separate `FULFILLMENT_UPDATE` event for the **Storefront's** fulfillment might also be emitted (depending on the sync logic).
+
+        A successful update returns `200 OK` with the updated details of the Supplier's fulfillment record (`FulfillmentSerializer`).
+
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - fulfillments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateFulfillment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateFulfillment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UpdateFulfillment'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fulfillment'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    patch:
+      operationId: fulfillments_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - fulfillments
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedFulfillment'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedFulfillment'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedFulfillment'
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Fulfillment'
+          description: ''
+  /markets/prices/import/:
+    post:
+      operationId: markets_prices_import_create
+      tags:
+      - markets
+      security:
+      - basicAuth: []
+      - platformAppId: []
+        platformAppToken: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /max-shipping-rates/:
+    post:
+      operationId: max_shipping_rates_create
+      description: |2+
+
+        **[Storefront Only]** Provide a rough, potentially overestimated shipping cost for a set of line items, useful for display *before* a customer provides their full address (e.g., showing 'Shipping from $X' on a product page).
+
+        **Request Body (`MaxShippingQuerySerializer`):**
+
+        - `line_items` (list, required): A list of objects, each specifying:
+
+          - `variant_id` (UUID, required): The Rokt Catalog ID of the *Storefront's* variant record.
+
+          - `quantity` (integer, required): The quantity of this variant.
+
+        **Process:**
+
+        1. **Default Address:** This endpoint **ignores** any address provided and instead uses a **hardcoded default address** (currently hardcoded to San Francisco, CA: 655 Montgomery St, 94111).
+
+        2. **Query Suppliers:** It queries the relevant Suppliers for shipping rates to this *default* address using the provided `line_items`.
+
+        3. **Find Maximum:** It identifies the **single highest shipping rate** returned across all involved Suppliers for the default address.
+
+        **Response (`ShippingRateResponseSerializer`):**
+
+        - `rates` (list): Typically contains **only one** rate object representing the maximum cost found for the default address. The object includes `title` and `price` (Money object).
+
+        **Disclaimer:** This is an **estimate** based on a fixed location. The actual shipping cost calculated using the customer's real address via the `/shipping_rates` endpoint during checkout may be significantly different (higher or lower).
+
+      tags:
+      - max-shipping-rates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MaxShippingQuery'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/MaxShippingQuery'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/MaxShippingQuery'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShippingRateResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /orders/:
+    get:
+      operationId: orders_list
+      description: |2+
+
+        **[Storefront Only]** Retrieve a paginated list of orders recorded in Rokt Catalog that originated from your Storefront and contain items sourced from Catalog Suppliers.
+
+        This provides your Storefront's view of these cross-shop orders.
+
+        Results are returned using cursor-based pagination (`PlatformPagination`). Available ordering fields are `created_at` and `updated_at`. The default order is `-created_at`.
+
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      tags:
+      - orders
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedOrderList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    post:
+      operationId: orders_create
+      description: |2+
+
+        **[Storefront Only]** Record a new customer order placed on your external platform (e.g., your Shopify store) that contains items sourced from Rokt Catalog Suppliers.
+
+        The request body (`OrderCreateSerializer`) must include:
+
+        `order_name` (your unique identifier for this order), `currency`, `email`, `customer_locale`, `shipping_address` (full address object), `billing_address` (optional), and a list of `line_items`.
+
+        Each object in `line_items` requires the Catalog `variant_id` (UUID of the *Storefront's* variant record, which links to the Supplier variant) and `quantity`.
+
+        **Process:**
+
+        1. **Validation:** Checks if input variants are valid, active, and listed by the supplier. If variants are paused or unlisted, returns `422 Unprocessable Entity`. Basic format validation returns `400 Bad Request`.
+
+        2. **Locking:** Acquires a temporary lock based on customer name/phone to prevent duplicate order creation during concurrent requests. If lock fails, returns `503 Service Unavailable`.
+
+        3. **Storefront Order Creation:** Creates the primary order record in Catalog representing the Storefront's view of the order.
+
+        4. **Supplier Order Dispatch:** Based on the Storefront's `order_forwarding_delay` setting:
+
+           - If delay > 0: Schedules an **asynchronous** task to forward order details to relevant Suppliers after the delay. Returns `202 Accepted` with the created Storefront order data.
+
+           - If delay == 0: **Synchronously** attempts to dispatch orders to Suppliers. If successful, returns `201 Created` with Storefront order data. If dispatch fails (e.g., Supplier API issue), attempts to cancel any partially created Supplier orders and raises an error (likely resulting in a `500 Internal Server Error` response).
+
+        **Error Handling:** Catches various exceptions, including dispatch errors, database connection issues, and general exceptions, logging them and potentially returning `500 Internal Server Error`.
+
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /orders/{id}/:
+    get:
+      operationId: orders_retrieve
+      description: |2+
+
+        **[Storefront Only]** Retrieve the full details for a specific Rokt Catalog order, identified by its Catalog `ID` (UUID) in the URL path.
+
+        This endpoint provides the Storefront's perspective on the order. Access is restricted to orders associated with the authenticated Storefront (`request.shop`).
+
+        The response (`OrderSerializer`) includes comprehensive information: customer details (`email`, `customer_locale`), `shipping_address`, `billing_address`, `currency`, `order_name`, `line_items` (with Catalog variant IDs and quantities), overall `fulfillment_status`, `financial_status`, `cancelled_at` timestamp (if applicable), calculated totals (`total_price`, `subtotal_price`, etc.), and potentially links or references to the corresponding connected orders created on the Supplier side.
+
+        If the provided order `ID` is invalid or the order does not belong to your Storefront, a `404 Not Found` error is returned.
+
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - orders
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /orders/{id}/cancel/:
+    post:
+      operationId: orders_cancel_create
+      description: |2+
+
+        **[Storefront Only]** Cancel a Rokt Catalog order associated with your Storefront.
+
+        Identify the order to be cancelled by its Catalog `ID` (UUID) provided in the URL path.
+
+        **Process:**
+
+        1. **Update Storefront Order:** Sets the `cancelled_at` field on the Storefront's order record in Catalog to the current timestamp.
+
+        2. **Cancel Supplier Orders:** Triggers an **asynchronous** operation. This attempts to cancel the corresponding order(s) that were previously dispatched to the relevant Supplier(s)' external platforms (e.g., calling the Shopify API to cancel the order on the Supplier's store).
+
+        3. **Webhook:** Emits an `ORDER_CANCEL` webhook event containing the details of the cancelled Storefront order.
+
+        **Permissions:** Requires valid platform integration settings for the Storefront. If settings are missing, returns `403 Forbidden`.
+
+        A successful cancellation returns `200 OK` with the updated Storefront order details (`OrderSerializer`), including the `cancelled_at` timestamp.
+
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - orders
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /orders/create_or_get/:
+    post:
+      operationId: orders_create_or_get_create
+      description: |2+
+
+        **[Storefront Only]** Safely create or retrieve a Catalog order using your Storefront's unique order identifier (`order_name`) to ensure idempotency.
+
+        **Behavior:**
+
+        1. **Check Existing:** The system first queries for an existing active (non-cancelled) order associated with your shop that matches the provided `order_name`.
+
+        2. **Return Existing:** If exactly one such active order is found, the endpoint immediately returns `200 OK` with the details of that existing order (`OrderSerializer`). This prevents duplicate creation.
+
+        3. **Handle Duplicates:** If multiple active orders are found with the same `order_name` (which indicates a potential issue), it returns a `400 Bad Request` validation error.
+
+        4. **Create New:** If no active order with the given `order_name` is found, the endpoint proceeds to call the standard `create` method (the `/orders/` POST endpoint logic) using the **entire request payload**.
+
+        **Payload Requirement:** Even though this endpoint might retrieve an existing order, you **must** provide the full order creation payload (identical to the standard `/orders/` create request) in the request body. This payload is used only if a new order needs to be created.
+
+        **Use Case:** This endpoint is ideal for scenarios where order creation requests might be retried (e.g., due to network issues). It guarantees that submitting the same request multiple times will result in only one Catalog order being created.
+
+        **Responses & Errors:** If creating a new order, the responses (`201 Created`, `202 Accepted`) and potential errors (`400`, `422`, `500`, `503`) are identical to those of the standard `create` endpoint.
+
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderCreate'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Order'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /orders/v1/create-and-charge/:
+    post:
+      operationId: orders_v1_create_and_charge_create
+      description: |2+
+
+        **[Storefront Only]** Create a new order with immediate payment processing.
+
+
+        This endpoint combines order creation and payment processing in a single request.
+
+        The request body follows the same structure as the standard order creation endpoint, with additional payment fields.
+
+        **Process:**
+
+        1. **Validation:** Checks if input variants are valid, active, and listed by the supplier. If variants are paused or unlisted, returns `422 Unprocessable Entity`. Basic format validation returns `400 Bad Request`.
+
+        2. **Payment Processing:** Processes the payment with a third party payment service provider.
+
+        3. **Storefront Order Creation:** Creates the primary order record in Catalog representing the Storefront's view of the order.
+
+        4. **Supplier Order Dispatch:** Schedules an **asynchronous** task to forward order details to relevant Suppliers. Returns `202 Accepted` with the created Storefront order data.
+
+        **Responses & Errors:**
+
+        **Response:** Returns the created order details on success, or payment/validation errors on failure.
+
+        **Error Handling:** Catches various exceptions, including dispatch errors, database connection issues, and general exceptions, logging them and potentially returning `500 Internal Server Error`. If payment fails, will not continue with order creation.
+
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderCreateAndCharge'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/OrderCreateAndCharge'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/OrderCreateAndCharge'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderCreateAndChargeV1Response'
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderCreateAndChargeV1Response'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /orders/v1/initialize-order/:
+    post:
+      operationId: orders_v1_initialize_order_create
+      description: |2+
+
+        **[Storefront Only]** Create a new order and receive a Stripe PaymentIntent client secret for frontend payment confirmation.
+
+        This endpoint allows Storefronts to initiate order creation and receive a Stripe `client_secret`, which must be passed to the Stripe frontend payment element (such as Stripe Elements) to collect payment authorization from the customer.
+
+        The request payload mirrors the standard post purchase upsell order creation structure, but payment details are not required.
+
+        **Process:**
+
+        1. **Validation:** Ensures input variants are valid, active, and listed by the supplier. If variants are paused, unlisted, or invalid, returns `422 Unprocessable Entity`. If the input data format is invalid, returns `400 Bad Request`.
+
+        2. **Stripe PaymentIntent Creation:** Generates a Stripe PaymentIntent and returns its `client_secret`. The client secret must be used with the Stripe frontend integration to complete payment.
+
+        3. **Order Creation:** Creates the primary Storefront order record in Catalog, associated with the PaymentIntent.
+
+        4. **Supplier Dispatch:** After payment confirmation from the frontend, supplier orders are asynchronously dispatched.
+
+        **Responses & Errors:**
+
+        **Response:** On success, returns order details and the Stripe `client_secret` for the PaymentIntent. The frontend must use this secret to proceed with payment authorization.
+
+        **Error Handling:** Returns specific errors for failed validation, payment intent creation issues, or unexpected exceptions (such as dispatch or database failures). If payment intent creation fails, order creation will not proceed.
+
+      tags:
+      - orders
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PostPurchaseOrderCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PostPurchaseOrderCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PostPurchaseOrderCreate'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderInitializeAndChargeResponse'
+          description: ''
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderInitializeAndChargeResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '422':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '503':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /product_sets/:
+    get:
+      operationId: product_sets_list
+      description: |2
+
+        Returns a paginated list of product sets (IDs and lightweight metadata) for suppliers
+        connected to the authenticated store. Each result includes: product_set_id, supplier_id,
+        name, description, type (e.g., MANUAL, RULE_BASED), created_at, updated_at.
+        **Optional filters:** supplier_id (UUID), updated_since (ISO 8601).
+        Results use cursor-based pagination, ordered by updated_at descending.
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - in: query
+        name: supplier_id
+        schema:
+          type: string
+          format: uuid
+        description: Restrict results to product sets belonging to this supplier.
+      - in: query
+        name: updated_since
+        schema:
+          type: string
+          format: date-time
+        description: Returns only sets updated after this date (ISO 8601 format).
+      tags:
+      - product_sets
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductSetList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /product_sets/items/:
+    get:
+      operationId: product_sets_items_list
+      description: |2
+
+        Returns a paginated list of variants that belong to product sets. Each result includes:
+        variant_id, product_id, product_set_id, created_at, updated_at.
+        **Optional filters:** product_set_id (UUID), updated_since (ISO 8601).
+        Results use cursor-based pagination, ordered by updated_at descending.
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - in: query
+        name: product_set_id
+        schema:
+          type: string
+          format: uuid
+        description: 'If present: only variants in this product set. If absent: variants
+          across all product sets.'
+      - in: query
+        name: updated_since
+        schema:
+          type: string
+          format: date-time
+        description: Returns only items updated after this date (ISO 8601 format).
+      tags:
+      - product_sets
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedProductSetItemList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /products/:
+    get:
+      operationId: products_list
+      description: |2+
+
+        **[Storefront Only]** Retrieve a paginated list of products accessible to your Storefront through your established Rokt Catalog connections.
+
+        This endpoint returns products from Suppliers with whom you have an **active and approved** partnership. It includes products you might have already added/linked to your Storefront platform, as well as other products listed by those Suppliers that are available to you based on your connection terms.
+
+        You can filter the results to view products exclusively from one Supplier by providing their Catalog `supplier_id` (UUID) as a query parameter.
+
+        Results are returned using cursor-based pagination (`PlatformPagination`). Available ordering fields include `created_at`, `updated_at`, and `title`. The default order is `-created_at`.
+
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - in: query
+        name: supplier_id
+        schema:
+          type: string
+          format: uuid
+        description: Filter products by the Catalog ID of a specific connected Supplier.
+      - in: query
+        name: qa_review_complete
+        schema:
+          type: boolean
+        description: Filter products by whether they have been reviewed and approved.
+      tags:
+      - products
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedExternalProductList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    post:
+      operationId: products_create
+      description: |2+
+
+        **[Supplier Only]** Create a new product listing within your Rokt Catalog Supplier account. This makes the product manageable through Catalog and potentially available to your connected Storefront partners.
+
+        The request body must conform to the `PushProductSerializer` structure. Key fields include:
+
+        `title` (string, required), `body_html` (string, product description), `product_type` (string), `vendor` (string), `tags` (string, comma-separated), and a list of `variants` (required, at least one).
+
+        Each object in the `variants` list requires `price` (decimal string), `sku` (string), `inventory_quantity` (integer), and option values (`option1`, `option2`, `option3`). `compare_at_price` (decimal string) is optional for sale pricing.
+
+        You can also include a list of `images`, each with a `src` (URL) and optional `position`.
+
+        Successfully creating a product (HTTP `201 Created`) makes it visible in your Catalog dashboard. Its availability to Storefronts depends on its listing status (`supplier_has_listed_on_canal` flag on variants) and the terms established with each partner.
+
+        The response body contains the full details of the newly created product and its variants, including their assigned Catalog IDs (UUIDs), using the `ProductSerializer`.
+
+      tags:
+      - products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PushProduct'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PushProduct'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PushProduct'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /products/{id}/:
+    get:
+      operationId: products_retrieve
+      description: |2+
+
+        **[Storefront Only]** Retrieve comprehensive details for a single product, identified by its Rokt Catalog `ID` (UUID) in the URL path.
+
+        Access is restricted: this endpoint only returns data for products sourced from Suppliers with whom your Storefront has an **active and approved** partnership connection.
+
+        The response (`ExternalProductSerializer`) includes all product-level information (title, description, vendor, etc.), a list of associated `images`, and a list of `variants`.
+
+        Crucially, the variant information includes pricing (`price`, `compare_at_price`) and `inventory_quantity` that are specific to **your connection** with the Supplier, reflecting any agreed-upon terms or markups managed by Catalog.
+
+        If the provided product `ID` is invalid, or if the product belongs to a Supplier you are not actively connected with, a `404 Not Found` error is returned.
+
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - products
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ExternalProduct'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    put:
+      operationId: products_update
+      description: |2+
+
+        **[Supplier Only]** Update attributes of an existing product listing, identified by its Rokt Catalog `ID` (UUID) in the URL path.
+
+        This endpoint is used for modifying **product-level** details. Provide the fields you wish to change in the request body (e.g., `title`, `body_html`, `product_type`, `vendor`, `tags`).
+
+        **Important:** To modify variant-specific details like price, SKU, inventory, or options, you **must** use the dedicated `/variants/{variant_id}/` endpoint. Updates to variants are not supported here.
+
+        Changes made to product-level fields via this endpoint (like updating the description) are automatically synchronized to any connected Storefronts that are currently selling this product. This synchronization process runs **asynchronously** in the background.
+
+        A successful update returns `200 OK` with the complete, updated product details (including all variants) using the `ProductSerializer`.
+
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Product'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Product'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    patch:
+      operationId: products_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedProduct'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedProduct'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedProduct'
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+    delete:
+      operationId: products_destroy
+      description: |2+
+
+        **[Supplier Only]** Permanently remove a product listing, identified by its Rokt Catalog `ID` (UUID) in the URL path, from the Catalog platform.
+
+        **Warning:** This action is **irreversible**. Ensure you intend to delete this product permanently.
+
+        You can only delete products that are directly owned by your Supplier account. Attempting to delete a product belonging to another shop will result in a `403 Forbidden` error.
+
+        **Effect on Storefronts:** When a product is deleted, Catalog automatically **pauses** the corresponding product listings on any connected Storefronts that were actively selling it. An asynchronous task is initiated to inform these Storefronts about the product's removal.
+
+        A successful deletion returns an HTTP `204 No Content` status with an empty response body.
+
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - products
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '204':
+          description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /products/{id}/reorder_variants/:
+    post:
+      operationId: products_reorder_variants_create
+      description: |2+
+
+        **[Supplier Only]** Update the display sequence of variants for a specific product. The product is identified by its Rokt Catalog `ID` (UUID) in the URL path.
+
+        The request body must contain a field named `variant_order`, which is a list of Catalog variant `ID`s (UUIDs) sorted in the desired display order (0-indexed).
+
+        **Requirement:** The `variant_order` list **must** include the IDs of **all** currently existing variants for the specified product. Omitting or adding incorrect IDs will result in a validation error (400 Bad Request).
+
+        This reordering affects how variants are presented within the Catalog platform (e.g., in the Supplier dashboard). It may also influence the display order on connected Storefronts if their integration respects the `position` attribute of the variants.
+
+        A successful update returns `200 OK` with the full product details (`ProductSerializer`), reflecting the new `position` values for each variant.
+
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReorderVariant'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReorderVariant'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReorderVariant'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /products/{id}/resync/:
+    post:
+      operationId: products_resync_create
+      description: |2+
+
+        Resynchronize a retailer (Shopkeep) product with its origin supplier product.
+
+        If `fields_to_resync` is provided, only those fields will be updated; otherwise all fields are resynced.
+
+        On success, returns the updated product data. If the resync is queued to run asynchronously (e.g. due to rate limits), returns a message indicating the resync has started.
+
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - products
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResyncShopkeepProduct'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ResyncShopkeepProduct'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ResyncShopkeepProduct'
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResyncShopkeepProductResponse'
+          description: ''
+        '202':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResyncShopkeepProductResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /products/upsell_products/:
+    get:
+      operationId: products_upsell_products_list
+      description: |2+
+
+        **[Storefront Only]** Retrieve a paginated list of active products that are eligible for upselling.
+
+        This endpoint returns products from Suppliers with whom you have an active and approved partnership.
+
+        Products must meet the following criteria:
+
+        1) Have status='active',
+
+        2) Have at least one variant that is connected to a supplier variant, listed on Catalog, and not paused for selling,
+
+        3) Have passed ads eligibility checks,
+
+        4) Have at least one available variant in a non-deleted product set,
+
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - in: query
+        name: supplier_id
+        schema:
+          type: string
+          format: uuid
+        description: Filter products by the Catalog ID of a specific connected Supplier.
+      tags:
+      - products
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedExternalProductList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /refunds/:
+    get:
+      operationId: refunds_list
+      description: |2+
+
+        Retrieve a paginated list of refund records associated with the authenticated store, reflecting its role in the order process.
+
+        - **If called by a Storefront:** Returns refund records linked to orders originating from the Storefront. This includes refunds initiated *by* the Storefront and refunds initiated *by* connected Suppliers for those orders.
+
+        - **If called by a Supplier:** Returns refund records linked to orders received by the Supplier from connected Storefronts. This includes refunds initiated *by* the Supplier and refunds initiated *by* the originating Storefronts for those orders.
+
+        The response (`RefundSerializer`, paginated) includes details for each refund, such as the calculated `total_refunded_amount`, `currency`, the list of `refund_line_items` (with quantities and amounts), associated `order_id`, and timestamps.
+
+        Pagination is cursor-based (`PlatformPagination`). Ordering is available on `created_at` and `updated_at`, defaulting to `-created_at`.
+
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      tags:
+      - refunds
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRefundList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    post:
+      operationId: refunds_create
+      description: |2+
+
+        Initiate a refund for specific quantities of line items within a Rokt Catalog order. This endpoint handles refund requests originating from both Storefronts and Suppliers.
+
+        **Request Body (`RefundCreateSerializer`):**
+
+        - `order_id` (UUID, required): The Catalog ID of the order to be refunded.
+
+        - `line_items` (list, required): A list of objects, each specifying:
+
+          - `id` (UUID, required): The Catalog ID of the line item to refund.
+
+          - `quantity` (integer, required): The quantity of this line item to refund.
+
+        - `should_refund_shipping` (boolean, optional, **Storefront only**): If `true`, attempts to refund the original shipping cost associated with the Storefront order.
+
+        - `extra_amount` (decimal string, optional, **restricted use**): Allows refunding an additional amount beyond line items/shipping (currently restricted to specific shops like SHEIN).
+
+        **Process & Permissions:**
+
+        1. **Identify Initiator:** Determines if the request comes from the Storefront or the Supplier by checking the order's relationships.
+
+        2. **Lock Order:** Acquires a lock on the order record to prevent concurrent modifications.
+
+        3. **Validate Quantities:** Checks if the requested `quantity` for each line item exceeds the currently refundable quantity (original quantity minus previously refunded quantity). If validation fails, returns `400 Bad Request` with `error_code: ITEMS_ALREADY_REFUNDED` and details of affected items.
+
+        4. **Storefront-Initiated Refund:**
+
+           - **Permission Check:** Verifies the Storefront has the required scope (`write_sk_refunds`). Returns `403 Forbidden` if missing.
+
+           - **Dispatch:** Calculates refund amounts, creates the refund record for the Storefront in Catalog, and **asynchronously** triggers tasks to create corresponding refund records on the connected Supplier(s)' systems (e.g., via Shopify API).
+
+           - **Error Handling:** If downstream Supplier refund creation fails, returns `400 Bad Request` with `error_code: SUPPLIER_REFUND_FAILED`.
+
+        5. **Supplier-Initiated Refund:**
+
+           - **Permission Check:** Implicitly requires the `write_refunds` scope.
+
+           - **Create Supplier Refund:** Creates the refund record for the Supplier in Catalog.
+
+           - **Dispatch to Storefront:** If the Supplier order originated from a Storefront with integration settings, **synchronously** attempts to create a corresponding refund record on the Storefront's order in Catalog.
+
+           - **Error Handling:** If downstream Storefront refund creation fails, returns `400 Bad Request` with `error_code: SK_REFUND_FAILED`.
+
+        6. **Extra Amount:** If `extra_amount` is provided and valid, creates an associated record (restricted use).
+
+        **Response:** On success, returns `201 Created` with the details of the primary refund record created (either the Storefront's or the Supplier's) using `RefundSerializer`. The serializer might include details about failed downstream refunds in the `failed_to_create_refund_line_items` field for Storefront-initiated refunds.
+
+      tags:
+      - refunds
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefundCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RefundCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RefundCreate'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Refund'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /refunds/{id}/:
+    get:
+      operationId: refunds_retrieve
+      description: |2+
+
+        Retrieve the full details for a specific refund record, identified by its Rokt Catalog `ID` (UUID) in the URL path.
+
+        Access is restricted to refunds associated with orders linked to the authenticated store (`request.shop`).
+
+        The response (`RefundSerializer`) includes the `total_refunded_amount`, `currency`, the list of `refund_line_items` (specifying the exact items, quantities, and subtotal refunded), the associated `order_id`, `note` (if any), `processed_at` timestamp, and other relevant details.
+
+        If the refund `ID` is invalid or the refund is not associated with an order linked to your store, a `404 Not Found` error is returned.
+
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - refunds
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Refund'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /returns/:
+    get:
+      operationId: returns_list
+      description: |2+
+
+        Retrieve a paginated list of return requests associated with the authenticated store, reflecting its role.
+
+        - **If called by a Storefront:** Returns `ReturnRequest` records initiated *by* this Storefront for orders placed on their platform.
+
+        - **If called by a Supplier:** Returns `ReturnRequest` records received *from* connected Storefronts for orders the Supplier fulfilled.
+
+        **Filtering:** You can filter the list by `status` using a query parameter (e.g., `?status=OPEN` or `?status=CLOSED`).
+
+        **Response (`ReturnSerializer`, paginated):** Includes details for each return request: `id`, `name`, `rma`, associated `order_id`, `status` ('OPEN' or 'CLOSED'), `return_line_items` (with quantities, reasons), `reverse_deliveries` (tracking info), and timestamps.
+
+        Pagination is cursor-based (`PlatformPagination`). Ordering is available on `created_at` and `updated_at`, defaulting to `-created_at`.
+
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - in: query
+        name: status
+        schema:
+          type: string
+          enum:
+          - closed
+          - open
+        description: Filter returns by status
+      tags:
+      - returns
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedReturnList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    post:
+      operationId: returns_create
+      description: |2+
+
+        **[Storefront Only]** Initiate a return process for items purchased in a Rokt Catalog-facilitated order.
+
+        **Request Body (`ReturnCreateSerializer`):**
+
+        - `order_id` (UUID, required): The Catalog ID of the original Storefront order containing the items to be returned.
+
+        - `name` (string, required): A unique identifier for this return request (e.g., your system's RMA number).
+
+        - `rma` (string, optional): An alternative return merchandise authorization identifier.
+
+        - `return_line_items` (list, required): A list of objects, each specifying:
+
+          - `line_item_id` (UUID, required): The Catalog ID of the *Storefront's* line item record to be returned.
+
+          - `quantity` (integer, required): The quantity of this line item being returned.
+
+          - `return_reason` (string, optional): A code or description for the return reason.
+
+          - `customer_note` (string, optional): Any notes provided by the customer.
+
+        - `reverse_deliveries` (list, optional): Allows providing initial return shipping tracking information (see `ReverseDeliveryCreateSerializer`) within the same request.
+
+        **Process:**
+
+        1. **Validation:** Checks if the order and line items exist, belong to the Storefront, and if the requested return quantities are valid (e.g., not exceeding fulfilled quantity). Acquires a lock on the order.
+
+        2. **Create Storefront Return Request:** Creates the primary return request record associated with the Storefront's order in Rokt Catalog.
+
+        3. **Create Initial Tracking (Optional):** If `reverse_deliveries` are provided, creates associated return tracking records.
+
+        4. **Dispatch to Suppliers (Async):** Triggers an **asynchronous** task to create corresponding return request records for each relevant Supplier involved in the returned line items. These Supplier return requests are linked back to the Storefront's request.
+
+        **Error Handling:** Returns `400 Bad Request` for validation errors (e.g., invalid quantity, bad IDs). Returns `500 Internal Server Error` for unexpected issues.
+
+        **Response:** On success, returns `201 Created` with the details of the newly created **Storefront** return request (`ReturnSerializer`).
+
+      tags:
+      - returns
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReturnCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReturnCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReturnCreate'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /returns/{id}/:
+    get:
+      operationId: returns_retrieve
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - returns
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return'
+          description: ''
+  /returns/{id}/close/:
+    post:
+      operationId: returns_close_create
+      description: |2+
+
+        **[Supplier Only]** Mark a return request that your Supplier account received from a Storefront as 'CLOSED'.
+
+        Identify the return request by its Rokt Catalog `ID` (UUID) provided in the URL path.
+
+        **Use Case:** This endpoint should typically be called by the Supplier once they have received the physical returned items from the customer/Storefront and completed their internal processing (inspection, restocking, etc.).
+
+        **Action:** Sets the `status` field of the **Supplier's** return request record in Catalog to `CLOSED`.
+
+        **Important Limitation:** This action **only** updates the status of the Supplier's return record. It **does not** automatically update the status of the original Storefront's return request, nor does it trigger any notifications or refunds. Subsequent actions, such as initiating a refund using the `/refunds/` endpoint, might be required based on the agreed return policy and workflow.
+
+        **Permissions:** Requires the request to be authenticated as the Supplier associated with the return request. Attempting to close a return belonging to another shop results in `403 Forbidden`.
+
+        A successful update returns `200 OK` with the updated details of the **Supplier's** return request (`ReturnSerializer`), showing the status as 'CLOSED'.
+
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - returns
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Return'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Return'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Return'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Return'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /returns/{id}/update_tracking/:
+    post:
+      operationId: returns_update_tracking_create
+      description: |2+
+
+        **[Storefront Only]** Add or update the tracking information for the shipment returning items back to the Supplier(s). Identify the specific return request using its Rokt Catalog `ID` (UUID) in the URL path.
+
+        **Request Body (`ReverseDeliveryCreateSerializer`):**
+
+        - `carrier_name` (string, optional): Name of the shipping carrier (e.g., 'USPS', 'FedEx').
+
+        - `tracking_number` (string, optional): The tracking number for the return shipment.
+
+        - `tracking_url` (string, optional): A direct URL to track the shipment.
+
+        - `shipping_label_file_url` (string, optional): URL to a downloadable shipping label file (e.g., PDF).
+
+        - `shipping_label_created_at` (datetime string, optional): Timestamp when the label was created.
+
+        **Process:**
+
+        1. **Validation:** Checks if the return request exists and belongs to the Storefront.
+
+        2. **Create Storefront Return Tracking:** Creates a return tracking record containing the provided tracking/label info and associates it with the Storefront's return request.
+
+        3. **Sync to Suppliers (Sync):** This **synchronously** attempts to add the same return tracking information to the corresponding return request records on the Supplier side(s).
+
+        **Response:** Returns `200 OK` with the updated details of the **Storefront's** return request (`ReturnSerializer`), now including the added return tracking information.
+
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      tags:
+      - returns
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ReverseDeliveryCreate'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ReverseDeliveryCreate'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ReverseDeliveryCreate'
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedReturnList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /selection/ai-select/:
+    post:
+      operationId: selection_ai_select_create
+      description: |-
+        AI-powered product selection endpoint.
+
+        Accepts arbitrary JSON for items and context, uses parallel per-item GPT calls,
+        and returns the zero-based index of the best item with reasoning and confidence.
+
+        Request format:
+        {
+          "items": [arbitrary JSON objects, at least one],
+          "context": {arbitrary JSON object, non-empty},
+          "session_id": "optional string",
+          "timeout_ms": optional int or null,
+          "metadata": {
+            "temperature": 0.5,
+            "llmModel": "gpt-4o",
+            "embeddingModel": "text-embedding-3-small",
+            "prompt": "default",
+            "verbosity": "low",  // GPT-5 only: "low", "medium", or "high"
+            "reasoningEffort": "low"  // reasoning models: "low" or "medium";
+                                      // newer GPT-5 models may also use "none"
+          }
+        }
+
+        Response format:
+        {
+          "chosenIndex": 0,
+          "reasoning": "I would buy the Nike shoe cleaner...",
+          "confidence": 0.82,
+          "processingTimeMs": 1245
+        }
+      tags:
+      - selection
+      security:
+      - basicAuth: []
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          description: No response body
+  /shipping-rates/:
+    post:
+      operationId: shipping_rates_create
+      description: |2+
+
+        **[Storefront Only]** Calculate available shipping options and their estimated costs for a given destination address and a set of line items containing products sourced from Rokt Catalog Suppliers.
+
+        This endpoint is typically used during the checkout process after the customer has provided their shipping address.
+
+        **Request Body (`ShippingQuerySerializer`):**
+
+        - `shipping_address` (object, required): The destination address, including fields like `address1`, `city`, `province_code`, `country_code`, `zip`. `name` and `phone` are optional but recommended.
+
+        - `line_items` (list, required): A list of objects, each specifying:
+
+          - `variant_id` (UUID, required): The Rokt Catalog ID of the *Storefront's* variant record.
+
+          - `quantity` (integer, required): The quantity of this variant.
+
+        **Process:**
+
+        1. **Identify Suppliers:** Catalog determines which unique Suppliers are involved based on the `variant_id`s provided.
+
+        2. **Query Suppliers:** For each unique Supplier, Catalog queries their integrated shipping rate provider (e.g., Shopify's API) using the provided `shipping_address` and the subset of `line_items` belonging to that Supplier.
+
+        3. **Aggregate Rates:** Catalog aggregates the rates returned from all involved Suppliers. The exact aggregation logic might vary (e.g., summing costs for the same shipping service level across suppliers, presenting distinct options per supplier).
+
+        **Response (`ShippingRateResponseSerializer`):**
+
+        - `rates` (list): A list of available shipping rate options. Each object contains:
+
+          - `title` (string): The name of the shipping service (e.g., 'Standard Ground', 'Express Overnight').
+
+          - `price` (Money object): The calculated cost for this shipping option, including `amount` (decimal string) and `currency` (string).
+
+          - Potentially other fields depending on the Supplier's integration.
+
+        This response allows the Storefront to present the customer with accurate shipping choices and costs before finalizing the order.
+
+      tags:
+      - shipping-rates
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShippingQuery'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ShippingQuery'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ShippingQuery'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShippingRateResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /shipping/v1/calculate/:
+    post:
+      operationId: shipping_v1_calculate_create
+      description: Calculate shipping rates for supplier variants identified by `supplier_variant_rid`
+        and `supplier_id`. Requires the ROKT_ADS_SHOP feature flag.
+      tags:
+      - shipping
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShippingCalculationQuery'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ShippingCalculationQuery'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ShippingCalculationQuery'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShippingCalculationResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '403':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /shops/:
+    get:
+      operationId: shops_list
+      description: |2+
+
+        **[Storefront Only]** Retrieve a paginated list of Supplier shops with whom your Storefront has an **active and approved** partnership connection.
+
+        This endpoint provides essential details for each connected Supplier, such as their name, Rokt Catalog ID, contact information, and domain.
+
+        Use this to get an overview of your current Supplier network within Catalog.
+
+        You can filter this list to find a specific Supplier by providing their `canal_contact_email` using the `email` query parameter (ensure proper URL encoding if the email contains special characters like '+').
+
+        Results are returned using cursor-based pagination, ordered by `updated_at` descending by default. Standard ordering fields like `created_at` and `name` are also available.
+
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      - in: query
+        name: email
+        schema:
+          type: string
+          format: email
+        description: Filter by the Supplier's primary contact email address.
+      tags:
+      - shops
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedShopList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    post:
+      operationId: shops_create
+      description: |2+
+
+        **[Storefront Only]** Initiate partnership connection requests with one or more existing Rokt Catalog Suppliers by specifying their primary contact email addresses.
+
+        In the request body, provide a list of strings under the key `canal_contact_emails`.
+
+        For each email address that corresponds to an active Catalog Supplier shop, Catalog will record your request to connect, initially in a **pending** state.
+
+        The Supplier must then **approve** this request (usually through the Catalog web application) for the connection to become active.
+
+        Once approved, the Supplier will appear in your 'My Suppliers' list within the Catalog app, and you will gain access to view and potentially sell their products based on the agreed terms.
+
+        This endpoint returns a `201 Created` status along with the details (using `ShopSerializer`) of the Supplier shops for which pending connection requests were successfully created. It does not wait for Supplier approval. If an email does not match an active Supplier, no request is created for that email.
+
+      tags:
+      - shops
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/BulkCreateSupplierPartnership'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/BulkCreateSupplierPartnership'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/BulkCreateSupplierPartnership'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shop'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /shops/{id}/:
+    get:
+      operationId: shops_retrieve
+      description: |2+
+
+        **[Storefront Only]** Retrieve the full profile details for a specific Supplier shop, identified by its unique Rokt Catalog `ID` (UUID) provided in the URL path.
+
+        Access is restricted: this endpoint will only return data if an **active and approved** partnership connection exists between your Storefront and the specified Supplier.
+
+        The response includes comprehensive details like shop name, ID, contact info, address, configured settings (if applicable), etc.
+
+        If the provided `ID` is invalid, does not correspond to a Supplier shop, or if no approved connection exists, a `404 Not Found` error will be returned.
+
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - shops
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Shop'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /tax-and-shipping/calculate/:
+    post:
+      operationId: tax_and_shipping_calculate_create
+      description: |2+
+
+        **[Storefront Only]** Calculate estimated tax lines and available shipping options and costs, given a set of line items, shipping address, and optionally a billing address.
+
+        This endpoint is typically used during the checkout process after the customer has provided their shipping address.
+
+        **Request Body (`TaxCalculationQuerySerializer`):**
+
+        - `line_items` (list, required): A list of objects, each specifying:
+
+          - `variant_id` (UUID, required): The Catalog ID of the *Storefront's* variant record.
+
+          - `quantity` (integer, required): The quantity of this variant.
+
+        - `shipping_address` (object, required): The destination address, including fields like `address1`, `city`, `province_code`, `country_code`, `zip`. `name` and `phone` are optional but recommended.
+
+        - `billing_address` (object, optional): The billing address, with the same fields as `shipping_address`.
+
+        **Process:**
+
+        1. **Identify Suppliers:** Catalog determines which unique Suppliers are involved based on the `variant_id`s provided.
+
+        2. **Query Suppliers:** For each unique Supplier, Catalog queries their integrated shipping rate provider (e.g., Shopify's API) using the provided `shipping_address` and the subset of `line_items` belonging to that Supplier.
+
+        3. **Aggregate Rates:** Catalog aggregates the rates returned from all involved Suppliers. The exact aggregation logic might vary (e.g., summing costs for the same shipping service level across suppliers, presenting distinct options per supplier).
+
+        4. **Tax Calculation:** Catalog queries an integrated tax rate provider (e.g., Shopify's API) using the provided `shipping_address` and `billing_address` to calculate the tax line items for this order.
+
+        **Response (`TaxAndShippingResponseSerializer`):**
+
+        - `rates` (list): A list of available shipping rate options. Each object contains:
+
+          - `title` (string): The name of the shipping service (e.g., 'Standard Ground', 'Express Overnight').
+
+          - `price` (Money object): The calculated cost for this shipping option, including `amount` (decimal string) and `currency` (string).
+
+          - Potentially other fields depending on the Supplier's integration.
+
+        - `tax_amount` (string): Total sum of the taxes applied to this order.
+
+        - `currency` (string): Currency for the current order.
+
+        - `tax_lines_per_supplier`: Dictionary mapping a supplier's id to a list of tax line responses.
+
+        This response allows the Storefront to present the customer with accurate shipping choices and costs before finalizing the order.
+
+      tags:
+      - tax-and-shipping
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaxCalculationQuery'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TaxCalculationQuery'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TaxCalculationQuery'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxAndShippingResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /tax-and-shipping/v1/calculate/:
+    post:
+      operationId: tax_and_shipping_v1_calculate_create
+      description: |2+
+
+        **[Storefront Only]** Calculate estimated tax lines and available shipping options and costs, given a set of line items, shipping address, and optionally a billing address.
+
+        This endpoint is typically used during the checkout process after the customer has provided their shipping address.
+
+        **Process:**
+
+        1. **Tax Calculation:** Rokt Catalog queries an integrated tax rate provider (e.g., Shopify's API) using the provided `shipping_address` and `billing_address` to calculate the tax line items for this order.
+
+        2. **Shipping Calculation:** Catalog queries an integrated shipping rate provider (e.g., Shopify's API) using the provided `shipping_address` and the subset of `line_items` belonging to that Supplier.
+
+      tags:
+      - tax-and-shipping
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaxCalculationQuerySerializerV1'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TaxCalculationQuerySerializerV1'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TaxCalculationQuerySerializerV1'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxAndShippingResponseSerializerV1'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /tax/calculate/:
+    post:
+      operationId: tax_calculate_create
+      description: '**[Storefront Only]** Calculate estimated tax lines for a set
+        of line items and a shipping address.'
+      tags:
+      - tax
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TaxCalculationQuery'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/TaxCalculationQuery'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/TaxCalculationQuery'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TaxLinePerSupplierResponse'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /variants/:
+    get:
+      operationId: variants_list
+      description: |2+
+
+        **[Supplier Only]** Retrieve a paginated list of **all** product variants associated with **all** products owned by your Supplier account.
+
+        This endpoint provides a flat list of variant details, independent of their parent products. Use this if you need to query or manage variants across your entire catalog.
+
+        Results are returned using cursor-based pagination (`PlatformPagination`). Available ordering fields include `created_at`, `updated_at`, `price`, and `compare_at_price`. The default order is `-created_at`.
+
+      parameters:
+      - name: ordering
+        required: false
+        in: query
+        description: Which field to use when ordering the results.
+        schema:
+          type: string
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      tags:
+      - variants
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedVariantList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    post:
+      operationId: variants_create
+      description: |2+
+
+        **[Supplier Only]** Add a new variant to an existing product within your Rokt Catalog Supplier account.
+
+        The request body must conform to the `CreateVariantSerializer` structure, requiring the `product_id` (UUID) of the parent product and the full details of the new variant (including `price`, `sku`, `inventory_quantity`, `option1`, etc.).
+
+        Upon successful creation, the new variant is added to the specified product. By default, it will be assigned the next available `position` (typically appearing last in the variant list, unless explicitly reordered later using the `/products/{product_id}/reorder_variants/` endpoint).
+
+        **Synchronization:** This addition is automatically propagated **asynchronously** to connected Storefronts that are selling the parent product.
+
+        A successful creation returns `201 Created` with the full details of the **parent product** (`ProductSerializer`), now including the newly added variant and its assigned Catalog ID (UUID).
+
+      tags:
+      - variants
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVariant'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateVariant'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateVariant'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /variants/{id}/:
+    get:
+      operationId: variants_retrieve
+      description: |2+
+
+        **[Supplier Only]** Retrieve the full details for a specific product variant, identified by its Rokt Catalog `ID` (UUID) provided in the URL path.
+
+        This endpoint returns data only for variants that belong to products owned by your Supplier account.
+
+        The response (`VariantSerializer`) includes all attributes of the variant, such as price, SKU, inventory, options, weight, timestamps, and its parent product ID.
+
+        If the provided variant `ID` is invalid or belongs to a product owned by another shop, a `404 Not Found` error is returned.
+
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - variants
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Variant'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    put:
+      operationId: variants_update
+      description: |2+
+
+        **[Supplier Only]** Update attributes of a specific product variant, identified by its Rokt Catalog `ID` (UUID) in the URL path.
+
+        Provide the fields you wish to change in the request body using the `VariantSerializer` structure (partial updates are allowed). Common updatable fields include `price`, `compare_at_price`, `sku`, `inventory_quantity`, `option1`, `option2`, `option3`, `weight`, `weight_unit`, etc.
+
+        **Synchronization:** Changes to critical attributes like price and inventory are automatically propagated to connected Storefronts that are selling this variant. This synchronization occurs **asynchronously**.
+
+        **Pricing Update:** When updating `price` or `compare_at_price`, the system also updates the associated variant listing's default price, considering the shop's feature flags for sale price syncing.
+
+        A successful update returns `200 OK` with the full details of the **parent product** (`ProductSerializer`), reflecting the changes made to the specific variant.
+
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - variants
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Variant'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Variant'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Variant'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    patch:
+      operationId: variants_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - variants
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedVariant'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedVariant'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedVariant'
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Variant'
+          description: ''
+    delete:
+      operationId: variants_destroy
+      description: |2+
+
+        **[Supplier Only]** Permanently remove a specific product variant, identified by its Rokt Catalog `ID` (UUID) in the URL path, from its parent product.
+
+        **Warning:** This action is **irreversible**.
+
+        **Constraint:** You **cannot** delete the last remaining variant of a product using this endpoint. If you need to remove the product entirely, use the `/products/{product_id}/` delete endpoint instead.
+
+        **Synchronization:** Deleting a variant automatically triggers an **asynchronous** update (emitting a `PRODUCT_UPDATE` webhook) to propagate this change to connected Storefronts, effectively removing the variant from their listings.
+
+        **Position Update:** The `position` attribute of the remaining variants on the parent product will be automatically recalculated and updated to maintain a contiguous sequence.
+
+        A successful deletion returns `200 OK` with the full details of the **parent product** (`ProductSerializer`), reflecting the variant's removal and the updated positions of the remaining variants.
+
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - variants
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /webhooks/:
+    get:
+      operationId: webhooks_list
+      description: |2+
+
+        Retrieve a paginated list of all webhook subscriptions currently registered and active for the authenticated application (identified by the API credentials used in the request).
+
+        The response (`RegisteredWebhookSerializer`, paginated) includes the unique Rokt Catalog `ID` (UUID), the subscribed `topic`, and the target `address` (URL) for each registered webhook.
+
+        Results are returned using cursor-based pagination (`PlatformPagination`).
+
+      parameters:
+      - name: cursor
+        required: false
+        in: query
+        description: The pagination cursor value.
+        schema:
+          type: string
+      tags:
+      - webhooks
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedRegisteredWebhookList'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    post:
+      operationId: webhooks_create
+      description: |2+
+
+        Register a new endpoint URL to receive notifications (webhooks) from Rokt Catalog when specific events occur related to your store.
+
+        The request body (`CreateUpdateWebhookSerializer`) requires:
+
+        `topic`: A string representing the event type you want to subscribe to (e.g., `product/update`, `order/cancel`, `fulfillment/update`). See Catalog documentation for the full list of available topics.
+
+        `address`: The HTTPS URL of your application's endpoint that will receive the webhook POST requests from Catalog.
+
+        **Process:** Catalog validates the topic and creates a webhook subscription record associated with your application's integration settings. When an event matching the `topic` occurs for a resource linked to your store (e.g., an order associated with your shop is cancelled), Catalog will send an HTTP POST request containing the relevant event payload (JSON format) to the registered `address`.
+
+        A successful registration returns `201 Created` with the details of the new subscription (`RegisteredWebhookSerializer`), including its unique Catalog `ID` (UUID).
+
+      tags:
+      - webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUpdateWebhook'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateUpdateWebhook'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateUpdateWebhook'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisteredWebhook'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+  /webhooks/{id}/:
+    get:
+      operationId: webhooks_retrieve
+      description: |2+
+
+        Retrieve the details for a single, specific webhook subscription, identified by its Rokt Catalog `ID` (UUID) provided in the URL path.
+
+        Access is restricted to subscriptions belonging to the authenticated application.
+
+        The response (`RegisteredWebhookSerializer`) includes the `id`, `topic`, and `address`.
+
+        If the provided `ID` is invalid or does not correspond to a webhook registered by your application, a `404 Not Found` error is returned.
+
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - webhooks
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisteredWebhook'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    put:
+      operationId: webhooks_update
+      description: |2+
+
+        Update the configuration of an existing webhook subscription. Identify the subscription by its Rokt Catalog `ID` (UUID) in the URL path.
+
+        The request body (`CreateUpdateWebhookSerializer`) can include the new `topic` and/or `address` you want to set. Partial updates are allowed (only include the fields you want to change).
+
+        **Validation:** If provided, the `topic` must be one of the valid `WEBHOOK_TOPICS`.
+
+        A successful update returns `200 OK` with the complete, updated details of the webhook subscription (`RegisteredWebhookSerializer`).
+
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUpdateWebhook'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/CreateUpdateWebhook'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CreateUpdateWebhook'
+        required: true
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisteredWebhook'
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+    patch:
+      operationId: webhooks_partial_update
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - webhooks
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedRegisteredWebhook'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedRegisteredWebhook'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedRegisteredWebhook'
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegisteredWebhook'
+          description: ''
+    delete:
+      operationId: webhooks_destroy
+      description: |2+
+
+        Permanently remove an existing webhook subscription, identified by its Rokt Catalog `ID` (UUID) in the URL path.
+
+        Access is restricted to subscriptions belonging to the authenticated application.
+
+        Once deleted, Catalog will immediately stop sending notifications for the associated `topic` to the registered `address`.
+
+        **Warning:** This action is **irreversible**. To resume receiving notifications, you must create a new subscription.
+
+        A successful deletion returns an HTTP `200 OK` status with an empty response body.
+
+      parameters:
+      - in: path
+        name: id
+        schema:
+          type: string
+        required: true
+      tags:
+      - webhooks
+      security:
+      - platformAppId: []
+        platformAppToken: []
+      responses:
+        '200':
+          description: No response body
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: ''
+components:
+  schemas:
+    Address:
+      type: object
+      properties:
+        name:
+          type: string
+        address1:
+          type: string
+        address2:
+          type: string
+        city:
+          type: string
+        province:
+          type: string
+        province_code:
+          type: string
+        country:
+          type: string
+        country_code:
+          type: string
+        zip:
+          type: string
+        phone:
+          type: string
+      required:
+      - address1
+      - city
+      - country
+      - name
+      - province
+      - zip
+    BulkCreateSupplierPartnership:
+      type: object
+      properties:
+        canal_contact_emails:
+          type: array
+          items:
+            type: string
+            format: email
+      required:
+      - canal_contact_emails
+    ConfirmationDetails:
+      type: object
+      properties:
+        confirmation_number:
+          type: string
+        catalog_order_id:
+          type: string
+        order_id:
+          type: string
+        order_date:
+          type: string
+          format: date-time
+        order_status:
+          type: string
+        fulfillment_status:
+          type: string
+        tracking_info:
+          type: array
+          items:
+            type: string
+      required:
+      - confirmation_number
+      - order_date
+      - order_id
+    CreateFulfillment:
+      type: object
+      properties:
+        name:
+          type: string
+        service:
+          type: string
+        shipment_status:
+          $ref: '#/components/schemas/ShipmentStatusEnum'
+        status:
+          $ref: '#/components/schemas/Status406Enum'
+        tracking_company:
+          type: string
+          nullable: true
+        tracking_numbers:
+          type: array
+          items:
+            type: string
+          nullable: true
+        tracking_urls:
+          type: array
+          items:
+            type: string
+          nullable: true
+        order_id:
+          type: string
+          format: uuid
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItem'
+      required:
+      - line_items
+      - name
+      - order_id
+      - service
+      - shipment_status
+      - status
+    CreateOrderLineItem:
+      type: object
+      properties:
+        variant_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+      required:
+      - quantity
+      - variant_id
+    CreateReturnLineItem:
+      type: object
+      properties:
+        line_item_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        customer_note:
+          type: string
+          nullable: true
+        return_reason:
+          $ref: '#/components/schemas/ReturnReasonEnum'
+      required:
+      - line_item_id
+      - quantity
+      - return_reason
+    CreateUpdateWebhook:
+      type: object
+      properties:
+        topic:
+          type: string
+        address:
+          type: string
+      required:
+      - address
+      - topic
+    CreateVariant:
+      type: object
+      properties:
+        title:
+          type: string
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          description: The price of the variant to be sold at.
+        compare_at_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          nullable: true
+          description: The original price of the product from before the sale price.
+            Should be greater than "price". If you elect to not allow sale price passthrough,
+            Connected Storefronts will sell items at this price.
+        inventory_policy:
+          $ref: '#/components/schemas/InventoryPolicyEnum'
+        inventory_quantity:
+          type: integer
+        option1:
+          type: string
+        option2:
+          type: string
+        option3:
+          type: string
+        sku:
+          type: string
+        position:
+          type: integer
+        image_src:
+          type: string
+        weight:
+          type: number
+          format: double
+        weight_unit:
+          type: string
+        product_id:
+          type: string
+          format: uuid
+      required:
+      - inventory_policy
+      - inventory_quantity
+      - option1
+      - price
+      - product_id
+    Customer:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type: string
+          format: email
+          nullable: true
+          title: Email address
+          maxLength: 403
+        first_name:
+          type: string
+          nullable: true
+          maxLength: 255
+        last_name:
+          type: string
+          nullable: true
+          maxLength: 256
+        orders_count:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+      required:
+      - id
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+    ExternalProduct:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        shop:
+          allOf:
+          - $ref: '#/components/schemas/Shop'
+          readOnly: true
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/Variant'
+          readOnly: true
+        body_html:
+          type: string
+          nullable: true
+          maxLength: 60000
+        handle:
+          type: string
+          nullable: true
+          maxLength: 258
+        image_src:
+          type: string
+          nullable: true
+          maxLength: 1043
+        images:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+          readOnly: true
+        options:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+          description: Flatten option.values into a list of strings
+          readOnly: true
+        product_type:
+          type: string
+          nullable: true
+          maxLength: 1044
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        published_at:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          $ref: '#/components/schemas/Status2eaEnum'
+        title:
+          type: string
+          maxLength: 1029
+        vendor:
+          type: string
+          nullable: true
+          maxLength: 227
+        tags:
+          type: string
+          nullable: true
+          maxLength: 63750
+        permalink:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 2000
+        number_of_reviews:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        star_rating:
+          type: number
+          format: double
+          nullable: true
+        product_type_category:
+          type: string
+          nullable: true
+          description: Get Shoppable Ads product type category breadcrumb path if
+            available.
+          readOnly: true
+        customer_charge_amount:
+          type: object
+          additionalProperties: {}
+          nullable: true
+          readOnly: true
+      required:
+      - customer_charge_amount
+      - id
+      - images
+      - options
+      - product_type_category
+      - shop
+      - title
+      - updated_at
+      - variants
+    FieldsToResyncEnum:
+      enum:
+      - images
+      - product_title
+      - description
+      - tags
+      - variants
+      - vendor
+      - permalink
+      type: string
+      description: |-
+        * `images` - images
+        * `product_title` - product_title
+        * `description` - description
+        * `tags` - tags
+        * `variants` - variants
+        * `vendor` - vendor
+        * `permalink` - permalink
+    Fulfillment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        order_id:
+          type: string
+          format: uuid
+        shop:
+          $ref: '#/components/schemas/Shop'
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItemRead'
+        service:
+          type: string
+          nullable: true
+          maxLength: 258
+        shipment_status:
+          type: string
+          nullable: true
+          maxLength: 32
+        status:
+          type: string
+          nullable: true
+          maxLength: 32
+        tracking_company:
+          type: string
+          nullable: true
+          maxLength: 257
+        tracking_numbers:
+          type: array
+          items:
+            type: string
+            maxLength: 128
+          nullable: true
+        tracking_urls:
+          type: array
+          items:
+            type: string
+            maxLength: 256
+          nullable: true
+      required:
+      - id
+      - line_items
+      - name
+      - order_id
+      - shop
+    Image:
+      type: object
+      properties:
+        id:
+          type: string
+        position:
+          type: integer
+        src:
+          type: string
+          format: uri
+        display_src:
+          type: string
+          format: uri
+          nullable: true
+        width:
+          type: integer
+        height:
+          type: integer
+        canal_variant_ids:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        variant_ids:
+          type: array
+          items:
+            type: string
+        origin_supplier_image_id:
+          type: string
+          format: uuid
+          nullable: true
+      required:
+      - canal_variant_ids
+      - src
+    InventoryPolicyEnum:
+      enum:
+      - continue
+      - deny
+      type: string
+      description: |-
+        * `continue` - continue
+        * `deny` - deny
+    LineItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+      required:
+      - id
+      - quantity
+    LineItemRead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        variant_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        fulfillable_quantity:
+          type: integer
+        price:
+          type: number
+          format: double
+        requires_shipping:
+          type: boolean
+        title:
+          type: string
+        sku:
+          type: string
+      required:
+      - fulfillable_quantity
+      - id
+      - price
+      - quantity
+      - variant_id
+    MaxShippingQuery:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+      required:
+      - line_items
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        remote_rid:
+          type: string
+          maxLength: 48
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        shop:
+          $ref: '#/components/schemas/Shop'
+        customer:
+          $ref: '#/components/schemas/Customer'
+        email:
+          type: string
+          format: email
+          title: Email address
+          maxLength: 254
+        total_price:
+          type: string
+          maxLength: 18
+        currency:
+          type: string
+          maxLength: 6
+        name:
+          type: string
+          maxLength: 256
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItemRead'
+          readOnly: true
+        fulfillments:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fulfillment'
+          readOnly: true
+        billing_address:
+          nullable: true
+        shipping_address:
+          nullable: true
+        shipping_lines:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShippingRate'
+          readOnly: true
+        cancelled_at:
+          type: string
+          format: date-time
+          nullable: true
+        refunds:
+          type: array
+          items:
+            $ref: '#/components/schemas/Refund'
+          readOnly: true
+        connected_supplier_order_numbers:
+          type: array
+          items:
+            type: object
+            additionalProperties:
+              type: string
+          nullable: true
+          readOnly: true
+        cancel_reason:
+          type: string
+          nullable: true
+          maxLength: 14
+        note_attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderNoteAttribute'
+        returns:
+          type: array
+          items:
+            $ref: '#/components/schemas/Return'
+          readOnly: true
+      required:
+      - connected_supplier_order_numbers
+      - created_at
+      - currency
+      - customer
+      - email
+      - fulfillments
+      - id
+      - line_items
+      - name
+      - note_attributes
+      - refunds
+      - remote_rid
+      - returns
+      - shipping_lines
+      - shop
+      - total_price
+    OrderCreate:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        customer:
+          $ref: '#/components/schemas/OrderCreateCustomer'
+        order_name:
+          type: string
+        total_tax:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+        note_attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderNoteAttribute'
+          description: |-
+            This field is useful for passing customization options for Supplier products that support customization (gift messages, logos, custom text).
+            Example: {"name": "Variant 1 Custom Text", "value": "<custom text value>"}
+        shipping_address:
+          $ref: '#/components/schemas/Address'
+        billing_address:
+          $ref: '#/components/schemas/Address'
+      required:
+      - line_items
+      - shipping_address
+    OrderCreateAndCharge:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        customer:
+          $ref: '#/components/schemas/OrderCreateCustomer'
+        order_name:
+          type: string
+        total_tax:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+        note_attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderNoteAttribute'
+          description: |-
+            This field is useful for passing customization options for Supplier products that support customization (gift messages, logos, custom text).
+            Example: {"name": "Variant 1 Custom Text", "value": "<custom text value>"}
+        partner_name:
+          type: string
+        shipping_details:
+          $ref: '#/components/schemas/OrderShippingDetails'
+        ppu_transaction_id:
+          type: string
+          description: The Post Purchase Upsell session id for the tax calculation.
+            This matches the tax calculation request.
+        payment_details:
+          allOf:
+          - $ref: '#/components/schemas/PaymentDetailsWithTokenizedCardResponse'
+          description: This field is the response from the vault. It is used to charge
+            the customer.
+      required:
+      - line_items
+      - payment_details
+      - ppu_transaction_id
+      - shipping_details
+    OrderCreateAndChargeV1Response:
+      type: object
+      properties:
+        confirmation_details:
+          $ref: '#/components/schemas/ConfirmationDetails'
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        customer:
+          $ref: '#/components/schemas/OrderCreateCustomer'
+        shipping_address:
+          $ref: '#/components/schemas/Address'
+        display_metadata:
+          type: object
+          additionalProperties: {}
+        payment_details:
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/PaymentDetailsResponse'
+      required:
+      - confirmation_details
+      - line_items
+    OrderCreateCustomer:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+        first_name:
+          type: string
+        last_name:
+          type: string
+          default: ''
+      required:
+      - email
+      - first_name
+    OrderInitializeAndChargePaymentDetailsResponse:
+      type: object
+      properties:
+        payment_status:
+          type: string
+        payment_confirmation_id:
+          type: string
+        statement_descriptor:
+          type: string
+        client_secret:
+          type: string
+        line_item_total_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+        shipping_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+        tax_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+        currency:
+          type: string
+        brand_account_id:
+          type: string
+      required:
+      - brand_account_id
+      - client_secret
+      - currency
+      - line_item_total_amount
+      - payment_status
+      - shipping_amount
+      - statement_descriptor
+      - tax_amount
+    OrderInitializeAndChargeResponse:
+      type: object
+      properties:
+        confirmation_details:
+          $ref: '#/components/schemas/ConfirmationDetails'
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        customer:
+          $ref: '#/components/schemas/OrderCreateCustomer'
+        shipping_address:
+          $ref: '#/components/schemas/Address'
+        display_metadata:
+          type: object
+          additionalProperties: {}
+        payment_details:
+          $ref: '#/components/schemas/OrderInitializeAndChargePaymentDetailsResponse'
+      required:
+      - confirmation_details
+      - line_items
+      - payment_details
+    OrderNoteAttribute:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+      required:
+      - name
+      - value
+    OrderShippingDetails:
+      type: object
+      properties:
+        code:
+          type: string
+        amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          default: '0.0000'
+        use_override_amount:
+          type: boolean
+          default: false
+        shipping_address:
+          $ref: '#/components/schemas/TaxAndShippingAddress'
+      required:
+      - code
+      - shipping_address
+    PaginatedExternalProductList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalProduct'
+    PaginatedFulfillmentList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fulfillment'
+    PaginatedOrderList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Order'
+    PaginatedProductSetItemList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductSetItem'
+    PaginatedProductSetList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductSet'
+    PaginatedRefundList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Refund'
+    PaginatedRegisteredWebhookList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegisteredWebhook'
+    PaginatedReturnList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Return'
+    PaginatedShopList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Shop'
+    PaginatedVariantList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type: string
+          nullable: true
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Variant'
+    PartialAddressPaymentDetails:
+      type: object
+      properties:
+        billing_address:
+          $ref: '#/components/schemas/TaxAndShippingAddress'
+    PatchedFulfillment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        order_id:
+          type: string
+          format: uuid
+        shop:
+          $ref: '#/components/schemas/Shop'
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItemRead'
+        service:
+          type: string
+          nullable: true
+          maxLength: 258
+        shipment_status:
+          type: string
+          nullable: true
+          maxLength: 32
+        status:
+          type: string
+          nullable: true
+          maxLength: 32
+        tracking_company:
+          type: string
+          nullable: true
+          maxLength: 257
+        tracking_numbers:
+          type: array
+          items:
+            type: string
+            maxLength: 128
+          nullable: true
+        tracking_urls:
+          type: array
+          items:
+            type: string
+            maxLength: 256
+          nullable: true
+    PatchedProduct:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        shop:
+          allOf:
+          - $ref: '#/components/schemas/Shop'
+          readOnly: true
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/Variant'
+          readOnly: true
+        body_html:
+          type: string
+          nullable: true
+          maxLength: 60000
+        handle:
+          type: string
+          nullable: true
+          maxLength: 258
+        image_src:
+          type: string
+          nullable: true
+          maxLength: 1043
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+        options:
+          nullable: true
+        product_type:
+          type: string
+          nullable: true
+          maxLength: 1044
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        published_at:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          $ref: '#/components/schemas/Status2eaEnum'
+        title:
+          type: string
+          maxLength: 1029
+        vendor:
+          type: string
+          nullable: true
+          maxLength: 227
+        tags:
+          type: string
+          nullable: true
+          maxLength: 63750
+        permalink:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 2000
+        number_of_reviews:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        star_rating:
+          type: number
+          format: double
+          nullable: true
+    PatchedRegisteredWebhook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        topic:
+          $ref: '#/components/schemas/TopicEnum'
+        address:
+          type: string
+          maxLength: 512
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+    PatchedVariant:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        shop:
+          allOf:
+          - $ref: '#/components/schemas/Shop'
+          readOnly: true
+        inventory_policy:
+          type: string
+          nullable: true
+          maxLength: 123
+        inventory_quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        inventory_item_cost:
+          type: number
+          format: double
+        option1:
+          type: string
+          nullable: true
+          maxLength: 255
+        option2:
+          type: string
+          nullable: true
+          maxLength: 256
+        option3:
+          type: string
+          nullable: true
+          maxLength: 257
+        position:
+          type: integer
+          readOnly: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          description: The price of the variant to be sold at.
+        compare_at_price:
+          type: string
+          nullable: true
+          maxLength: 128
+        origin_supplier_currency:
+          type: string
+          nullable: true
+          readOnly: true
+        title:
+          type: string
+        sku:
+          type: string
+          nullable: true
+          readOnly: true
+        upc:
+          type: string
+          nullable: true
+          maxLength: 253
+        grams:
+          type: number
+          format: double
+          nullable: true
+        weight:
+          type: number
+          format: double
+          nullable: true
+        weight_unit:
+          type: string
+          nullable: true
+          maxLength: 3
+        pause_selling:
+          type: boolean
+        origin_supplier_id:
+          type: string
+          nullable: true
+          readOnly: true
+        origin_supplier_name:
+          type: string
+          nullable: true
+          readOnly: true
+        available_for_ordering:
+          type: boolean
+          readOnly: true
+        supplier_sku:
+          type: string
+          nullable: true
+          readOnly: true
+        is_exclusive_offer:
+          type: boolean
+          description: An exclusive offer is a variant that is discounted lower than
+            the variant's actual price on the supplier's website.
+          readOnly: true
+        sup_price:
+          type: string
+          nullable: true
+          description: The connected supplier variant's price, sourced from the supplier
+            directly.
+          readOnly: true
+        sup_compare_at_price:
+          type: string
+          nullable: true
+          description: The connected supplier variant's compare-at price, sourced
+            from the supplier directly.
+          readOnly: true
+    PaymentDetailsResponse:
+      type: object
+      properties:
+        payment_status:
+          type: string
+        payment_confirmation_id:
+          type: string
+        statement_descriptor:
+          type: string
+      required:
+      - payment_status
+    PaymentDetailsWithTokenizedCardResponse:
+      type: object
+      properties:
+        tokenized_card_response:
+          $ref: '#/components/schemas/TokenizedCardResponse'
+        billing_address:
+          $ref: '#/components/schemas/Address'
+      required:
+      - tokenized_card_response
+    PostPurchaseOrderCreate:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        customer:
+          $ref: '#/components/schemas/OrderCreateCustomer'
+        order_name:
+          type: string
+        total_tax:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+        note_attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderNoteAttribute'
+          description: |-
+            This field is useful for passing customization options for Supplier products that support customization (gift messages, logos, custom text).
+            Example: {"name": "Variant 1 Custom Text", "value": "<custom text value>"}
+        partner_name:
+          type: string
+        shipping_details:
+          $ref: '#/components/schemas/OrderShippingDetails'
+        ppu_transaction_id:
+          type: string
+          description: The Post Purchase Upsell session id for the tax calculation.
+            This matches the tax calculation request.
+        payment_details:
+          allOf:
+          - $ref: '#/components/schemas/PartialAddressPaymentDetails'
+          description: This field is the response from the vault. It is used to charge
+            the customer.
+      required:
+      - line_items
+      - ppu_transaction_id
+      - shipping_details
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        shop:
+          allOf:
+          - $ref: '#/components/schemas/Shop'
+          readOnly: true
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/Variant'
+          readOnly: true
+        body_html:
+          type: string
+          nullable: true
+          maxLength: 60000
+        handle:
+          type: string
+          nullable: true
+          maxLength: 258
+        image_src:
+          type: string
+          nullable: true
+          maxLength: 1043
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+        options:
+          nullable: true
+        product_type:
+          type: string
+          nullable: true
+          maxLength: 1044
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        published_at:
+          type: string
+          format: date-time
+          nullable: true
+        status:
+          $ref: '#/components/schemas/Status2eaEnum'
+        title:
+          type: string
+          maxLength: 1029
+        vendor:
+          type: string
+          nullable: true
+          maxLength: 227
+        tags:
+          type: string
+          nullable: true
+          maxLength: 63750
+        permalink:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 2000
+        number_of_reviews:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        star_rating:
+          type: number
+          format: double
+          nullable: true
+      required:
+      - id
+      - shop
+      - title
+      - updated_at
+      - variants
+    ProductSet:
+      type: object
+      properties:
+        product_set_id:
+          type: string
+          format: uuid
+          readOnly: true
+        supplier_id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type: string
+          nullable: true
+        type:
+          allOf:
+          - $ref: '#/components/schemas/TypeEnum'
+          description: |-
+            Whether the product set is manual or rule-based.
+
+            * `MANUAL` - Manual
+            * `RULE_BASED` - Rule-based
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - name
+      - product_set_id
+      - supplier_id
+      - updated_at
+    ProductSetItem:
+      type: object
+      properties:
+        variant_id:
+          type: string
+          format: uuid
+          readOnly: true
+        product_id:
+          type: string
+          format: uuid
+          description: Get product_id from the sk_variant's product.
+          readOnly: true
+        product_set_id:
+          type: string
+          format: uuid
+          readOnly: true
+        inventory_quantity:
+          type: integer
+          readOnly: true
+          nullable: true
+        price:
+          type: string
+          readOnly: true
+          nullable: true
+        product_type_category:
+          type: string
+          nullable: true
+          description: Get Shoppable Ads product type category breadcrumb path for
+            the variant's product.
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - inventory_quantity
+      - price
+      - product_id
+      - product_set_id
+      - product_type_category
+      - updated_at
+      - variant_id
+    PushProduct:
+      type: object
+      properties:
+        title:
+          type: string
+        body_html:
+          type: string
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushProductVariant'
+        permalink:
+          type: string
+        handle:
+          type: string
+        image_src:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+        product_type:
+          type: string
+        tags:
+          type: string
+        vendor:
+          type: string
+        shopify_taxonomy:
+          type: string
+          nullable: true
+        is_listed:
+          type: boolean
+          default: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/PushProductStatusEnum'
+          default: active
+      required:
+      - title
+      - variants
+    PushProductStatusEnum:
+      enum:
+      - active
+      - draft
+      - archived
+      type: string
+      description: |-
+        * `active` - active
+        * `draft` - draft
+        * `archived` - archived
+    PushProductVariant:
+      type: object
+      properties:
+        title:
+          type: string
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          description: The price of the variant to be sold at.
+        compare_at_price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          nullable: true
+          description: The original price of the product from before the sale price.
+            Should be greater than "price". If you elect to not allow sale price passthrough,
+            Connected Storefronts will sell items at this price.
+        inventory_policy:
+          $ref: '#/components/schemas/InventoryPolicyEnum'
+        inventory_quantity:
+          type: integer
+        option1:
+          type: string
+        option2:
+          type: string
+        option3:
+          type: string
+        sku:
+          type: string
+        position:
+          type: integer
+        image_src:
+          type: string
+        weight:
+          type: number
+          format: double
+        weight_unit:
+          type: string
+      required:
+      - inventory_policy
+      - inventory_quantity
+      - option1
+      - price
+    Refund:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        order_id:
+          type: string
+        amount:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        note:
+          type: string
+          nullable: true
+          maxLength: 1025
+        duties:
+          nullable: true
+        restock:
+          type: boolean
+          nullable: true
+        processed_at:
+          type: string
+          format: date-time
+        refund_line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefundLineItem'
+        shipping_refund_amount:
+          type: string
+          nullable: true
+          maxLength: 128
+        failed_to_create_refund_line_items:
+          type: string
+          readOnly: true
+      required:
+      - amount
+      - failed_to_create_refund_line_items
+      - id
+      - order_id
+      - processed_at
+      - refund_line_items
+    RefundCreate:
+      type: object
+      properties:
+        order_id:
+          type: string
+          format: uuid
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItem'
+        should_refund_shipping:
+          type: boolean
+        extra_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: Only available to select retailers.
+      required:
+      - line_items
+      - order_id
+    RefundLineItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        line_item:
+          $ref: '#/components/schemas/LineItemRead'
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        subtotal:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          nullable: true
+      required:
+      - id
+      - line_item
+      - quantity
+    RegisteredWebhook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        topic:
+          $ref: '#/components/schemas/TopicEnum'
+        address:
+          type: string
+          maxLength: 512
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - address
+      - created_at
+      - id
+      - topic
+      - updated_at
+    ReorderVariant:
+      type: object
+      properties:
+        variant_order:
+          type: array
+          items:
+            type: string
+            format: uuid
+      required:
+      - variant_order
+    ResyncShopkeepProduct:
+      type: object
+      properties:
+        fields_to_resync:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldsToResyncEnum'
+    ResyncShopkeepProductResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        status:
+          type: string
+          nullable: true
+        shopify_product:
+          allOf:
+          - $ref: '#/components/schemas/Product'
+          nullable: true
+      required:
+      - ok
+    Return:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        order:
+          type: string
+          format: uuid
+        return_line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReturnLineItem'
+        status:
+          $ref: '#/components/schemas/Status602Enum'
+        name:
+          type: string
+          nullable: true
+          maxLength: 501
+        total_return_line_items:
+          type: integer
+          maximum: 32767
+          minimum: -32768
+          description: The sum of all return line item quantities for the return.
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        tracking:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReverseDelivery'
+        rma:
+          type: string
+          nullable: true
+          description: '"Return merchandise authorization" -- used as reference number
+            for SK to SUP comms'
+          maxLength: 501
+      required:
+      - created_at
+      - id
+      - order
+      - return_line_items
+      - total_return_line_items
+      - tracking
+      - updated_at
+    ReturnCreate:
+      type: object
+      properties:
+        order_id:
+          type: string
+          format: uuid
+        return_line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateReturnLineItem'
+        tracking:
+          $ref: '#/components/schemas/ReverseDeliveryCreate'
+        name:
+          type: string
+          nullable: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status602Enum'
+          readOnly: true
+          default: open
+        rma:
+          type: string
+      required:
+      - order_id
+      - return_line_items
+      - status
+      - tracking
+    ReturnLineItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        line_item_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        customer_note:
+          type: string
+          nullable: true
+          maxLength: 300
+        return_reason:
+          $ref: '#/components/schemas/ReturnReasonEnum'
+        return_reason_note:
+          type: string
+          nullable: true
+          maxLength: 255
+      required:
+      - id
+      - line_item_id
+      - quantity
+    ReturnReasonEnum:
+      enum:
+      - color
+      - defective
+      - not_as_described
+      - other
+      - size_too_large
+      - size_too_small
+      - style
+      - unknown
+      - unwanted
+      - wrong_item
+      type: string
+      description: |-
+        * `color` - color
+        * `defective` - defective
+        * `not_as_described` - not_as_described
+        * `other` - other
+        * `size_too_large` - size_too_large
+        * `size_too_small` - size_too_small
+        * `style` - style
+        * `unknown` - unknown
+        * `unwanted` - unwanted
+        * `wrong_item` - wrong_item
+    ReverseDelivery:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        carrier_name:
+          type: string
+          nullable: true
+          maxLength: 100
+        tracking_number:
+          type: string
+          nullable: true
+          maxLength: 100
+        tracking_url:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+        shipping_label_file_url:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 1279
+      required:
+      - id
+    ReverseDeliveryCreate:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        carrier_name:
+          type: string
+          nullable: true
+          maxLength: 100
+        tracking_number:
+          type: string
+          nullable: true
+          maxLength: 100
+        tracking_url:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 200
+        shipping_label_file_url:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 1279
+      required:
+      - id
+    ShipmentStatusEnum:
+      enum:
+      - label_printed
+      - label_purchased
+      - attempted_delivery
+      - ready_for_pickup
+      - confirmed
+      - in_transit
+      - out_for_delivery
+      - delivered
+      - failure
+      type: string
+      description: |-
+        * `label_printed` - label_printed
+        * `label_purchased` - label_purchased
+        * `attempted_delivery` - attempted_delivery
+        * `ready_for_pickup` - ready_for_pickup
+        * `confirmed` - confirmed
+        * `in_transit` - in_transit
+        * `out_for_delivery` - out_for_delivery
+        * `delivered` - delivered
+        * `failure` - failure
+    ShippingCalculationQuery:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplierShippingLineItem'
+        shipping_address:
+          allOf:
+          - $ref: '#/components/schemas/TaxAndShippingAddress'
+          description: The destination address, including fields like `city`, `province_code`,
+            `country_code`, `zip`. `address1`, `name` and `phone` are optional but
+            recommended.
+      required:
+      - line_items
+      - shipping_address
+    ShippingCalculationResponse:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShippingLineItemData'
+          description: List of shipping calculation results per line item.
+        calculation_errors:
+          type: array
+          items:
+            type: string
+          description: Error messages
+      required:
+      - calculation_errors
+      - line_items
+    ShippingDetails:
+      type: object
+      properties:
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: The price of shipping
+        code:
+          type: string
+          description: The shipping code
+        title:
+          type: string
+          description: The shipping title
+        description:
+          type: string
+          description: The shipping description
+      required:
+      - code
+      - price
+      - title
+    ShippingDetailsData:
+      type: object
+      properties:
+        price:
+          type: string
+        code:
+          type: string
+        title:
+          type: string
+        description:
+          type: string
+          nullable: true
+          default: ''
+      required:
+      - code
+      - price
+      - title
+    ShippingLineItemData:
+      type: object
+      properties:
+        supplier_variant_rid:
+          type: string
+        supplier_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        shipping_amount:
+          type: string
+        shipping_details:
+          $ref: '#/components/schemas/ShippingDetailsData'
+      required:
+      - quantity
+      - shipping_amount
+      - shipping_details
+      - supplier_id
+      - supplier_variant_rid
+    ShippingQuery:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        shipping_address:
+          $ref: '#/components/schemas/Address'
+      required:
+      - line_items
+      - shipping_address
+    ShippingRate:
+      type: object
+      properties:
+        code:
+          type: string
+        title:
+          type: string
+        price:
+          type: number
+          format: double
+        currency:
+          type: string
+          default: USD
+      required:
+      - code
+      - price
+      - title
+    ShippingRateResponse:
+      type: object
+      properties:
+        shipping_rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShippingRate'
+      required:
+      - shipping_rates
+    Shop:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type: string
+          nullable: true
+          readOnly: true
+        phone:
+          type: string
+          nullable: true
+          maxLength: 128
+        name:
+          type: string
+          maxLength: 129
+        description:
+          type: string
+          nullable: true
+          maxLength: 6144
+        myshopify_domain:
+          type: string
+          maxLength: 128
+        province:
+          type: string
+          nullable: true
+          maxLength: 122
+        country:
+          type: string
+          maxLength: 64
+        domain:
+          type: string
+          nullable: true
+          maxLength: 128
+        display_domain:
+          type: string
+          nullable: true
+          readOnly: true
+        privacy_policy_url:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 500
+        terms_of_service_url:
+          type: string
+          format: uri
+          nullable: true
+          maxLength: 500
+      required:
+      - country
+      - display_domain
+      - email
+      - id
+      - myshopify_domain
+      - name
+    Status2eaEnum:
+      enum:
+      - active
+      - draft
+      - archived
+      - unlisted
+      type: string
+      description: |-
+        * `active` - active
+        * `draft` - draft
+        * `archived` - archived
+        * `unlisted` - unlisted
+    Status406Enum:
+      enum:
+      - pending
+      - open
+      - success
+      - cancelled
+      - error
+      - failure
+      type: string
+      description: |-
+        * `pending` - pending
+        * `open` - open
+        * `success` - success
+        * `cancelled` - cancelled
+        * `error` - error
+        * `failure` - failure
+    Status602Enum:
+      enum:
+      - canceled
+      - closed
+      - declined
+      - open
+      - requested
+      type: string
+      description: |-
+        * `canceled` - canceled
+        * `closed` - closed
+        * `declined` - declined
+        * `open` - open
+        * `requested` - requested
+    SupplierShippingLineItem:
+      type: object
+      properties:
+        supplier_variant_rid:
+          type: string
+        supplier_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+          minimum: 1
+      required:
+      - quantity
+      - supplier_id
+      - supplier_variant_rid
+    TaxAndShippingAddress:
+      type: object
+      description: Address serializer for tax and shipping calculations where address1
+        and name are optional
+      properties:
+        name:
+          type: string
+        address1:
+          type: string
+        address2:
+          type: string
+        city:
+          type: string
+        province:
+          type: string
+        province_code:
+          type: string
+        country:
+          type: string
+        country_code:
+          type: string
+        zip:
+          type: string
+        phone:
+          type: string
+      required:
+      - city
+      - country
+      - province
+      - zip
+    TaxAndShippingLineItemResponse:
+      type: object
+      properties:
+        tax_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: The tax amount for the line item
+        currency:
+          type: string
+          default: USD
+        variant_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        shipping_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: The shipping amount for the line item
+        shipping_details:
+          allOf:
+          - $ref: '#/components/schemas/ShippingDetails'
+          description: Shipping details including price, code, and title
+      required:
+      - quantity
+      - shipping_amount
+      - tax_amount
+      - variant_id
+    TaxAndShippingResponse:
+      type: object
+      properties:
+        shipping_rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShippingRate'
+        tax_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: The total tax amount for the order
+        currency:
+          type: string
+          default: USD
+        tax_lines_per_supplier:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TaxLineResponse'
+          description: Dictionary mapping a supplier's id to a list of tax line responses.
+        calculation_errors:
+          type: array
+          items:
+            type: string
+          description: Error messages
+      required:
+      - calculation_errors
+      - shipping_rates
+      - tax_amount
+      - tax_lines_per_supplier
+    TaxAndShippingResponseSerializerV1:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxAndShippingLineItemResponse'
+          description: Dictionary mapping a line item's id to a list of tax line responses.
+        calculation_errors:
+          type: array
+          items:
+            type: string
+          description: Error messages
+        request_id:
+          type: string
+          format: uuid
+          description: The id of the tax request
+      required:
+      - calculation_errors
+      - line_items
+    TaxCalculationQuery:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        shipping_address:
+          allOf:
+          - $ref: '#/components/schemas/TaxAndShippingAddress'
+          description: The destination address, including fields like `city`, `province_code`,
+            `country_code`, `zip`. `address1`, `name` and `phone` are optional but
+            recommended.
+        billing_address:
+          allOf:
+          - $ref: '#/components/schemas/TaxAndShippingAddress'
+          description: The billing address, including fields like `city`, `province_code`,
+            `country_code`, `zip`. `address1`, `name` and `phone` are optional but
+            recommended.
+      required:
+      - line_items
+      - shipping_address
+    TaxCalculationQuerySerializerV1:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        shipping_address:
+          allOf:
+          - $ref: '#/components/schemas/TaxAndShippingAddress'
+          description: The destination address, including fields like `city`, `province_code`,
+            `country_code`, `zip`. `address1`, `name` and `phone` are optional but
+            recommended.
+        billing_address:
+          allOf:
+          - $ref: '#/components/schemas/TaxAndShippingAddress'
+          description: The billing address, including fields like `city`, `province_code`,
+            `country_code`, `zip`. `address1`, `name` and `phone` are optional but
+            recommended.
+        ppu_transaction_id:
+          type: string
+          description: The Post Purchase Upsell session id for the tax calculation.
+            This will be reused at order creation time to match the tax calculation
+            request.
+      required:
+      - line_items
+      - ppu_transaction_id
+      - shipping_address
+    TaxLinePerSupplierResponse:
+      type: object
+      properties:
+        tax_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: The total tax amount for the order
+        currency:
+          type: string
+          default: USD
+        tax_lines_per_supplier:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TaxLineResponse'
+          description: Dictionary mapping a supplier's id to a list of tax line responses.
+        calculation_errors:
+          type: array
+          items:
+            type: string
+          description: Error messages
+      required:
+      - calculation_errors
+      - tax_amount
+      - tax_lines_per_supplier
+    TaxLineResponse:
+      type: object
+      properties:
+        tax_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: The tax amount for the line item
+        currency:
+          type: string
+          default: USD
+        title:
+          type: string
+          description: The name of the tax line
+        rate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: The tax rate for the line item
+      required:
+      - rate
+      - tax_amount
+      - title
+    TokenizedCardResponse:
+      type: object
+      properties:
+        payment_reference_id:
+          type: string
+      required:
+      - payment_reference_id
+    TopicEnum:
+      enum:
+      - order/create
+      - order/update
+      - order/cancel
+      - product/create
+      - product/update
+      - fulfillment/create
+      - fulfillment/update
+      type: string
+      description: |-
+        * `order/create` - order/create
+        * `order/update` - order/update
+        * `order/cancel` - order/cancel
+        * `product/create` - product/create
+        * `product/update` - product/update
+        * `fulfillment/create` - fulfillment/create
+        * `fulfillment/update` - fulfillment/update
+    TypeEnum:
+      enum:
+      - MANUAL
+      - RULE_BASED
+      type: string
+      description: |-
+        * `MANUAL` - Manual
+        * `RULE_BASED` - Rule-based
+    UpdateFulfillment:
+      type: object
+      properties:
+        name:
+          type: string
+        service:
+          type: string
+        shipment_status:
+          $ref: '#/components/schemas/ShipmentStatusEnum'
+        status:
+          $ref: '#/components/schemas/Status406Enum'
+        tracking_company:
+          type: string
+          nullable: true
+        tracking_numbers:
+          type: array
+          items:
+            type: string
+          nullable: true
+        tracking_urls:
+          type: array
+          items:
+            type: string
+          nullable: true
+      required:
+      - name
+      - service
+      - shipment_status
+      - status
+    Variant:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        shop:
+          allOf:
+          - $ref: '#/components/schemas/Shop'
+          readOnly: true
+        inventory_policy:
+          type: string
+          nullable: true
+          maxLength: 123
+        inventory_quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+          nullable: true
+        inventory_item_cost:
+          type: number
+          format: double
+        option1:
+          type: string
+          nullable: true
+          maxLength: 255
+        option2:
+          type: string
+          nullable: true
+          maxLength: 256
+        option3:
+          type: string
+          nullable: true
+          maxLength: 257
+        position:
+          type: integer
+          readOnly: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          description: The price of the variant to be sold at.
+        compare_at_price:
+          type: string
+          nullable: true
+          maxLength: 128
+        origin_supplier_currency:
+          type: string
+          nullable: true
+          readOnly: true
+        title:
+          type: string
+        sku:
+          type: string
+          nullable: true
+          readOnly: true
+        upc:
+          type: string
+          nullable: true
+          maxLength: 253
+        grams:
+          type: number
+          format: double
+          nullable: true
+        weight:
+          type: number
+          format: double
+          nullable: true
+        weight_unit:
+          type: string
+          nullable: true
+          maxLength: 3
+        pause_selling:
+          type: boolean
+        origin_supplier_id:
+          type: string
+          nullable: true
+          readOnly: true
+        origin_supplier_name:
+          type: string
+          nullable: true
+          readOnly: true
+        available_for_ordering:
+          type: boolean
+          readOnly: true
+        supplier_sku:
+          type: string
+          nullable: true
+          readOnly: true
+        is_exclusive_offer:
+          type: boolean
+          description: An exclusive offer is a variant that is discounted lower than
+            the variant's actual price on the supplier's website.
+          readOnly: true
+        sup_price:
+          type: string
+          nullable: true
+          description: The connected supplier variant's price, sourced from the supplier
+            directly.
+          readOnly: true
+        sup_compare_at_price:
+          type: string
+          nullable: true
+          description: The connected supplier variant's compare-at price, sourced
+            from the supplier directly.
+          readOnly: true
+      required:
+      - available_for_ordering
+      - id
+      - is_exclusive_offer
+      - origin_supplier_currency
+      - origin_supplier_id
+      - origin_supplier_name
+      - position
+      - price
+      - shop
+      - sku
+      - sup_compare_at_price
+      - sup_price
+      - supplier_sku
+      - title
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    platformAppId:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-ID
+    platformAppToken:
+      type: apiKey
+      in: header
+      name: X-CANAL-APP-TOKEN
+servers:
+- url: https://api.shopcanal.com/platform
+  description: Rokt Catalog Storefront Public API

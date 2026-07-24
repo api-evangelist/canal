@@ -1,0 +1,14 @@
+# OpenAPI Overlay 1.0.0 - API Evangelist enhancements (non-mutating)
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Rokt Catalog (Canal)
+  version: 1.0.0
+extends: openapi/canal-openapi-original.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-07-18'
+    x-apievangelist-provider: canal
+    x-apievangelist-auth: x-canal-app-id + x-canal-app-token (API key headers)
+    x-apievangelist-idempotency: orders/create_or_get is order_name-keyed idempotent
+    x-apievangelist-webhooks: HMAC-SHA256 signed, x-canal-event-hash header, 7 topics

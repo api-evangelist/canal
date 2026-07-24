@@ -1,0 +1,28 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/canal-openapi-original.yml
+standards:
+- id: oauth2
+  conforms: false
+  evidence: No oauth2 securityScheme; auth is app-id + app-token API keys plus basicAuth.
+- id: oidc
+  conforms: false
+  evidence: No OpenID Connect discovery or scheme.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Errors use a custom JSON envelope (error_code + message), not application/problem+json.
+- id: cursor-pagination
+  conforms: true
+  evidence: List endpoints use cursor-based PlatformPagination (Paginated*List schemas).
+- id: idempotency
+  conforms: true
+  evidence: orders/create_or_get provides order_name-keyed idempotent order creation.
+- id: webhooks-hmac
+  conforms: true
+  evidence: Webhook deliveries signed with HMAC-SHA256 in x-canal-event-hash header.
+- id: openapi-3.0
+  conforms: true
+  evidence: Machine-readable OpenAPI 3.0.3 published at https://api.shopcanal.com/schema/.
+- id: uuid-identifiers
+  conforms: true
+  evidence: All primary resource identifiers are UUIDs.

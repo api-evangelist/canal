@@ -1,0 +1,28 @@
+generated: '2026-07-18'
+method: searched
+source: https://docs.shopcanal.com/docs/environments
+versioning:
+  scheme: path-embedded
+  current: 1.0.1
+  base_path: /platform
+  docs: https://docs.shopcanal.com/reference/brand
+  note: >-
+    OpenAPI info.version 1.0.1. Newer endpoints are introduced under a /v1/
+    path segment alongside the original unversioned operations.
+environments:
+  production:
+    base_url: https://api.shopcanal.com/platform
+    note: >-
+      Rokt Catalog runs a single production environment. Testing is done in
+      production against designated test brand accounts and test payment
+      methods rather than a separate sandbox host.
+deprecation:
+  policy_url: null
+  sunset_header: unknown
+  note: No public deprecation policy or RFC 8594 Sunset/Deprecation header support was found in the docs.
+status_page:
+  url: null
+  note: No public status page was found for api.shopcanal.com as of the generated date.
+sla:
+  url: null
+deprecated_operations: []
