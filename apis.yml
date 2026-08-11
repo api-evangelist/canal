@@ -261,7 +261,7 @@ common:
 - type: Authentication
   url: authentication/canal-authentication.yml
 - type: OpenAPI
-  url: openapi/canal-openapi-original.yml
+  url: openapi/_original/canal-openapi-original.yml
 - type: Overlay
   url: overlays/canal-openapi-overlay.yaml
 - type: LLMsTxt
