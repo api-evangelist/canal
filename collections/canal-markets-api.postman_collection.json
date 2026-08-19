@@ -1,0 +1,115 @@
+{
+  "item": [
+    {
+      "id": "a4c5f7df-8de2-442e-acc3-b910bdb09c8b",
+      "name": "markets",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f88db410-d93c-4cf9-9a0f-85f64d756322",
+          "name": "markets prices import create",
+          "request": {
+            "name": "markets prices import create",
+            "description": {},
+            "url": {
+              "path": [
+                "markets",
+                "prices",
+                "import",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "POST",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{basicAuthUsername}}"
+                },
+                {
+                  "key": "password",
+                  "value": "{{basicAuthPassword}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "fdd99fff-6479-45c5-84b0-576017bfcc3d",
+              "name": "No response body",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "markets",
+                    "prices",
+                    "import",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.shopcanal.com/platform",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "91b35e55-350d-443d-9b3c-b3dd37ad5bdd",
+    "name": "Rokt Catalog csv markets API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Integrate with Rokt Catalog",
+      "type": "text/plain"
+    }
+  }
+}

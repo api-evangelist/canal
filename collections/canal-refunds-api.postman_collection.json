@@ -1,0 +1,1104 @@
+{
+  "item": [
+    {
+      "id": "7db0e231-9952-401e-b4ce-d70780b6bf0e",
+      "name": "refunds",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f739fce8-595c-461d-83db-a6e25fb32c66",
+          "name": "refunds list",
+          "request": {
+            "name": "refunds list",
+            "description": {
+              "content": "\nRetrieve a paginated list of refund records associated with the authenticated store, reflecting its role in the order process.\n\n- **If called by a Storefront:** Returns refund records linked to orders originating from the Storefront. This includes refunds initiated *by* the Storefront and refunds initiated *by* connected Suppliers for those orders.\n\n- **If called by a Supplier:** Returns refund records linked to orders received by the Supplier from connected Storefronts. This includes refunds initiated *by* the Supplier and refunds initiated *by* the originating Storefronts for those orders.\n\nThe response (`RefundSerializer`, paginated) includes details for each refund, such as the calculated `total_refunded_amount`, `currency`, the list of `refund_line_items` (with quantities and amounts), associated `order_id`, and timestamps.\n\nPagination is cursor-based (`PlatformPagination`). Ordering is available on `created_at` and `updated_at`, defaulting to `-created_at`.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "refunds",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "ordering",
+                  "value": "<string>",
+                  "description": "Which field to use when ordering the results."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "The pagination cursor value."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "d2414d13-cfba-4c60-83ba-d24c5ac3d31f",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refunds",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    {\n      \"amount\": {\n        \"key_0\": {},\n        \"key_1\": {}\n      },\n      \"failed_to_create_refund_line_items\": \"string\",\n      \"id\": \"8bb1580e-14cf-ca97-5ea2-4058844ecd0e\",\n      \"order_id\": \"string\",\n      \"processed_at\": \"1982-11-10T09:30:14.729Z\",\n      \"refund_line_items\": [\n        {\n          \"id\": \"682ce89a-e1f3-a131-425d-d4864bd78dcc\",\n          \"line_item\": {\n            \"fulfillable_quantity\": 7075,\n            \"id\": \"274aa2c3-a1f4-cdb7-8158-c808ed1b82ce\",\n            \"price\": 2535.3432249892694,\n            \"quantity\": 4875,\n            \"variant_id\": \"1d851972-3ac6-7177-9dc6-a454da9a7b06\",\n            \"requires_shipping\": true,\n            \"title\": \"string\",\n            \"sku\": \"string\"\n          },\n          \"quantity\": -166652769,\n          \"subtotal\": \"9517037.\"\n        },\n        {\n          \"id\": \"2ff2c395-03d0-871b-3d62-7dda8ef1af09\",\n          \"line_item\": {\n            \"fulfillable_quantity\": 722,\n            \"id\": \"8814ec37-8569-7498-a53a-32f2c8be17c5\",\n            \"price\": 2716.134435091565,\n            \"quantity\": 5160,\n            \"variant_id\": \"7913c57d-a0f2-7933-7172-3a885d7a1160\",\n            \"requires_shipping\": false,\n            \"title\": \"string\",\n            \"sku\": \"string\"\n          },\n          \"quantity\": 776527814,\n          \"subtotal\": \"-2528\"\n        }\n      ],\n      \"note\": \"string\",\n      \"duties\": {},\n      \"restock\": false,\n      \"shipping_refund_amount\": \"string\"\n    },\n    {\n      \"amount\": {\n        \"key_0\": {}\n      },\n      \"failed_to_create_refund_line_items\": \"string\",\n      \"id\": \"5b24bdf6-26d7-1098-2c36-796723dcd8ea\",\n      \"order_id\": \"string\",\n      \"processed_at\": \"2011-08-30T03:52:03.305Z\",\n      \"refund_line_items\": [\n        {\n          \"id\": \"7f736f04-fdfe-847d-1378-940d6085a95f\",\n          \"line_item\": {\n            \"fulfillable_quantity\": 6775,\n            \"id\": \"e8dfaae7-60fe-fe4a-781e-ef46352a401a\",\n            \"price\": 9942.003585008459,\n            \"quantity\": 1455,\n            \"variant_id\": \"365dbbd1-8224-0e9e-4d93-8dd4bac48e92\",\n            \"requires_shipping\": false,\n            \"title\": \"string\",\n            \"sku\": \"string\"\n          },\n          \"quantity\": 435915702,\n          \"subtotal\": \"-94967\"\n        },\n        {\n          \"id\": \"6645d057-3b77-53ce-57ed-1af2a9cf2f0b\",\n          \"line_item\": {\n            \"fulfillable_quantity\": 4760,\n            \"id\": \"cb1ccb1d-62f5-ce14-8ba9-0f6130c2b019\",\n            \"price\": 5784.836446144764,\n            \"quantity\": 3185,\n            \"variant_id\": \"6f128ba6-f381-0e05-0141-5d9aa378bc01\",\n            \"requires_shipping\": false,\n            \"title\": \"string\",\n            \"sku\": \"string\"\n          },\n          \"quantity\": 2142247991,\n          \"subtotal\": \"32738\"\n        }\n      ],\n      \"note\": \"string\",\n      \"duties\": {},\n      \"restock\": true,\n      \"shipping_refund_amount\": \"string\"\n    }\n  ],\n  \"next\": \"http://fqhKPDgQRqWnYzcKVIUTGNfszwaVuRLi.newjzg0wGhRFvT7dN3s8Tbj3I9,HMaIK,oGTx7FQBdwjz\",\n  \"previous\": \"http://api.example.org/accounts/?cursor=cj0xJnA9NDg3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c84ddbe3-23fb-4ca7-b645-659f8ea9941e",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refunds",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4997b453-1146-4ff3-a17c-6267e105ac6f",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refunds",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "49dbc3ed-fa2b-44c9-848c-b07aab032d96",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refunds",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "903450ea-b8f8-4526-ac62-4b6123dc20b4",
+          "name": "refunds create",
+          "request": {
+            "name": "refunds create",
+            "description": {
+              "content": "\nInitiate a refund for specific quantities of line items within a Rokt Catalog order. This endpoint handles refund requests originating from both Storefronts and Suppliers.\n\n**Request Body (`RefundCreateSerializer`):**\n\n- `order_id` (UUID, required): The Catalog ID of the order to be refunded.\n\n- `line_items` (list, required): A list of objects, each specifying:\n\n  - `id` (UUID, required): The Catalog ID of the line item to refund.\n\n  - `quantity` (integer, required): The quantity of this line item to refund.\n\n- `should_refund_shipping` (boolean, optional, **Storefront only**): If `true`, attempts to refund the original shipping cost associated with the Storefront order.\n\n- `extra_amount` (decimal string, optional, **restricted use**): Allows refunding an additional amount beyond line items/shipping (currently restricted to specific shops like SHEIN).\n\n**Process & Permissions:**\n\n1. **Identify Initiator:** Determines if the request comes from the Storefront or the Supplier by checking the order's relationships.\n\n2. **Lock Order:** Acquires a lock on the order record to prevent concurrent modifications.\n\n3. **Validate Quantities:** Checks if the requested `quantity` for each line item exceeds the currently refundable quantity (original quantity minus previously refunded quantity). If validation fails, returns `400 Bad Request` with `error_code: ITEMS_ALREADY_REFUNDED` and details of affected items.\n\n4. **Storefront-Initiated Refund:**\n\n   - **Permission Check:** Verifies the Storefront has the required scope (`write_sk_refunds`). Returns `403 Forbidden` if missing.\n\n   - **Dispatch:** Calculates refund amounts, creates the refund record for the Storefront in Catalog, and **asynchronously** triggers tasks to create corresponding refund records on the connected Supplier(s)' systems (e.g., via Shopify API).\n\n   - **Error Handling:** If downstream Supplier refund creation fails, returns `400 Bad Request` with `error_code: SUPPLIER_REFUND_FAILED`.\n\n5. **Supplier-Initiated Refund:**\n\n   - **Permission Check:** Implicitly requires the `write_refunds` scope.\n\n   - **Create Supplier Refund:** Creates the refund record for the Supplier in Catalog.\n\n   - **Dispatch to Storefront:** If the Supplier order originated from a Storefront with integration settings, **synchronously** attempts to create a corresponding refund record on the Storefront's order in Catalog.\n\n   - **Error Handling:** If downstream Storefront refund creation fails, returns `400 Bad Request` with `error_code: SK_REFUND_FAILED`.\n\n6. **Extra Amount:** If `extra_amount` is provided and valid, creates an associated record (restricted use).\n\n**Response:** On success, returns `201 Created` with the details of the primary refund record created (either the Storefront's or the Supplier's) using `RefundSerializer`. The serializer might include details about failed downstream refunds in the `failed_to_create_refund_line_items` field for Storefront-initiated refunds.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "refunds",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "line_items",
+                  "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "line_items",
+                  "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "order_id",
+                  "value": "<uuid>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "should_refund_shipping",
+                  "value": "<boolean>"
+                },
+                {
+                  "disabled": false,
+                  "key": "extra_amount",
+                  "value": "<decimal>",
+                  "description": "Only available to select retailers."
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "3780718a-fdbc-452b-89d7-566158712a92",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refunds",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "order_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "should_refund_shipping",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Only available to select retailers.",
+                        "type": "text/plain"
+                      },
+                      "key": "extra_amount",
+                      "value": "<decimal>"
+                    }
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"amount\": {\n    \"key_0\": {},\n    \"key_1\": {}\n  },\n  \"failed_to_create_refund_line_items\": \"string\",\n  \"id\": \"53e3b0f9-8824-ef23-cddb-9b1c0264e063\",\n  \"order_id\": \"string\",\n  \"processed_at\": \"2002-10-08T20:27:57.737Z\",\n  \"refund_line_items\": [\n    {\n      \"id\": \"22788a0e-0e0a-a075-fc70-b8877f09a382\",\n      \"line_item\": {\n        \"fulfillable_quantity\": 4421,\n        \"id\": \"b52dbe91-23ee-ff50-f210-7c9e9234fd21\",\n        \"price\": 4587.298769167566,\n        \"quantity\": 648,\n        \"variant_id\": \"6de6971e-8fbf-1da3-5c09-e9d0f9e78c36\",\n        \"requires_shipping\": true,\n        \"title\": \"string\",\n        \"sku\": \"string\"\n      },\n      \"quantity\": -1826781712,\n      \"subtotal\": \"\"\n    },\n    {\n      \"id\": \"7d1a907e-6ea2-2741-2c7e-0736f86d8a9f\",\n      \"line_item\": {\n        \"fulfillable_quantity\": 1298,\n        \"id\": \"2c493eb4-da2d-ebe5-6194-5eda2ea6fae7\",\n        \"price\": 3977.0150360658686,\n        \"quantity\": 4622,\n        \"variant_id\": \"f3509aa5-7a0c-edda-626d-ef304627279d\",\n        \"requires_shipping\": false,\n        \"title\": \"string\",\n        \"sku\": \"string\"\n      },\n      \"quantity\": 390255299,\n      \"subtotal\": \"9\"\n    }\n  ],\n  \"note\": \"string\",\n  \"duties\": {},\n  \"restock\": false,\n  \"shipping_refund_amount\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ec9a8ad1-7e60-410f-bce4-44e26dd01085",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refunds",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "order_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "should_refund_shipping",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Only available to select retailers.",
+                        "type": "text/plain"
+                      },
+                      "key": "extra_amount",
+                      "value": "<decimal>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bceaf013-9e59-4faf-98f3-ed13bdda62e0",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refunds",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "order_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "should_refund_shipping",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Only available to select retailers.",
+                        "type": "text/plain"
+                      },
+                      "key": "extra_amount",
+                      "value": "<decimal>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6f991d4c-41d9-4413-926b-1a60a8dc9cbf",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refunds",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "order_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "should_refund_shipping",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Only available to select retailers.",
+                        "type": "text/plain"
+                      },
+                      "key": "extra_amount",
+                      "value": "<decimal>"
+                    }
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "00be7037-3867-42ea-86e8-b83944e755bb",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refunds",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "order_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "should_refund_shipping",
+                      "value": "<boolean>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Only available to select retailers.",
+                        "type": "text/plain"
+                      },
+                      "key": "extra_amount",
+                      "value": "<decimal>"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "71aa69e2-f312-44b9-80e2-eb28320216e6",
+          "name": "refunds retrieve",
+          "request": {
+            "name": "refunds retrieve",
+            "description": {
+              "content": "\nRetrieve the full details for a specific refund record, identified by its Rokt Catalog `ID` (UUID) in the URL path.\n\nAccess is restricted to refunds associated with orders linked to the authenticated store (`request.shop`).\n\nThe response (`RefundSerializer`) includes the `total_refunded_amount`, `currency`, the list of `refund_line_items` (specifying the exact items, quantities, and subtotal refunded), the associated `order_id`, `note` (if any), `processed_at` timestamp, and other relevant details.\n\nIf the refund `ID` is invalid or the refund is not associated with an order linked to your store, a `404 Not Found` error is returned.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "refunds",
+                ":id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0608b9c1-9b46-4929-960e-1698a615e3f0",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refunds",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"amount\": {\n    \"key_0\": {},\n    \"key_1\": {}\n  },\n  \"failed_to_create_refund_line_items\": \"string\",\n  \"id\": \"53e3b0f9-8824-ef23-cddb-9b1c0264e063\",\n  \"order_id\": \"string\",\n  \"processed_at\": \"2002-10-08T20:27:57.737Z\",\n  \"refund_line_items\": [\n    {\n      \"id\": \"22788a0e-0e0a-a075-fc70-b8877f09a382\",\n      \"line_item\": {\n        \"fulfillable_quantity\": 4421,\n        \"id\": \"b52dbe91-23ee-ff50-f210-7c9e9234fd21\",\n        \"price\": 4587.298769167566,\n        \"quantity\": 648,\n        \"variant_id\": \"6de6971e-8fbf-1da3-5c09-e9d0f9e78c36\",\n        \"requires_shipping\": true,\n        \"title\": \"string\",\n        \"sku\": \"string\"\n      },\n      \"quantity\": -1826781712,\n      \"subtotal\": \"\"\n    },\n    {\n      \"id\": \"7d1a907e-6ea2-2741-2c7e-0736f86d8a9f\",\n      \"line_item\": {\n        \"fulfillable_quantity\": 1298,\n        \"id\": \"2c493eb4-da2d-ebe5-6194-5eda2ea6fae7\",\n        \"price\": 3977.0150360658686,\n        \"quantity\": 4622,\n        \"variant_id\": \"f3509aa5-7a0c-edda-626d-ef304627279d\",\n        \"requires_shipping\": false,\n        \"title\": \"string\",\n        \"sku\": \"string\"\n      },\n      \"quantity\": 390255299,\n      \"subtotal\": \"9\"\n    }\n  ],\n  \"note\": \"string\",\n  \"duties\": {},\n  \"restock\": false,\n  \"shipping_refund_amount\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7eac2774-3e4a-4fc6-a295-57b6fc7b602d",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refunds",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "46b0beb2-2347-4d09-a893-c4fae6206ffa",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refunds",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d9ebc96f-1bf8-491f-bfb7-5524eea4aab8",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "refunds",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.shopcanal.com/platform",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "eb2351c5-b748-4fe0-90c3-fd6d13d2560a",
+    "name": "Rokt Catalog csv refunds API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Integrate with Rokt Catalog",
+      "type": "text/plain"
+    }
+  }
+}

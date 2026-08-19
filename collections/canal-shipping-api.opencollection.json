@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rokt Catalog csv shipping API",
+    "version": "1.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "shipping",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "shipping_v1_calculate_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/shipping/v1/calculate/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "Calculate shipping rates for supplier variants identified by `supplier_variant_rid` and `supplier_id`. Requires the ROKT_ADS_SHOP feature flag."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

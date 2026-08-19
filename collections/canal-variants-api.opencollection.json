@@ -1,0 +1,173 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rokt Catalog csv variants API",
+    "version": "1.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "variants",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "variants_list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shopcanal.com/platform/variants/",
+            "params": [
+              {
+                "name": "ordering",
+                "value": "",
+                "type": "query",
+                "description": "Which field to use when ordering the results."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The pagination cursor value."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Supplier Only]** Retrieve a paginated list of **all** product variants associated with **all** products owned by your Supplier account.\n\nThis endpoint provides a flat list of variant details, independent of their parent products. Use this if you need to query or manage variants across your entire catalog.\n\nResults are returned using cursor-based pagination (`PlatformPagination`). Available ordering fields include `created_at`, `updated_at`, `price`, and `compare_at_price`. The default order "
+        },
+        {
+          "info": {
+            "name": "variants_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/variants/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Supplier Only]** Add a new variant to an existing product within your Rokt Catalog Supplier account.\n\nThe request body must conform to the `CreateVariantSerializer` structure, requiring the `product_id` (UUID) of the parent product and the full details of the new variant (including `price`, `sku`, `inventory_quantity`, `option1`, etc.).\n\nUpon successful creation, the new variant is added to the specified product. By default, it will be assigned the next available `position` (typically appear"
+        },
+        {
+          "info": {
+            "name": "variants_retrieve",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shopcanal.com/platform/variants/:id/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Supplier Only]** Retrieve the full details for a specific product variant, identified by its Rokt Catalog `ID` (UUID) provided in the URL path.\n\nThis endpoint returns data only for variants that belong to products owned by your Supplier account.\n\nThe response (`VariantSerializer`) includes all attributes of the variant, such as price, SKU, inventory, options, weight, timestamps, and its parent product ID.\n\nIf the provided variant `ID` is invalid or belongs to a product owned by another shop,"
+        },
+        {
+          "info": {
+            "name": "variants_update",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.shopcanal.com/platform/variants/:id/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Supplier Only]** Update attributes of a specific product variant, identified by its Rokt Catalog `ID` (UUID) in the URL path.\n\nProvide the fields you wish to change in the request body using the `VariantSerializer` structure (partial updates are allowed). Common updatable fields include `price`, `compare_at_price`, `sku`, `inventory_quantity`, `option1`, `option2`, `option3`, `weight`, `weight_unit`, etc.\n\n**Synchronization:** Changes to critical attributes like price and inventory are autom"
+        },
+        {
+          "info": {
+            "name": "variants_partial_update",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.shopcanal.com/platform/variants/:id/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "variants_destroy",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.shopcanal.com/platform/variants/:id/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Supplier Only]** Permanently remove a specific product variant, identified by its Rokt Catalog `ID` (UUID) in the URL path, from its parent product.\n\n**Warning:** This action is **irreversible**.\n\n**Constraint:** You **cannot** delete the last remaining variant of a product using this endpoint. If you need to remove the product entirely, use the `/products/{product_id}/` delete endpoint instead.\n\n**Synchronization:** Deleting a variant automatically triggers an **asynchronous** update (emitt"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

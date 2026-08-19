@@ -1,0 +1,34 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rokt Catalog csv selection API",
+    "version": "1.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "selection",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "selection_ai_select_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/selection/ai-select/",
+            "auth": {
+              "type": "basic",
+              "username": "{{username}}",
+              "password": "{{password}}"
+            }
+          },
+          "docs": "AI-powered product selection endpoint.\n\nAccepts arbitrary JSON for items and context, uses parallel per-item GPT calls,\nand returns the zero-based index of the best item with reasoning and confidence.\n\nRequest format:\n{\n  \"items\": [arbitrary JSON objects, at least one],\n  \"context\": {arbitrary JSON object, non-empty},\n  \"session_id\": \"optional string\",\n  \"timeout_ms\": optional int or null,\n  \"metadata\": {\n    \"temperature\": 0.5,\n    \"llmModel\": \"gpt-4o\",\n    \"embeddingModel\": \"text-embedding-3-s"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

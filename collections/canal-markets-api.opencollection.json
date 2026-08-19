@@ -1,0 +1,33 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rokt Catalog csv markets API",
+    "version": "1.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "markets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "markets_prices_import_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/markets/prices/import/",
+            "auth": {
+              "type": "basic",
+              "username": "{{username}}",
+              "password": "{{password}}"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

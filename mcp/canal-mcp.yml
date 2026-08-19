@@ -217,3 +217,9 @@ tools:
   description: Permanently remove an existing webhook subscription, identified by its Rokt Catalog `ID`
     (UUID) in the URL path
   source_operation: openapi/canal-openapi-original.yml#webhooks_destroy
+deployment:
+  mode: none
+  verified: derived
+  tools: 57
+  checked: '2026-08-12'
+  source: catalog MCP census

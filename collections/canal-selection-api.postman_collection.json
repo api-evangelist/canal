@@ -1,0 +1,116 @@
+{
+  "item": [
+    {
+      "id": "9c84a790-f712-4643-afdf-6dc78bf03922",
+      "name": "selection",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "c05b07e6-7365-4f36-a3bb-b5eea7f61e9a",
+          "name": "selection ai select create",
+          "request": {
+            "name": "selection ai select create",
+            "description": {
+              "content": "AI-powered product selection endpoint.\n\nAccepts arbitrary JSON for items and context, uses parallel per-item GPT calls,\nand returns the zero-based index of the best item with reasoning and confidence.\n\nRequest format:\n{\n  \"items\": [arbitrary JSON objects, at least one],\n  \"context\": {arbitrary JSON object, non-empty},\n  \"session_id\": \"optional string\",\n  \"timeout_ms\": optional int or null,\n  \"metadata\": {\n    \"temperature\": 0.5,\n    \"llmModel\": \"gpt-4o\",\n    \"embeddingModel\": \"text-embedding-3-small\",\n    \"prompt\": \"default\",\n    \"verbosity\": \"low\",  // GPT-5 only: \"low\", \"medium\", or \"high\"\n    \"reasoningEffort\": \"low\"  // reasoning models: \"low\" or \"medium\";\n                              // newer GPT-5 models may also use \"none\"\n  }\n}\n\nResponse format:\n{\n  \"chosenIndex\": 0,\n  \"reasoning\": \"I would buy the Nike shoe cleaner...\",\n  \"confidence\": 0.82,\n  \"processingTimeMs\": 1245\n}",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "selection",
+                "ai-select",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "POST",
+            "auth": {
+              "type": "basic",
+              "basic": [
+                {
+                  "key": "username",
+                  "value": "{{basicAuthUsername}}"
+                },
+                {
+                  "key": "password",
+                  "value": "{{basicAuthPassword}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c936847e-eed0-4f43-8671-d76306d0edec",
+              "name": "No response body",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "selection",
+                    "ai-select",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: basic",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Basic <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.shopcanal.com/platform",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "b6c82e60-f733-488d-abcd-5ca081af4e98",
+    "name": "Rokt Catalog csv selection API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Integrate with Rokt Catalog",
+      "type": "text/plain"
+    }
+  }
+}

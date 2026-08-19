@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rokt Catalog csv tax API",
+    "version": "1.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "tax",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "tax_calculate_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/tax/calculate/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "**[Storefront Only]** Calculate estimated tax lines for a set of line items and a shipping address."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

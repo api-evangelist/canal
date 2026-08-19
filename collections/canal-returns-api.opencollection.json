@@ -1,0 +1,167 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rokt Catalog csv returns API",
+    "version": "1.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "returns",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "returns_list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shopcanal.com/platform/returns/",
+            "params": [
+              {
+                "name": "ordering",
+                "value": "",
+                "type": "query",
+                "description": "Which field to use when ordering the results."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The pagination cursor value."
+              },
+              {
+                "name": "status",
+                "value": "",
+                "type": "query",
+                "description": "Filter returns by status"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\nRetrieve a paginated list of return requests associated with the authenticated store, reflecting its role.\n\n- **If called by a Storefront:** Returns `ReturnRequest` records initiated *by* this Storefront for orders placed on their platform.\n\n- **If called by a Supplier:** Returns `ReturnRequest` records received *from* connected Storefronts for orders the Supplier fulfilled.\n\n**Filtering:** You can filter the list by `status` using a query parameter (e.g., `?status=OPEN` or `?status=CLOSED`).\n\n"
+        },
+        {
+          "info": {
+            "name": "returns_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/returns/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Storefront Only]** Initiate a return process for items purchased in a Rokt Catalog-facilitated order.\n\n**Request Body (`ReturnCreateSerializer`):**\n\n- `order_id` (UUID, required): The Catalog ID of the original Storefront order containing the items to be returned.\n\n- `name` (string, required): A unique identifier for this return request (e.g., your system's RMA number).\n\n- `rma` (string, optional): An alternative return merchandise authorization identifier.\n\n- `return_line_items` (list, requ"
+        },
+        {
+          "info": {
+            "name": "returns_retrieve",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shopcanal.com/platform/returns/:id/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "returns_close_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/returns/:id/close/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Supplier Only]** Mark a return request that your Supplier account received from a Storefront as 'CLOSED'.\n\nIdentify the return request by its Rokt Catalog `ID` (UUID) provided in the URL path.\n\n**Use Case:** This endpoint should typically be called by the Supplier once they have received the physical returned items from the customer/Storefront and completed their internal processing (inspection, restocking, etc.).\n\n**Action:** Sets the `status` field of the **Supplier's** return request reco"
+        },
+        {
+          "info": {
+            "name": "returns_update_tracking_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/returns/:id/update_tracking/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "ordering",
+                "value": "",
+                "type": "query",
+                "description": "Which field to use when ordering the results."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The pagination cursor value."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Storefront Only]** Add or update the tracking information for the shipment returning items back to the Supplier(s). Identify the specific return request using its Rokt Catalog `ID` (UUID) in the URL path.\n\n**Request Body (`ReverseDeliveryCreateSerializer`):**\n\n- `carrier_name` (string, optional): Name of the shipping carrier (e.g., 'USPS', 'FedEx').\n\n- `tracking_number` (string, optional): The tracking number for the return shipment.\n\n- `tracking_url` (string, optional): A direct URL to trac"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,907 @@
+{
+  "item": [
+    {
+      "id": "149816b9-289f-4f4d-889b-983baae59643",
+      "name": "shops",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "684d37f2-2b66-4517-b729-4cbe2b81e3c1",
+          "name": "shops list",
+          "request": {
+            "name": "shops list",
+            "description": {
+              "content": "\n**[Storefront Only]** Retrieve a paginated list of Supplier shops with whom your Storefront has an **active and approved** partnership connection.\n\nThis endpoint provides essential details for each connected Supplier, such as their name, Rokt Catalog ID, contact information, and domain.\n\nUse this to get an overview of your current Supplier network within Catalog.\n\nYou can filter this list to find a specific Supplier by providing their `canal_contact_email` using the `email` query parameter (ensure proper URL encoding if the email contains special characters like '+').\n\nResults are returned using cursor-based pagination, ordered by `updated_at` descending by default. Standard ordering fields like `created_at` and `name` are also available.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "shops",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "The pagination cursor value."
+                },
+                {
+                  "disabled": false,
+                  "key": "email",
+                  "value": "<email>",
+                  "description": "Filter by the Supplier's primary contact email address."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "78bbcada-fd0e-460f-83a9-16e9aba93916",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shops",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "email",
+                      "value": "<email>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    {\n      \"country\": \"string\",\n      \"display_domain\": \"string\",\n      \"email\": \"string\",\n      \"id\": \"d1ebf181-2af1-3f2a-6836-a8043b59ccd4\",\n      \"myshopify_domain\": \"string\",\n      \"name\": \"string\",\n      \"phone\": \"string\",\n      \"description\": \"string\",\n      \"province\": \"string\",\n      \"domain\": \"string\",\n      \"privacy_policy_url\": \"https://FaI.pdwip6VbZ-y\",\n      \"terms_of_service_url\": \"https://wdjrNBe.ngmsRR9+Diw5HDG2dlD\"\n    },\n    {\n      \"country\": \"string\",\n      \"display_domain\": \"string\",\n      \"email\": \"string\",\n      \"id\": \"37f9c818-637f-9b05-d7e7-6cfbc58335bb\",\n      \"myshopify_domain\": \"string\",\n      \"name\": \"string\",\n      \"phone\": \"string\",\n      \"description\": \"string\",\n      \"province\": \"string\",\n      \"domain\": \"string\",\n      \"privacy_policy_url\": \"http://JtvYgGuEsCJlubDMIypjhloCTDIz.nyyACazDiOJgHbrpVWhF5vGyaq0llslii\",\n      \"terms_of_service_url\": \"https://ZoJCEEMmsTmxWaVkujM.kteQ17WB3llTLbNvis+TEn\"\n    }\n  ],\n  \"next\": \"https://RwRDwXye.onkuecPe2Da06.ovLcXutoDccxs4u7UmZfYKLM8MSbFQzzoKt0HRMGkBivQOx+r\",\n  \"previous\": \"http://api.example.org/accounts/?cursor=cj0xJnA9NDg3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fdbad585-2a6f-4c75-8fdf-19abf722f43e",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shops",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "email",
+                      "value": "<email>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f1868f74-c24d-495f-9eb8-4913c53a7a81",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shops",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "email",
+                      "value": "<email>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d3893125-d33f-4b29-a36e-a14bbea1f8d1",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shops",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "email",
+                      "value": "<email>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cd17d87a-166d-4373-9fd1-101af3ef385f",
+          "name": "shops create",
+          "request": {
+            "name": "shops create",
+            "description": {
+              "content": "\n**[Storefront Only]** Initiate partnership connection requests with one or more existing Rokt Catalog Suppliers by specifying their primary contact email addresses.\n\nIn the request body, provide a list of strings under the key `canal_contact_emails`.\n\nFor each email address that corresponds to an active Catalog Supplier shop, Catalog will record your request to connect, initially in a **pending** state.\n\nThe Supplier must then **approve** this request (usually through the Catalog web application) for the connection to become active.\n\nOnce approved, the Supplier will appear in your 'My Suppliers' list within the Catalog app, and you will gain access to view and potentially sell their products based on the agreed terms.\n\nThis endpoint returns a `201 Created` status along with the details (using `ShopSerializer`) of the Supplier shops for which pending connection requests were successfully created. It does not wait for Supplier approval. If an email does not match an active Supplier, no request is created for that email.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "shops",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "canal_contact_emails",
+                  "value": "<email>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "canal_contact_emails",
+                  "value": "<email>",
+                  "description": "(Required) "
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "a2b7db2b-5735-433a-8307-1c2a82bdcdeb",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shops",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "canal_contact_emails",
+                      "value": "<email>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "canal_contact_emails",
+                      "value": "<email>"
+                    }
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"country\": \"string\",\n  \"display_domain\": \"string\",\n  \"email\": \"string\",\n  \"id\": \"c86a2df5-5260-e5da-ac2e-e9e94ae0ec85\",\n  \"myshopify_domain\": \"string\",\n  \"name\": \"string\",\n  \"phone\": \"string\",\n  \"description\": \"string\",\n  \"province\": \"string\",\n  \"domain\": \"string\",\n  \"privacy_policy_url\": \"https://sSMdEcCAq.wnjdjCYZzX2VWhtSPIg087AUBYwpPpFFq.Ec4MWaZgpA73hfHr\",\n  \"terms_of_service_url\": \"https://UsFbovr.hassZA3Pemo8pZgbLhegu\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c1196172-c663-416c-9e32-482381ab38d8",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shops",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "canal_contact_emails",
+                      "value": "<email>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "canal_contact_emails",
+                      "value": "<email>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c30c22ee-0b00-4d77-a943-53b97067a227",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shops",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "canal_contact_emails",
+                      "value": "<email>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "canal_contact_emails",
+                      "value": "<email>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b1da504d-2b53-4b35-b016-a19ccf177d0b",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shops",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "canal_contact_emails",
+                      "value": "<email>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "canal_contact_emails",
+                      "value": "<email>"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e8c69d9d-34aa-455c-a653-1ba2324f8cce",
+          "name": "shops retrieve",
+          "request": {
+            "name": "shops retrieve",
+            "description": {
+              "content": "\n**[Storefront Only]** Retrieve the full profile details for a specific Supplier shop, identified by its unique Rokt Catalog `ID` (UUID) provided in the URL path.\n\nAccess is restricted: this endpoint will only return data if an **active and approved** partnership connection exists between your Storefront and the specified Supplier.\n\nThe response includes comprehensive details like shop name, ID, contact info, address, configured settings (if applicable), etc.\n\nIf the provided `ID` is invalid, does not correspond to a Supplier shop, or if no approved connection exists, a `404 Not Found` error will be returned.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "shops",
+                ":id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "c1e7a9dc-0bf2-4ddd-8810-a095ed236fb9",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shops",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"country\": \"string\",\n  \"display_domain\": \"string\",\n  \"email\": \"string\",\n  \"id\": \"c86a2df5-5260-e5da-ac2e-e9e94ae0ec85\",\n  \"myshopify_domain\": \"string\",\n  \"name\": \"string\",\n  \"phone\": \"string\",\n  \"description\": \"string\",\n  \"province\": \"string\",\n  \"domain\": \"string\",\n  \"privacy_policy_url\": \"https://sSMdEcCAq.wnjdjCYZzX2VWhtSPIg087AUBYwpPpFFq.Ec4MWaZgpA73hfHr\",\n  \"terms_of_service_url\": \"https://UsFbovr.hassZA3Pemo8pZgbLhegu\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5bbbe7e9-3a69-4ae7-ac4e-462ca13fe228",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shops",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6c7678d7-0971-4326-b277-bb2cad7f108a",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shops",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e1e51a26-d9e6-4b92-ad65-b26f5e168472",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "shops",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.shopcanal.com/platform",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "575fa84a-f65a-4ddb-bbe0-f22571354926",
+    "name": "Rokt Catalog csv shops API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Integrate with Rokt Catalog",
+      "type": "text/plain"
+    }
+  }
+}

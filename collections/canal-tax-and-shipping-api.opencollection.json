@@ -1,0 +1,60 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rokt Catalog csv tax-and-shipping API",
+    "version": "1.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "tax-and-shipping",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "tax_and_shipping_calculate_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/tax-and-shipping/calculate/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Storefront Only]** Calculate estimated tax lines and available shipping options and costs, given a set of line items, shipping address, and optionally a billing address.\n\nThis endpoint is typically used during the checkout process after the customer has provided their shipping address.\n\n**Request Body (`TaxCalculationQuerySerializer`):**\n\n- `line_items` (list, required): A list of objects, each specifying:\n\n  - `variant_id` (UUID, required): The Catalog ID of the *Storefront's* variant recor"
+        },
+        {
+          "info": {
+            "name": "tax_and_shipping_v1_calculate_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/tax-and-shipping/v1/calculate/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Storefront Only]** Calculate estimated tax lines and available shipping options and costs, given a set of line items, shipping address, and optionally a billing address.\n\nThis endpoint is typically used during the checkout process after the customer has provided their shipping address.\n\n**Process:**\n\n1. **Tax Calculation:** Rokt Catalog queries an integrated tax rate provider (e.g., Shopify's API) using the provided `shipping_address` and `billing_address` to calculate the tax line items for"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

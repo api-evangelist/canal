@@ -1,0 +1,2490 @@
+{
+  "item": [
+    {
+      "id": "0b016bbe-8758-433a-af82-ca7b89a09b58",
+      "name": "variants",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "65cdd968-b848-4f17-8165-3251e990ff03",
+          "name": "variants list",
+          "request": {
+            "name": "variants list",
+            "description": {
+              "content": "\n**[Supplier Only]** Retrieve a paginated list of **all** product variants associated with **all** products owned by your Supplier account.\n\nThis endpoint provides a flat list of variant details, independent of their parent products. Use this if you need to query or manage variants across your entire catalog.\n\nResults are returned using cursor-based pagination (`PlatformPagination`). Available ordering fields include `created_at`, `updated_at`, `price`, and `compare_at_price`. The default order is `-created_at`.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "variants",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "ordering",
+                  "value": "<string>",
+                  "description": "Which field to use when ordering the results."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "The pagination cursor value."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "6fad1631-6435-428e-886e-bc3f496a7ba9",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "variants",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    {\n      \"available_for_ordering\": true,\n      \"id\": \"4ceda224-00a1-9d79-fdd2-abb0ff459568\",\n      \"is_exclusive_offer\": false,\n      \"origin_supplier_currency\": \"string\",\n      \"origin_supplier_id\": \"string\",\n      \"origin_supplier_name\": \"string\",\n      \"position\": 5529,\n      \"price\": \"-21618\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"d6646e41-3b72-824c-171b-df9c48dd1fd3\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"https://DCzcUakSQdngrHWdVReEbNUPfXBpDR.iapA-8QcNZwGNdIW3N5gVjkaVe\",\n        \"terms_of_service_url\": \"http://OuVQqigMHcf.ziVqRSYOimEOn,tTf4e5w\"\n      },\n      \"sku\": \"string\",\n      \"sup_compare_at_price\": \"string\",\n      \"sup_price\": \"string\",\n      \"supplier_sku\": \"string\",\n      \"title\": \"string\",\n      \"inventory_policy\": \"string\",\n      \"inventory_quantity\": -293743465,\n      \"inventory_item_cost\": 3413.5728837632696,\n      \"option1\": \"string\",\n      \"option2\": \"string\",\n      \"option3\": \"string\",\n      \"compare_at_price\": \"string\",\n      \"upc\": \"string\",\n      \"grams\": 4607.399289690868,\n      \"weight\": 9967.566450330965,\n      \"weight_unit\": \"str\",\n      \"pause_selling\": true\n    },\n    {\n      \"available_for_ordering\": false,\n      \"id\": \"54899f41-4707-1441-5882-8d68b9842fad\",\n      \"is_exclusive_offer\": false,\n      \"origin_supplier_currency\": \"string\",\n      \"origin_supplier_id\": \"string\",\n      \"origin_supplier_name\": \"string\",\n      \"position\": 1746,\n      \"price\": \"910567\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"ad59dd00-ede3-4676-3c87-5a63e9399458\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"http://ALvrevQGCWceZldTyCXQSX.mpjEowJzk.LhX-Ut,MysnlJ0-ts9\",\n        \"terms_of_service_url\": \"https://zGu.zwCZojB+gTEcQNwUoCn1uhg1M3a\"\n      },\n      \"sku\": \"string\",\n      \"sup_compare_at_price\": \"string\",\n      \"sup_price\": \"string\",\n      \"supplier_sku\": \"string\",\n      \"title\": \"string\",\n      \"inventory_policy\": \"string\",\n      \"inventory_quantity\": 205854039,\n      \"inventory_item_cost\": 144.5615536823519,\n      \"option1\": \"string\",\n      \"option2\": \"string\",\n      \"option3\": \"string\",\n      \"compare_at_price\": \"string\",\n      \"upc\": \"string\",\n      \"grams\": 7662.77455476003,\n      \"weight\": 4030.3624464625254,\n      \"weight_unit\": \"str\",\n      \"pause_selling\": true\n    }\n  ],\n  \"next\": \"http://tlYrpEPDHdrxFiNuXJBn.pvizomz4j+qjMMcHz3Tvcq2uh5TExHjkF8xIoaeNAsG.GQmXbWQrksPoplXRRwvk4WeM\",\n  \"previous\": \"http://api.example.org/accounts/?cursor=cj0xJnA9NDg3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5cfb7e8c-f52b-4f8f-9933-5a896c06ced5",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "variants",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "28d823b8-bef5-441e-a25f-162cea867503",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "variants",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9b7068a4-574c-4ff6-8662-dfd0013dca00",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "variants",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "eed55f9e-127b-4746-b954-56e2258791ba",
+          "name": "variants create",
+          "request": {
+            "name": "variants create",
+            "description": {
+              "content": "\n**[Supplier Only]** Add a new variant to an existing product within your Rokt Catalog Supplier account.\n\nThe request body must conform to the `CreateVariantSerializer` structure, requiring the `product_id` (UUID) of the parent product and the full details of the new variant (including `price`, `sku`, `inventory_quantity`, `option1`, etc.).\n\nUpon successful creation, the new variant is added to the specified product. By default, it will be assigned the next available `position` (typically appearing last in the variant list, unless explicitly reordered later using the `/products/{product_id}/reorder_variants/` endpoint).\n\n**Synchronization:** This addition is automatically propagated **asynchronously** to connected Storefronts that are selling the parent product.\n\nA successful creation returns `201 Created` with the full details of the **parent product** (`ProductSerializer`), now including the newly added variant and its assigned Catalog ID (UUID).\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "variants",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "inventory_policy",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "inventory_quantity",
+                  "value": "<integer>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "option1",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "price",
+                  "value": "<decimal>",
+                  "description": "(Required) The price of the variant to be sold at."
+                },
+                {
+                  "disabled": false,
+                  "key": "product_id",
+                  "value": "<uuid>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "title",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "compare_at_price",
+                  "value": "<decimal>",
+                  "description": "The original price of the product from before the sale price. Should be greater than \"price\". If you elect to not allow sale price passthrough, Connected Storefronts will sell items at this price."
+                },
+                {
+                  "disabled": false,
+                  "key": "option2",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "option3",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "sku",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "position",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "image_src",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "weight",
+                  "value": "<double>"
+                },
+                {
+                  "disabled": false,
+                  "key": "weight_unit",
+                  "value": "<string>"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9eb6fe18-416a-43ef-84b3-81eb847e3142",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "variants",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "inventory_policy",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "inventory_quantity",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "option1",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The price of the variant to be sold at.",
+                        "type": "text/plain"
+                      },
+                      "key": "price",
+                      "value": "<decimal>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "product_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "title",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The original price of the product from before the sale price. Should be greater than \"price\". If you elect to not allow sale price passthrough, Connected Storefronts will sell items at this price.",
+                        "type": "text/plain"
+                      },
+                      "key": "compare_at_price",
+                      "value": "<decimal>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option2",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option3",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "sku",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "position",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "image_src",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "weight",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "weight_unit",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"7d048f50-cfa5-0ef2-5fff-f1f3a734fc49\",\n  \"shop\": {\n    \"country\": \"string\",\n    \"display_domain\": \"string\",\n    \"email\": \"string\",\n    \"id\": \"439a6555-3e6c-9bd6-9372-6bed0dd26a62\",\n    \"myshopify_domain\": \"string\",\n    \"name\": \"string\",\n    \"phone\": \"string\",\n    \"description\": \"string\",\n    \"province\": \"string\",\n    \"domain\": \"string\",\n    \"privacy_policy_url\": \"https://VVPXheJqew.kabqlc4glX8hri.gNwcARYH2A9XMSkHwxeuT\",\n    \"terms_of_service_url\": \"https://qRQNTeBIlfE.ndoWUvaX68ILbB0phVx,oSKOFyrb\"\n  },\n  \"title\": \"string\",\n  \"updated_at\": \"1977-03-12T18:14:13.261Z\",\n  \"variants\": [\n    {\n      \"available_for_ordering\": true,\n      \"id\": \"69d2445f-eed8-8a8d-9732-1ab9272e9f3d\",\n      \"is_exclusive_offer\": true,\n      \"origin_supplier_currency\": \"string\",\n      \"origin_supplier_id\": \"string\",\n      \"origin_supplier_name\": \"string\",\n      \"position\": 2729,\n      \"price\": \"-1888\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"f2ad4fbd-aba4-d8ff-e988-7c6e5fad83ea\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"https://ZHQQGV.bqkPk25QGzguIvxYYOsq3c,6qK6kq0ogWKPDVaeZafhzJiO\",\n        \"terms_of_service_url\": \"https://cJrZzOeHvCfWRmpZUHqTRfIBw.mxKotALNbl6qgD,x,+x.-osqUuFrK00UZE-FBRnR8cR-is\"\n      },\n      \"sku\": \"string\",\n      \"sup_compare_at_price\": \"string\",\n      \"sup_price\": \"string\",\n      \"supplier_sku\": \"string\",\n      \"title\": \"string\",\n      \"inventory_policy\": \"string\",\n      \"inventory_quantity\": -1012944262,\n      \"inventory_item_cost\": 3950.5851234530787,\n      \"option1\": \"string\",\n      \"option2\": \"string\",\n      \"option3\": \"string\",\n      \"compare_at_price\": \"string\",\n      \"upc\": \"string\",\n      \"grams\": 8510.946935510658,\n      \"weight\": 6627.225539416667,\n      \"weight_unit\": \"str\",\n      \"pause_selling\": false\n    },\n    {\n      \"available_for_ordering\": false,\n      \"id\": \"12ecd9c2-0e2c-9d0c-3215-debe95a0b343\",\n      \"is_exclusive_offer\": true,\n      \"origin_supplier_currency\": \"string\",\n      \"origin_supplier_id\": \"string\",\n      \"origin_supplier_name\": \"string\",\n      \"position\": 5634,\n      \"price\": \"3188\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"7c64dd05-a94a-e4fc-61a3-ec45c1a7db24\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"https://ahiCpYEkkr.lucdpWOT\",\n        \"terms_of_service_url\": \"http://MaCWc.nsR.WkdU0WmzfOZqbYVxPSeF9m9GwLuULQTzJnGLkFqQTL+FwG36LvTPd-PX\"\n      },\n      \"sku\": \"string\",\n      \"sup_compare_at_price\": \"string\",\n      \"sup_price\": \"string\",\n      \"supplier_sku\": \"string\",\n      \"title\": \"string\",\n      \"inventory_policy\": \"string\",\n      \"inventory_quantity\": 937751951,\n      \"inventory_item_cost\": 8257.412863742415,\n      \"option1\": \"string\",\n      \"option2\": \"string\",\n      \"option3\": \"string\",\n      \"compare_at_price\": \"string\",\n      \"upc\": \"string\",\n      \"grams\": 4977.238986660456,\n      \"weight\": 9790.341336080008,\n      \"weight_unit\": \"str\",\n      \"pause_selling\": true\n    }\n  ],\n  \"body_html\": \"string\",\n  \"handle\": \"string\",\n  \"image_src\": \"string\",\n  \"images\": [\n    {\n      \"canal_variant_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"src\": \"http://Oc.zqeDxY36CYO2nqVig3mSYCsuU--bqWFuspXCT.VKrCKCiCOkTCxYH4d,tcUL\",\n      \"id\": \"string\",\n      \"position\": 4899,\n      \"display_src\": \"https://x.eklcs5R3J4fBQy.FVttb6hv8,mkBoJrswAiNAQl8hs,RnyMpvmkyH6Un7H\",\n      \"width\": 4810,\n      \"height\": 8132,\n      \"variant_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"origin_supplier_image_id\": \"28a9b7bf-0ec9-9c44-56cd-53108c197d8a\"\n    },\n    {\n      \"canal_variant_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"src\": \"http://EkrMuRqgsgZuOKzUrXixeyaLZduV.cdsz,ToV9Q,YN.BR4nT916hwA1EFnfy8nw,STCz-VrJLGFBj732bgrL0zmeyFwtTiF82Qcx\",\n      \"id\": \"string\",\n      \"position\": 1872,\n      \"display_src\": \"http://QfsyzQDjMhxhukRNLhLEeOddvIWQxl.qqtEG3yLp0K6njWvW0Eub1eQ0bz52bTFP4s\",\n      \"width\": 7648,\n      \"height\": 1973,\n      \"variant_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"origin_supplier_image_id\": \"334ba97d-dfa3-1188-b865-fc6e0ad88c66\"\n    }\n  ],\n  \"options\": {},\n  \"product_type\": \"string\",\n  \"published_at\": \"1978-12-24T23:31:02.040Z\",\n  \"status\": \"archived\",\n  \"vendor\": \"string\",\n  \"tags\": \"string\",\n  \"permalink\": \"https://eCJsmUgZoOsapAoHtOcwrRuKnDOFdxz.xctnFzermv0fWXMkoDX5Amqd-fdT,iaG\",\n  \"number_of_reviews\": -862216759,\n  \"star_rating\": 8671.723808934716\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8e6f46b0-84d3-4768-95fe-d439a6304cff",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "variants",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "inventory_policy",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "inventory_quantity",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "option1",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The price of the variant to be sold at.",
+                        "type": "text/plain"
+                      },
+                      "key": "price",
+                      "value": "<decimal>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "product_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "title",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The original price of the product from before the sale price. Should be greater than \"price\". If you elect to not allow sale price passthrough, Connected Storefronts will sell items at this price.",
+                        "type": "text/plain"
+                      },
+                      "key": "compare_at_price",
+                      "value": "<decimal>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option2",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option3",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "sku",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "position",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "image_src",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "weight",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "weight_unit",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "666f76f9-f718-4d37-a6cb-720816ba9935",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "variants",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "inventory_policy",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "inventory_quantity",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "option1",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The price of the variant to be sold at.",
+                        "type": "text/plain"
+                      },
+                      "key": "price",
+                      "value": "<decimal>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "product_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "title",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The original price of the product from before the sale price. Should be greater than \"price\". If you elect to not allow sale price passthrough, Connected Storefronts will sell items at this price.",
+                        "type": "text/plain"
+                      },
+                      "key": "compare_at_price",
+                      "value": "<decimal>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option2",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option3",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "sku",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "position",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "image_src",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "weight",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "weight_unit",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b303baed-eb1b-4f2e-8422-e195da2f2231",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "variants",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "inventory_policy",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "inventory_quantity",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "option1",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The price of the variant to be sold at.",
+                        "type": "text/plain"
+                      },
+                      "key": "price",
+                      "value": "<decimal>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "product_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "title",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The original price of the product from before the sale price. Should be greater than \"price\". If you elect to not allow sale price passthrough, Connected Storefronts will sell items at this price.",
+                        "type": "text/plain"
+                      },
+                      "key": "compare_at_price",
+                      "value": "<decimal>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option2",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option3",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "sku",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "position",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "image_src",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "weight",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "weight_unit",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "52fc143d-3144-44ad-8d07-d0c33abb1892",
+          "name": "variants retrieve",
+          "request": {
+            "name": "variants retrieve",
+            "description": {
+              "content": "\n**[Supplier Only]** Retrieve the full details for a specific product variant, identified by its Rokt Catalog `ID` (UUID) provided in the URL path.\n\nThis endpoint returns data only for variants that belong to products owned by your Supplier account.\n\nThe response (`VariantSerializer`) includes all attributes of the variant, such as price, SKU, inventory, options, weight, timestamps, and its parent product ID.\n\nIf the provided variant `ID` is invalid or belongs to a product owned by another shop, a `404 Not Found` error is returned.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "variants",
+                ":id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "888ab715-a8b2-4e4c-8e08-37ee7a9b7afb",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "variants",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"available_for_ordering\": true,\n  \"id\": \"ddc8bd46-89b6-a505-0196-205144a7730a\",\n  \"is_exclusive_offer\": false,\n  \"origin_supplier_currency\": \"string\",\n  \"origin_supplier_id\": \"string\",\n  \"origin_supplier_name\": \"string\",\n  \"position\": 1874,\n  \"price\": \"-635\",\n  \"shop\": {\n    \"country\": \"string\",\n    \"display_domain\": \"string\",\n    \"email\": \"string\",\n    \"id\": \"121a3618-5ce2-76fd-ffd1-41253d713faa\",\n    \"myshopify_domain\": \"string\",\n    \"name\": \"string\",\n    \"phone\": \"string\",\n    \"description\": \"string\",\n    \"province\": \"string\",\n    \"domain\": \"string\",\n    \"privacy_policy_url\": \"https://DoaNUdNqVMVUsSvYtLMHJphYyYMptxaSQ.ypVpEpyzqtuibW.83\",\n    \"terms_of_service_url\": \"http://pylqnlZRfIDIRedjwzRxNcoKEVFzIsrd.dyGj-sd8OFkeMDJbjSy+JCRs6\"\n  },\n  \"sku\": \"string\",\n  \"sup_compare_at_price\": \"string\",\n  \"sup_price\": \"string\",\n  \"supplier_sku\": \"string\",\n  \"title\": \"string\",\n  \"inventory_policy\": \"string\",\n  \"inventory_quantity\": 1645375556,\n  \"inventory_item_cost\": 9736.41029497404,\n  \"option1\": \"string\",\n  \"option2\": \"string\",\n  \"option3\": \"string\",\n  \"compare_at_price\": \"string\",\n  \"upc\": \"string\",\n  \"grams\": 6686.924960968291,\n  \"weight\": 1709.2267980163856,\n  \"weight_unit\": \"str\",\n  \"pause_selling\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bc0a0a2a-4b14-489d-bae8-1c92ed910d72",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "variants",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2633e578-55e7-49fe-b47c-4595f56d65ed",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "variants",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "31d998cf-107c-4673-a41d-cd6ee0c4dbf5",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "variants",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "906da69f-7b4b-42f2-9e2d-99a3d0d502ca",
+          "name": "variants update",
+          "request": {
+            "name": "variants update",
+            "description": {
+              "content": "\n**[Supplier Only]** Update attributes of a specific product variant, identified by its Rokt Catalog `ID` (UUID) in the URL path.\n\nProvide the fields you wish to change in the request body using the `VariantSerializer` structure (partial updates are allowed). Common updatable fields include `price`, `compare_at_price`, `sku`, `inventory_quantity`, `option1`, `option2`, `option3`, `weight`, `weight_unit`, etc.\n\n**Synchronization:** Changes to critical attributes like price and inventory are automatically propagated to connected Storefronts that are selling this variant. This synchronization occurs **asynchronously**.\n\n**Pricing Update:** When updating `price` or `compare_at_price`, the system also updates the associated variant listing's default price, considering the shop's feature flags for sale price syncing.\n\nA successful update returns `200 OK` with the full details of the **parent product** (`ProductSerializer`), reflecting the changes made to the specific variant.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "variants",
+                ":id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "price",
+                  "value": "<decimal>",
+                  "description": "(Required) The price of the variant to be sold at."
+                },
+                {
+                  "disabled": false,
+                  "key": "title",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "inventory_policy",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "inventory_quantity",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "inventory_item_cost",
+                  "value": "<double>"
+                },
+                {
+                  "disabled": false,
+                  "key": "option1",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "option2",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "option3",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "compare_at_price",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "upc",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "grams",
+                  "value": "<double>"
+                },
+                {
+                  "disabled": false,
+                  "key": "weight",
+                  "value": "<double>"
+                },
+                {
+                  "disabled": false,
+                  "key": "weight_unit",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "pause_selling",
+                  "value": "<boolean>"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "f4fc3653-683f-4997-bda7-1ef5df5cd83c",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "variants",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The price of the variant to be sold at.",
+                        "type": "text/plain"
+                      },
+                      "key": "price",
+                      "value": "<decimal>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "title",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "inventory_policy",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "inventory_quantity",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "inventory_item_cost",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option1",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option2",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option3",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "compare_at_price",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "upc",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "grams",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "weight",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "weight_unit",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "pause_selling",
+                      "value": "<boolean>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"e9f9c4cf-1178-24bd-68a1-d9f87daae56a\",\n  \"shop\": {\n    \"country\": \"string\",\n    \"display_domain\": \"string\",\n    \"email\": \"string\",\n    \"id\": \"b0e130b1-9490-90e2-6a05-f2ce48d60855\",\n    \"myshopify_domain\": \"string\",\n    \"name\": \"string\",\n    \"phone\": \"string\",\n    \"description\": \"string\",\n    \"province\": \"string\",\n    \"domain\": \"string\",\n    \"privacy_policy_url\": \"http://RCwWTMtElGgJkimI.wgiJHQd8GM,o1XDl,g65XLbbuaok8.6fL4Z4-OoR4-S1tCwimiZOvmXkvzTjEjfnZ3TiR8oqIj\",\n    \"terms_of_service_url\": \"http://qMlUPzP.wrkAg7g7M44nW0EPjUSwFrY3hKXPV4Wi-PEqXfY+EmaaE+\"\n  },\n  \"title\": \"string\",\n  \"updated_at\": \"1988-10-22T14:28:41.337Z\",\n  \"variants\": [\n    {\n      \"price\": \"<decimal>\",\n      \"title\": \"<string>\",\n      \"id\": \"62ebc63a-7304-7f47-2326-b430604b7f83\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"95143e2c-e304-f4af-02b7-76c7ab98febb\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"http://OQJHqKaiQIxqqU.mxeaXLcF5Xqm38ODDQMecjWad+1n.3Bd\",\n        \"terms_of_service_url\": \"http://WxVTyGGFkDUMpnViA.julhitK8CkR1EbUc3a5havzXgodpHhkMNYdiwAiHp3+ndt23c\"\n      },\n      \"inventory_policy\": \"<string>\",\n      \"inventory_quantity\": \"<integer>\",\n      \"inventory_item_cost\": \"<double>\",\n      \"option1\": \"<string>\",\n      \"option2\": \"<string>\",\n      \"option3\": \"<string>\",\n      \"position\": 1672,\n      \"compare_at_price\": \"<string>\",\n      \"origin_supplier_currency\": \"string\",\n      \"sku\": \"string\",\n      \"upc\": \"<string>\",\n      \"grams\": \"<double>\",\n      \"weight\": \"<double>\",\n      \"weight_unit\": \"<string>\",\n      \"pause_selling\": \"<boolean>\",\n      \"origin_supplier_id\": \"string\",\n      \"origin_supplier_name\": \"string\",\n      \"available_for_ordering\": true,\n      \"supplier_sku\": \"string\",\n      \"is_exclusive_offer\": true,\n      \"sup_price\": \"string\",\n      \"sup_compare_at_price\": \"string\"\n    },\n    {\n      \"price\": \"<decimal>\",\n      \"title\": \"<string>\",\n      \"id\": \"414b7926-cb31-8c84-bedf-5c44a86be3cd\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"0f747e4d-3789-33a6-966d-ca290fba7fde\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"http://g.gcyj7I,1i28jUO0uDXhh7x5xcqcIfiY+YjV.YJCK0D6zCAGLysCLTcQt,ZFvXMmBbCP\",\n        \"terms_of_service_url\": \"https://qGAPtSdZrsYwFadbSj.cqCEvFD2M4TwWqxUOawO7jo8s12MX5Ob5l7Dw5FP+iX.KuCLAa99uXE0JuQR5AqzHarGrjtGS1rl.Z8CzdsU\"\n      },\n      \"inventory_policy\": \"<string>\",\n      \"inventory_quantity\": \"<integer>\",\n      \"inventory_item_cost\": \"<double>\",\n      \"option1\": \"<string>\",\n      \"option2\": \"<string>\",\n      \"option3\": \"<string>\",\n      \"position\": 9297,\n      \"compare_at_price\": \"<string>\",\n      \"origin_supplier_currency\": \"string\",\n      \"sku\": \"string\",\n      \"upc\": \"<string>\",\n      \"grams\": \"<double>\",\n      \"weight\": \"<double>\",\n      \"weight_unit\": \"<string>\",\n      \"pause_selling\": \"<boolean>\",\n      \"origin_supplier_id\": \"string\",\n      \"origin_supplier_name\": \"string\",\n      \"available_for_ordering\": false,\n      \"supplier_sku\": \"string\",\n      \"is_exclusive_offer\": true,\n      \"sup_price\": \"string\",\n      \"sup_compare_at_price\": \"string\"\n    }\n  ],\n  \"body_html\": \"string\",\n  \"handle\": \"string\",\n  \"image_src\": \"string\",\n  \"images\": [\n    {\n      \"canal_variant_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"src\": \"http://kaOBttlgLnBFd.xbgV8vbrfd3DAJ\",\n      \"id\": \"string\",\n      \"position\": 6678,\n      \"display_src\": \"https://YiCsRuzgrETLOgJVhbxXaE.dfKHWUAysL2QyJUPP29.Iwt,\",\n      \"width\": 1483,\n      \"height\": 7112,\n      \"variant_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"origin_supplier_image_id\": \"4a303992-c7df-0b0f-3289-684a3bd317cf\"\n    },\n    {\n      \"canal_variant_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"src\": \"http://UbmpOGWJsBNvKswNjWHIWNmfTZv.gkdkWK0XTXA+pL1dj6aG5b1eaq41CeN87.RBQ83gkHmGLQCgBh\",\n      \"id\": \"string\",\n      \"position\": 5183,\n      \"display_src\": \"http://mgLyahzkVy.bmGFurPDzbP4V--4L.eWz\",\n      \"width\": 7599,\n      \"height\": 4711,\n      \"variant_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"origin_supplier_image_id\": \"6779d383-b7d5-bf8b-aa1f-579f46180c2f\"\n    }\n  ],\n  \"options\": {},\n  \"product_type\": \"string\",\n  \"published_at\": \"1986-01-19T19:09:18.772Z\",\n  \"status\": \"unlisted\",\n  \"vendor\": \"string\",\n  \"tags\": \"string\",\n  \"permalink\": \"https://IUfiiRJUQiShnCu.qvalh6UhQ3fIwJva-Ge-oysJvyZGnxIKXGe5yZ,0\",\n  \"number_of_reviews\": -178418220,\n  \"star_rating\": 2437.8423936465656\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bd7bb326-f982-4fb4-80e4-84ff22906974",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "variants",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The price of the variant to be sold at.",
+                        "type": "text/plain"
+                      },
+                      "key": "price",
+                      "value": "<decimal>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "title",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "inventory_policy",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "inventory_quantity",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "inventory_item_cost",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option1",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option2",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option3",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "compare_at_price",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "upc",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "grams",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "weight",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "weight_unit",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "pause_selling",
+                      "value": "<boolean>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6f160879-b6e1-484d-b9f4-0577f1be70f8",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "variants",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The price of the variant to be sold at.",
+                        "type": "text/plain"
+                      },
+                      "key": "price",
+                      "value": "<decimal>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "title",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "inventory_policy",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "inventory_quantity",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "inventory_item_cost",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option1",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option2",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option3",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "compare_at_price",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "upc",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "grams",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "weight",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "weight_unit",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "pause_selling",
+                      "value": "<boolean>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0aa102de-88df-4ae6-9bca-8b3cf3d7763b",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "variants",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The price of the variant to be sold at.",
+                        "type": "text/plain"
+                      },
+                      "key": "price",
+                      "value": "<decimal>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "title",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "inventory_policy",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "inventory_quantity",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "inventory_item_cost",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option1",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option2",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option3",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "compare_at_price",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "upc",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "grams",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "weight",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "weight_unit",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "pause_selling",
+                      "value": "<boolean>"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e364a03e-9fdb-4f4c-93a6-a27a4b650142",
+          "name": "variants partial update",
+          "request": {
+            "name": "variants partial update",
+            "description": {},
+            "url": {
+              "path": [
+                "variants",
+                ":id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "inventory_policy",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "inventory_quantity",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "inventory_item_cost",
+                  "value": "<double>"
+                },
+                {
+                  "disabled": false,
+                  "key": "option1",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "option2",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "option3",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "price",
+                  "value": "<decimal>",
+                  "description": "The price of the variant to be sold at."
+                },
+                {
+                  "disabled": false,
+                  "key": "compare_at_price",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "title",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "upc",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "grams",
+                  "value": "<double>"
+                },
+                {
+                  "disabled": false,
+                  "key": "weight",
+                  "value": "<double>"
+                },
+                {
+                  "disabled": false,
+                  "key": "weight_unit",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "pause_selling",
+                  "value": "<boolean>"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "37dfb592-da85-4072-bfa2-1f9dfdf5dcfa",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "variants",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "inventory_policy",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "inventory_quantity",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "inventory_item_cost",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option1",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option2",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "option3",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The price of the variant to be sold at.",
+                        "type": "text/plain"
+                      },
+                      "key": "price",
+                      "value": "<decimal>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "compare_at_price",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "title",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "upc",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "grams",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "weight",
+                      "value": "<double>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "weight_unit",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "pause_selling",
+                      "value": "<boolean>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"price\": \"<decimal>\",\n  \"title\": \"<string>\",\n  \"id\": \"e4b2a790-40ef-b45d-14ca-92d0fcc22db4\",\n  \"shop\": {\n    \"country\": \"string\",\n    \"display_domain\": \"string\",\n    \"email\": \"string\",\n    \"id\": \"430b8ab2-cddd-0d83-f92b-e3d50e6cd39e\",\n    \"myshopify_domain\": \"string\",\n    \"name\": \"string\",\n    \"phone\": \"string\",\n    \"description\": \"string\",\n    \"province\": \"string\",\n    \"domain\": \"string\",\n    \"privacy_policy_url\": \"https://ToNHLhs.gwqizidGSva5BvJSLuvpQz-8vJ3wUgGLKRm8I1Y7KvgLNSKsoodDqRCFw4ojm10rYfDZ8saVXYmy\",\n    \"terms_of_service_url\": \"http://lFXuwJAvuAOvUEtprSJfhDFRaHvHfRbZ.pjUeMs.dPsqLHN\"\n  },\n  \"inventory_policy\": \"<string>\",\n  \"inventory_quantity\": \"<integer>\",\n  \"inventory_item_cost\": \"<double>\",\n  \"option1\": \"<string>\",\n  \"option2\": \"<string>\",\n  \"option3\": \"<string>\",\n  \"position\": 1528,\n  \"compare_at_price\": \"<string>\",\n  \"origin_supplier_currency\": \"string\",\n  \"sku\": \"string\",\n  \"upc\": \"<string>\",\n  \"grams\": \"<double>\",\n  \"weight\": \"<double>\",\n  \"weight_unit\": \"<string>\",\n  \"pause_selling\": \"<boolean>\",\n  \"origin_supplier_id\": \"string\",\n  \"origin_supplier_name\": \"string\",\n  \"available_for_ordering\": true,\n  \"supplier_sku\": \"string\",\n  \"is_exclusive_offer\": false,\n  \"sup_price\": \"string\",\n  \"sup_compare_at_price\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "14a3a57f-cb0d-4528-8ec3-8b0c8c6cbe39",
+          "name": "variants destroy",
+          "request": {
+            "name": "variants destroy",
+            "description": {
+              "content": "\n**[Supplier Only]** Permanently remove a specific product variant, identified by its Rokt Catalog `ID` (UUID) in the URL path, from its parent product.\n\n**Warning:** This action is **irreversible**.\n\n**Constraint:** You **cannot** delete the last remaining variant of a product using this endpoint. If you need to remove the product entirely, use the `/products/{product_id}/` delete endpoint instead.\n\n**Synchronization:** Deleting a variant automatically triggers an **asynchronous** update (emitting a `PRODUCT_UPDATE` webhook) to propagate this change to connected Storefronts, effectively removing the variant from their listings.\n\n**Position Update:** The `position` attribute of the remaining variants on the parent product will be automatically recalculated and updated to maintain a contiguous sequence.\n\nA successful deletion returns `200 OK` with the full details of the **parent product** (`ProductSerializer`), reflecting the variant's removal and the updated positions of the remaining variants.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "variants",
+                ":id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "176eb5b7-1b74-49d6-a215-7927ea51c7cc",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "variants",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"e9f9c4cf-1178-24bd-68a1-d9f87daae56a\",\n  \"shop\": {\n    \"country\": \"string\",\n    \"display_domain\": \"string\",\n    \"email\": \"string\",\n    \"id\": \"b0e130b1-9490-90e2-6a05-f2ce48d60855\",\n    \"myshopify_domain\": \"string\",\n    \"name\": \"string\",\n    \"phone\": \"string\",\n    \"description\": \"string\",\n    \"province\": \"string\",\n    \"domain\": \"string\",\n    \"privacy_policy_url\": \"http://RCwWTMtElGgJkimI.wgiJHQd8GM,o1XDl,g65XLbbuaok8.6fL4Z4-OoR4-S1tCwimiZOvmXkvzTjEjfnZ3TiR8oqIj\",\n    \"terms_of_service_url\": \"http://qMlUPzP.wrkAg7g7M44nW0EPjUSwFrY3hKXPV4Wi-PEqXfY+EmaaE+\"\n  },\n  \"title\": \"string\",\n  \"updated_at\": \"1988-10-22T14:28:41.337Z\",\n  \"variants\": [\n    {\n      \"price\": \"<decimal>\",\n      \"title\": \"<string>\",\n      \"id\": \"62ebc63a-7304-7f47-2326-b430604b7f83\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"95143e2c-e304-f4af-02b7-76c7ab98febb\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"http://OQJHqKaiQIxqqU.mxeaXLcF5Xqm38ODDQMecjWad+1n.3Bd\",\n        \"terms_of_service_url\": \"http://WxVTyGGFkDUMpnViA.julhitK8CkR1EbUc3a5havzXgodpHhkMNYdiwAiHp3+ndt23c\"\n      },\n      \"inventory_policy\": \"<string>\",\n      \"inventory_quantity\": \"<integer>\",\n      \"inventory_item_cost\": \"<double>\",\n      \"option1\": \"<string>\",\n      \"option2\": \"<string>\",\n      \"option3\": \"<string>\",\n      \"position\": 1672,\n      \"compare_at_price\": \"<string>\",\n      \"origin_supplier_currency\": \"string\",\n      \"sku\": \"string\",\n      \"upc\": \"<string>\",\n      \"grams\": \"<double>\",\n      \"weight\": \"<double>\",\n      \"weight_unit\": \"<string>\",\n      \"pause_selling\": \"<boolean>\",\n      \"origin_supplier_id\": \"string\",\n      \"origin_supplier_name\": \"string\",\n      \"available_for_ordering\": true,\n      \"supplier_sku\": \"string\",\n      \"is_exclusive_offer\": true,\n      \"sup_price\": \"string\",\n      \"sup_compare_at_price\": \"string\"\n    },\n    {\n      \"price\": \"<decimal>\",\n      \"title\": \"<string>\",\n      \"id\": \"414b7926-cb31-8c84-bedf-5c44a86be3cd\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"0f747e4d-3789-33a6-966d-ca290fba7fde\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"http://g.gcyj7I,1i28jUO0uDXhh7x5xcqcIfiY+YjV.YJCK0D6zCAGLysCLTcQt,ZFvXMmBbCP\",\n        \"terms_of_service_url\": \"https://qGAPtSdZrsYwFadbSj.cqCEvFD2M4TwWqxUOawO7jo8s12MX5Ob5l7Dw5FP+iX.KuCLAa99uXE0JuQR5AqzHarGrjtGS1rl.Z8CzdsU\"\n      },\n      \"inventory_policy\": \"<string>\",\n      \"inventory_quantity\": \"<integer>\",\n      \"inventory_item_cost\": \"<double>\",\n      \"option1\": \"<string>\",\n      \"option2\": \"<string>\",\n      \"option3\": \"<string>\",\n      \"position\": 9297,\n      \"compare_at_price\": \"<string>\",\n      \"origin_supplier_currency\": \"string\",\n      \"sku\": \"string\",\n      \"upc\": \"<string>\",\n      \"grams\": \"<double>\",\n      \"weight\": \"<double>\",\n      \"weight_unit\": \"<string>\",\n      \"pause_selling\": \"<boolean>\",\n      \"origin_supplier_id\": \"string\",\n      \"origin_supplier_name\": \"string\",\n      \"available_for_ordering\": false,\n      \"supplier_sku\": \"string\",\n      \"is_exclusive_offer\": true,\n      \"sup_price\": \"string\",\n      \"sup_compare_at_price\": \"string\"\n    }\n  ],\n  \"body_html\": \"string\",\n  \"handle\": \"string\",\n  \"image_src\": \"string\",\n  \"images\": [\n    {\n      \"canal_variant_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"src\": \"http://kaOBttlgLnBFd.xbgV8vbrfd3DAJ\",\n      \"id\": \"string\",\n      \"position\": 6678,\n      \"display_src\": \"https://YiCsRuzgrETLOgJVhbxXaE.dfKHWUAysL2QyJUPP29.Iwt,\",\n      \"width\": 1483,\n      \"height\": 7112,\n      \"variant_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"origin_supplier_image_id\": \"4a303992-c7df-0b0f-3289-684a3bd317cf\"\n    },\n    {\n      \"canal_variant_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"src\": \"http://UbmpOGWJsBNvKswNjWHIWNmfTZv.gkdkWK0XTXA+pL1dj6aG5b1eaq41CeN87.RBQ83gkHmGLQCgBh\",\n      \"id\": \"string\",\n      \"position\": 5183,\n      \"display_src\": \"http://mgLyahzkVy.bmGFurPDzbP4V--4L.eWz\",\n      \"width\": 7599,\n      \"height\": 4711,\n      \"variant_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"origin_supplier_image_id\": \"6779d383-b7d5-bf8b-aa1f-579f46180c2f\"\n    }\n  ],\n  \"options\": {},\n  \"product_type\": \"string\",\n  \"published_at\": \"1986-01-19T19:09:18.772Z\",\n  \"status\": \"unlisted\",\n  \"vendor\": \"string\",\n  \"tags\": \"string\",\n  \"permalink\": \"https://IUfiiRJUQiShnCu.qvalh6UhQ3fIwJva-Ge-oysJvyZGnxIKXGe5yZ,0\",\n  \"number_of_reviews\": -178418220,\n  \"star_rating\": 2437.8423936465656\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e557aa35-c12a-4c33-b2f5-09e3e27ee11a",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "variants",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "69171e70-2878-4be6-9b82-769aedd6595a",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "variants",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c7b2dd40-0253-45ce-a359-c98b3c05e0e3",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "variants",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.shopcanal.com/platform",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "0a183a21-dbf9-43b6-b39e-0ebd6619e69f",
+    "name": "Rokt Catalog csv variants API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Integrate with Rokt Catalog",
+      "type": "text/plain"
+    }
+  }
+}

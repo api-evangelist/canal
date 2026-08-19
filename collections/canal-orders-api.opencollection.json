@@ -1,0 +1,181 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rokt Catalog csv orders API",
+    "version": "1.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "orders",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "orders_list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shopcanal.com/platform/orders/",
+            "params": [
+              {
+                "name": "ordering",
+                "value": "",
+                "type": "query",
+                "description": "Which field to use when ordering the results."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The pagination cursor value."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Storefront Only]** Retrieve a paginated list of orders recorded in Rokt Catalog that originated from your Storefront and contain items sourced from Catalog Suppliers.\n\nThis provides your Storefront's view of these cross-shop orders.\n\nResults are returned using cursor-based pagination (`PlatformPagination`). Available ordering fields are `created_at` and `updated_at`. The default order is `-created_at`.\n\n"
+        },
+        {
+          "info": {
+            "name": "orders_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/orders/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Storefront Only]** Record a new customer order placed on your external platform (e.g., your Shopify store) that contains items sourced from Rokt Catalog Suppliers.\n\nThe request body (`OrderCreateSerializer`) must include:\n\n`order_name` (your unique identifier for this order), `currency`, `email`, `customer_locale`, `shipping_address` (full address object), `billing_address` (optional), and a list of `line_items`.\n\nEach object in `line_items` requires the Catalog `variant_id` (UUID of the *St"
+        },
+        {
+          "info": {
+            "name": "orders_retrieve",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shopcanal.com/platform/orders/:id/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Storefront Only]** Retrieve the full details for a specific Rokt Catalog order, identified by its Catalog `ID` (UUID) in the URL path.\n\nThis endpoint provides the Storefront's perspective on the order. Access is restricted to orders associated with the authenticated Storefront (`request.shop`).\n\nThe response (`OrderSerializer`) includes comprehensive information: customer details (`email`, `customer_locale`), `shipping_address`, `billing_address`, `currency`, `order_name`, `line_items` (with"
+        },
+        {
+          "info": {
+            "name": "orders_cancel_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/orders/:id/cancel/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Storefront Only]** Cancel a Rokt Catalog order associated with your Storefront.\n\nIdentify the order to be cancelled by its Catalog `ID` (UUID) provided in the URL path.\n\n**Process:**\n\n1. **Update Storefront Order:** Sets the `cancelled_at` field on the Storefront's order record in Catalog to the current timestamp.\n\n2. **Cancel Supplier Orders:** Triggers an **asynchronous** operation. This attempts to cancel the corresponding order(s) that were previously dispatched to the relevant Supplier("
+        },
+        {
+          "info": {
+            "name": "orders_create_or_get_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/orders/create_or_get/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Storefront Only]** Safely create or retrieve a Catalog order using your Storefront's unique order identifier (`order_name`) to ensure idempotency.\n\n**Behavior:**\n\n1. **Check Existing:** The system first queries for an existing active (non-cancelled) order associated with your shop that matches the provided `order_name`.\n\n2. **Return Existing:** If exactly one such active order is found, the endpoint immediately returns `200 OK` with the details of that existing order (`OrderSerializer`). Thi"
+        },
+        {
+          "info": {
+            "name": "orders_v1_create_and_charge_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/orders/v1/create-and-charge/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Storefront Only]** Create a new order with immediate payment processing.\n\n\nThis endpoint combines order creation and payment processing in a single request.\n\nThe request body follows the same structure as the standard order creation endpoint, with additional payment fields.\n\n**Process:**\n\n1. **Validation:** Checks if input variants are valid, active, and listed by the supplier. If variants are paused or unlisted, returns `422 Unprocessable Entity`. Basic format validation returns `400 Bad Re"
+        },
+        {
+          "info": {
+            "name": "orders_v1_initialize_order_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/orders/v1/initialize-order/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Storefront Only]** Create a new order and receive a Stripe PaymentIntent client secret for frontend payment confirmation.\n\nThis endpoint allows Storefronts to initiate order creation and receive a Stripe `client_secret`, which must be passed to the Stripe frontend payment element (such as Stripe Elements) to collect payment authorization from the customer.\n\nThe request payload mirrors the standard post purchase upsell order creation structure, but payment details are not required.\n\n**Process"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

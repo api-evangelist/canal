@@ -1,0 +1,365 @@
+{
+  "item": [
+    {
+      "id": "94784789-cb09-49b3-9a5e-e80f736d6812",
+      "name": "max-shipping-rates",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "fe5fa56c-5201-4b66-b689-b247a8004a88",
+          "name": "max shipping rates create",
+          "request": {
+            "name": "max shipping rates create",
+            "description": {
+              "content": "\n**[Storefront Only]** Provide a rough, potentially overestimated shipping cost for a set of line items, useful for display *before* a customer provides their full address (e.g., showing 'Shipping from $X' on a product page).\n\n**Request Body (`MaxShippingQuerySerializer`):**\n\n- `line_items` (list, required): A list of objects, each specifying:\n\n  - `variant_id` (UUID, required): The Rokt Catalog ID of the *Storefront's* variant record.\n\n  - `quantity` (integer, required): The quantity of this variant.\n\n**Process:**\n\n1. **Default Address:** This endpoint **ignores** any address provided and instead uses a **hardcoded default address** (currently hardcoded to San Francisco, CA: 655 Montgomery St, 94111).\n\n2. **Query Suppliers:** It queries the relevant Suppliers for shipping rates to this *default* address using the provided `line_items`.\n\n3. **Find Maximum:** It identifies the **single highest shipping rate** returned across all involved Suppliers for the default address.\n\n**Response (`ShippingRateResponseSerializer`):**\n\n- `rates` (list): Typically contains **only one** rate object representing the maximum cost found for the default address. The object includes `title` and `price` (Money object).\n\n**Disclaimer:** This is an **estimate** based on a fixed location. The actual shipping cost calculated using the customer's real address via the `/shipping_rates` endpoint during checkout may be significantly different (higher or lower).\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "max-shipping-rates",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "line_items",
+                  "value": "{\"quantity\":\"<integer>\",\"variant_id\":\"<uuid>\",\"price\":\"<decimal>\"}",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "line_items",
+                  "value": "{\"quantity\":\"<integer>\",\"variant_id\":\"<uuid>\",\"price\":\"<decimal>\"}",
+                  "description": "(Required) "
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e02586dd-d4c0-461c-9766-4d1c91ede30e",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "max-shipping-rates",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"quantity\":\"<integer>\",\"variant_id\":\"<uuid>\",\"price\":\"<decimal>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"quantity\":\"<integer>\",\"variant_id\":\"<uuid>\",\"price\":\"<decimal>\"}"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"shipping_rates\": [\n    {\n      \"code\": \"string\",\n      \"price\": 9858.770473327115,\n      \"title\": \"string\",\n      \"currency\": \"USD\"\n    },\n    {\n      \"code\": \"string\",\n      \"price\": 9195.68270205254,\n      \"title\": \"string\",\n      \"currency\": \"USD\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eb947112-4cbb-42a5-9d3d-6fc06e3b929d",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "max-shipping-rates",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"quantity\":\"<integer>\",\"variant_id\":\"<uuid>\",\"price\":\"<decimal>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"quantity\":\"<integer>\",\"variant_id\":\"<uuid>\",\"price\":\"<decimal>\"}"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a8269638-b6e2-4e9f-8824-95be92c960fa",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "max-shipping-rates",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"quantity\":\"<integer>\",\"variant_id\":\"<uuid>\",\"price\":\"<decimal>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"quantity\":\"<integer>\",\"variant_id\":\"<uuid>\",\"price\":\"<decimal>\"}"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8a1c8687-c441-469d-a604-6c45b4120249",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "max-shipping-rates",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"quantity\":\"<integer>\",\"variant_id\":\"<uuid>\",\"price\":\"<decimal>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"quantity\":\"<integer>\",\"variant_id\":\"<uuid>\",\"price\":\"<decimal>\"}"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.shopcanal.com/platform",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "f3f186d8-2938-48b4-84cd-d5f9c4836357",
+    "name": "Rokt Catalog csv max-shipping-rates API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Integrate with Rokt Catalog",
+      "type": "text/plain"
+    }
+  }
+}

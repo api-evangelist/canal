@@ -1,0 +1,278 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rokt Catalog csv products API",
+    "version": "1.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "products",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "products_list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shopcanal.com/platform/products/",
+            "params": [
+              {
+                "name": "ordering",
+                "value": "",
+                "type": "query",
+                "description": "Which field to use when ordering the results."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The pagination cursor value."
+              },
+              {
+                "name": "supplier_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter products by the Catalog ID of a specific connected Supplier."
+              },
+              {
+                "name": "qa_review_complete",
+                "value": "",
+                "type": "query",
+                "description": "Filter products by whether they have been reviewed and approved."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Storefront Only]** Retrieve a paginated list of products accessible to your Storefront through your established Rokt Catalog connections.\n\nThis endpoint returns products from Suppliers with whom you have an **active and approved** partnership. It includes products you might have already added/linked to your Storefront platform, as well as other products listed by those Suppliers that are available to you based on your connection terms.\n\nYou can filter the results to view products exclusively"
+        },
+        {
+          "info": {
+            "name": "products_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/products/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Supplier Only]** Create a new product listing within your Rokt Catalog Supplier account. This makes the product manageable through Catalog and potentially available to your connected Storefront partners.\n\nThe request body must conform to the `PushProductSerializer` structure. Key fields include:\n\n`title` (string, required), `body_html` (string, product description), `product_type` (string), `vendor` (string), `tags` (string, comma-separated), and a list of `variants` (required, at least one)"
+        },
+        {
+          "info": {
+            "name": "products_retrieve",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shopcanal.com/platform/products/:id/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Storefront Only]** Retrieve comprehensive details for a single product, identified by its Rokt Catalog `ID` (UUID) in the URL path.\n\nAccess is restricted: this endpoint only returns data for products sourced from Suppliers with whom your Storefront has an **active and approved** partnership connection.\n\nThe response (`ExternalProductSerializer`) includes all product-level information (title, description, vendor, etc.), a list of associated `images`, and a list of `variants`.\n\nCrucially, the "
+        },
+        {
+          "info": {
+            "name": "products_update",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.shopcanal.com/platform/products/:id/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Supplier Only]** Update attributes of an existing product listing, identified by its Rokt Catalog `ID` (UUID) in the URL path.\n\nThis endpoint is used for modifying **product-level** details. Provide the fields you wish to change in the request body (e.g., `title`, `body_html`, `product_type`, `vendor`, `tags`).\n\n**Important:** To modify variant-specific details like price, SKU, inventory, or options, you **must** use the dedicated `/variants/{variant_id}/` endpoint. Updates to variants are n"
+        },
+        {
+          "info": {
+            "name": "products_partial_update",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.shopcanal.com/platform/products/:id/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "products_destroy",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.shopcanal.com/platform/products/:id/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Supplier Only]** Permanently remove a product listing, identified by its Rokt Catalog `ID` (UUID) in the URL path, from the Catalog platform.\n\n**Warning:** This action is **irreversible**. Ensure you intend to delete this product permanently.\n\nYou can only delete products that are directly owned by your Supplier account. Attempting to delete a product belonging to another shop will result in a `403 Forbidden` error.\n\n**Effect on Storefronts:** When a product is deleted, Catalog automatically"
+        },
+        {
+          "info": {
+            "name": "products_reorder_variants_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/products/:id/reorder_variants/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Supplier Only]** Update the display sequence of variants for a specific product. The product is identified by its Rokt Catalog `ID` (UUID) in the URL path.\n\nThe request body must contain a field named `variant_order`, which is a list of Catalog variant `ID`s (UUIDs) sorted in the desired display order (0-indexed).\n\n**Requirement:** The `variant_order` list **must** include the IDs of **all** currently existing variants for the specified product. Omitting or adding incorrect IDs will result i"
+        },
+        {
+          "info": {
+            "name": "products_resync_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/products/:id/resync/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\nResynchronize a retailer (Shopkeep) product with its origin supplier product.\n\nIf `fields_to_resync` is provided, only those fields will be updated; otherwise all fields are resynced.\n\nOn success, returns the updated product data. If the resync is queued to run asynchronously (e.g. due to rate limits), returns a message indicating the resync has started.\n\n"
+        },
+        {
+          "info": {
+            "name": "products_upsell_products_list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shopcanal.com/platform/products/upsell_products/",
+            "params": [
+              {
+                "name": "ordering",
+                "value": "",
+                "type": "query",
+                "description": "Which field to use when ordering the results."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The pagination cursor value."
+              },
+              {
+                "name": "supplier_id",
+                "value": "",
+                "type": "query",
+                "description": "Filter products by the Catalog ID of a specific connected Supplier."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Storefront Only]** Retrieve a paginated list of active products that are eligible for upselling.\n\nThis endpoint returns products from Suppliers with whom you have an active and approved partnership.\n\nProducts must meet the following criteria:\n\n1) Have status='active',\n\n2) Have at least one variant that is connected to a supplier variant, listed on Catalog, and not paused for selling,\n\n3) Have passed ads eligibility checks,\n\n4) Have at least one available variant in a non-deleted product set,"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

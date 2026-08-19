@@ -1,0 +1,39 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rokt Catalog csv max-shipping-rates API",
+    "version": "1.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "max-shipping-rates",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "max_shipping_rates_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/max-shipping-rates/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Storefront Only]** Provide a rough, potentially overestimated shipping cost for a set of line items, useful for display *before* a customer provides their full address (e.g., showing 'Shipping from $X' on a product page).\n\n**Request Body (`MaxShippingQuerySerializer`):**\n\n- `line_items` (list, required): A list of objects, each specifying:\n\n  - `variant_id` (UUID, required): The Rokt Catalog ID of the *Storefront's* variant record.\n\n  - `quantity` (integer, required): The quantity of this va"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

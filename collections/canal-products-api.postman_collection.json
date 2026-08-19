@@ -1,0 +1,3582 @@
+{
+  "item": [
+    {
+      "id": "23680039-a8eb-426d-a4fd-cde59923f117",
+      "name": "products",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ce1d7f3c-0069-4bd0-94de-743f2a069cbc",
+          "name": "products list",
+          "request": {
+            "name": "products list",
+            "description": {
+              "content": "\n**[Storefront Only]** Retrieve a paginated list of products accessible to your Storefront through your established Rokt Catalog connections.\n\nThis endpoint returns products from Suppliers with whom you have an **active and approved** partnership. It includes products you might have already added/linked to your Storefront platform, as well as other products listed by those Suppliers that are available to you based on your connection terms.\n\nYou can filter the results to view products exclusively from one Supplier by providing their Catalog `supplier_id` (UUID) as a query parameter.\n\nResults are returned using cursor-based pagination (`PlatformPagination`). Available ordering fields include `created_at`, `updated_at`, and `title`. The default order is `-created_at`.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "products",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "ordering",
+                  "value": "<string>",
+                  "description": "Which field to use when ordering the results."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "The pagination cursor value."
+                },
+                {
+                  "disabled": false,
+                  "key": "supplier_id",
+                  "value": "<uuid>",
+                  "description": "Filter products by the Catalog ID of a specific connected Supplier."
+                },
+                {
+                  "disabled": false,
+                  "key": "qa_review_complete",
+                  "value": "<boolean>",
+                  "description": "Filter products by whether they have been reviewed and approved."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "8c34dc69-de0a-48b9-bdea-b8466800d72b",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "supplier_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "qa_review_complete",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    {\n      \"customer_charge_amount\": {\n        \"key_0\": {},\n        \"key_1\": {}\n      },\n      \"id\": \"b775ce65-34b4-287a-cb6e-bd52e94c8c45\",\n      \"images\": [\n        {\n          \"key_0\": {}\n        },\n        {\n          \"key_0\": {},\n          \"key_1\": {},\n          \"key_2\": {},\n          \"key_3\": {}\n        }\n      ],\n      \"options\": [\n        {\n          \"key_0\": {}\n        },\n        {\n          \"key_0\": {},\n          \"key_1\": {}\n        }\n      ],\n      \"product_type_category\": \"string\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"fce7a37a-94a1-aa52-2673-b03dbce18498\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"https://VSd.xblaJSmK9ZSPEFbQRFJpLRLW-CH6dlY9XNycxRu\",\n        \"terms_of_service_url\": \"http://VVrnHhmmtJ.igZzfWKdJcZPZrQGAZ.4f6d2NwZquiJFdlKnqV\"\n      },\n      \"title\": \"string\",\n      \"updated_at\": \"1987-09-30T05:34:39.608Z\",\n      \"variants\": [\n        {\n          \"available_for_ordering\": true,\n          \"id\": \"1f903c0d-91ed-30cb-ef0c-221a8ea87525\",\n          \"is_exclusive_offer\": true,\n          \"origin_supplier_currency\": \"string\",\n          \"origin_supplier_id\": \"string\",\n          \"origin_supplier_name\": \"string\",\n          \"position\": 1608,\n          \"price\": \"416\",\n          \"shop\": {\n            \"country\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"display_domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"myshopify_domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"phone\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"province\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"privacy_policy_url\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"terms_of_service_url\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"sku\": \"string\",\n          \"sup_compare_at_price\": \"string\",\n          \"sup_price\": \"string\",\n          \"supplier_sku\": \"string\",\n          \"title\": \"string\",\n          \"inventory_policy\": \"string\",\n          \"inventory_quantity\": 1616989552,\n          \"inventory_item_cost\": 3648.283358448964,\n          \"option1\": \"string\",\n          \"option2\": \"string\",\n          \"option3\": \"string\",\n          \"compare_at_price\": \"string\",\n          \"upc\": \"string\",\n          \"grams\": 6870.949435804937,\n          \"weight\": 2147.92477915328,\n          \"weight_unit\": \"str\",\n          \"pause_selling\": false\n        },\n        {\n          \"available_for_ordering\": true,\n          \"id\": \"0ac742df-4b6e-3817-e76c-7011554e7707\",\n          \"is_exclusive_offer\": true,\n          \"origin_supplier_currency\": \"string\",\n          \"origin_supplier_id\": \"string\",\n          \"origin_supplier_name\": \"string\",\n          \"position\": 3786,\n          \"price\": \"-\",\n          \"shop\": {\n            \"country\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"display_domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"myshopify_domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"phone\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"province\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"privacy_policy_url\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"terms_of_service_url\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"sku\": \"string\",\n          \"sup_compare_at_price\": \"string\",\n          \"sup_price\": \"string\",\n          \"supplier_sku\": \"string\",\n          \"title\": \"string\",\n          \"inventory_policy\": \"string\",\n          \"inventory_quantity\": 662471846,\n          \"inventory_item_cost\": 7891.560314454487,\n          \"option1\": \"string\",\n          \"option2\": \"string\",\n          \"option3\": \"string\",\n          \"compare_at_price\": \"string\",\n          \"upc\": \"string\",\n          \"grams\": 4826.840506942389,\n          \"weight\": 2639.5945490920867,\n          \"weight_unit\": \"str\",\n          \"pause_selling\": true\n        }\n      ],\n      \"body_html\": \"string\",\n      \"handle\": \"string\",\n      \"image_src\": \"string\",\n      \"product_type\": \"string\",\n      \"published_at\": \"2024-01-11T15:01:30.113Z\",\n      \"status\": \"active\",\n      \"vendor\": \"string\",\n      \"tags\": \"string\",\n      \"permalink\": \"http://oBOnVbbUMjanwRUBWfnP.ctF6KGlx8v6cFVM.x\",\n      \"number_of_reviews\": 700531395,\n      \"star_rating\": 3574.3180287940777\n    },\n    {\n      \"customer_charge_amount\": {\n        \"key_0\": {}\n      },\n      \"id\": \"f3f4e746-9787-c547-7cec-66a72f949be5\",\n      \"images\": [\n        {\n          \"key_0\": {},\n          \"key_1\": {},\n          \"key_2\": {}\n        },\n        {\n          \"key_0\": {},\n          \"key_1\": {},\n          \"key_2\": {}\n        }\n      ],\n      \"options\": [\n        {\n          \"key_0\": {},\n          \"key_1\": {}\n        },\n        {\n          \"key_0\": {},\n          \"key_1\": {}\n        }\n      ],\n      \"product_type_category\": \"string\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"a1116958-76e6-5061-596b-454d1690d3f5\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"https://MfwQhKGXQEvRswyzuYeMsaLeagAMHULE.wwU9m5x+7aQyjhk1,WNSmgaLJl8qN,\",\n        \"terms_of_service_url\": \"https://AXxTfeYDntpdlaVRoV.gfkiRbVrc8vq-Rdek898Xd9bnEA+6l4zKKib9\"\n      },\n      \"title\": \"string\",\n      \"updated_at\": \"1995-09-23T00:25:58.721Z\",\n      \"variants\": [\n        {\n          \"available_for_ordering\": false,\n          \"id\": \"7c911478-3319-6f89-09ee-52fe757899c0\",\n          \"is_exclusive_offer\": false,\n          \"origin_supplier_currency\": \"string\",\n          \"origin_supplier_id\": \"string\",\n          \"origin_supplier_name\": \"string\",\n          \"position\": 1274,\n          \"price\": \"535616\",\n          \"shop\": {\n            \"country\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"display_domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"myshopify_domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"phone\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"province\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"privacy_policy_url\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"terms_of_service_url\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"sku\": \"string\",\n          \"sup_compare_at_price\": \"string\",\n          \"sup_price\": \"string\",\n          \"supplier_sku\": \"string\",\n          \"title\": \"string\",\n          \"inventory_policy\": \"string\",\n          \"inventory_quantity\": -1870859828,\n          \"inventory_item_cost\": 6888.8042975913795,\n          \"option1\": \"string\",\n          \"option2\": \"string\",\n          \"option3\": \"string\",\n          \"compare_at_price\": \"string\",\n          \"upc\": \"string\",\n          \"grams\": 8014.926737746816,\n          \"weight\": 206.9793587257862,\n          \"weight_unit\": \"str\",\n          \"pause_selling\": true\n        },\n        {\n          \"available_for_ordering\": true,\n          \"id\": \"3ed4524d-acf7-21e6-bbbb-8e7595a78309\",\n          \"is_exclusive_offer\": true,\n          \"origin_supplier_currency\": \"string\",\n          \"origin_supplier_id\": \"string\",\n          \"origin_supplier_name\": \"string\",\n          \"position\": 7778,\n          \"price\": \"018.7\",\n          \"shop\": {\n            \"country\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"display_domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"myshopify_domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"phone\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"province\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"privacy_policy_url\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"terms_of_service_url\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"sku\": \"string\",\n          \"sup_compare_at_price\": \"string\",\n          \"sup_price\": \"string\",\n          \"supplier_sku\": \"string\",\n          \"title\": \"string\",\n          \"inventory_policy\": \"string\",\n          \"inventory_quantity\": -2102926015,\n          \"inventory_item_cost\": 8740.127457851799,\n          \"option1\": \"string\",\n          \"option2\": \"string\",\n          \"option3\": \"string\",\n          \"compare_at_price\": \"string\",\n          \"upc\": \"string\",\n          \"grams\": 9298.443152892924,\n          \"weight\": 1339.5149848470312,\n          \"weight_unit\": \"str\",\n          \"pause_selling\": false\n        }\n      ],\n      \"body_html\": \"string\",\n      \"handle\": \"string\",\n      \"image_src\": \"string\",\n      \"product_type\": \"string\",\n      \"published_at\": \"1965-06-22T00:35:25.181Z\",\n      \"status\": \"active\",\n      \"vendor\": \"string\",\n      \"tags\": \"string\",\n      \"permalink\": \"http://hqeUagMh.piamFIbOsnOix5jPXGhCADvknRVUDfjoQ-vj9kvE\",\n      \"number_of_reviews\": -1343097795,\n      \"star_rating\": 5248.57498359091\n    }\n  ],\n  \"next\": \"https://LtCChlYDhRlfqNqVBQW.jsnL7yaMrADkyh+zJlAQEXWSyFEqZu5+Ds4FwCCZXCgFU0VNzVYFXNClSOlkofdKY3AL.rcjkrd1Bf.1B\",\n  \"previous\": \"http://api.example.org/accounts/?cursor=cj0xJnA9NDg3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "770735d5-c39c-4fe8-8876-bc8426ae2da3",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "supplier_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "qa_review_complete",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "389e814b-fb07-453c-8913-b2a698e55a53",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "supplier_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "qa_review_complete",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "83cfb41b-0571-43b2-8db9-135762fced56",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "supplier_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "key": "qa_review_complete",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0ef89dc9-cbd6-4583-93d3-916c68b9c6f6",
+          "name": "products create",
+          "request": {
+            "name": "products create",
+            "description": {
+              "content": "\n**[Supplier Only]** Create a new product listing within your Rokt Catalog Supplier account. This makes the product manageable through Catalog and potentially available to your connected Storefront partners.\n\nThe request body must conform to the `PushProductSerializer` structure. Key fields include:\n\n`title` (string, required), `body_html` (string, product description), `product_type` (string), `vendor` (string), `tags` (string, comma-separated), and a list of `variants` (required, at least one).\n\nEach object in the `variants` list requires `price` (decimal string), `sku` (string), `inventory_quantity` (integer), and option values (`option1`, `option2`, `option3`). `compare_at_price` (decimal string) is optional for sale pricing.\n\nYou can also include a list of `images`, each with a `src` (URL) and optional `position`.\n\nSuccessfully creating a product (HTTP `201 Created`) makes it visible in your Catalog dashboard. Its availability to Storefronts depends on its listing status (`supplier_has_listed_on_canal` flag on variants) and the terms established with each partner.\n\nThe response body contains the full details of the newly created product and its variants, including their assigned Catalog IDs (UUIDs), using the `ProductSerializer`.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "products",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "title",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "variants",
+                  "value": "{\"inventory_policy\":\"<string>\",\"inventory_quantity\":\"<integer>\",\"option1\":\"<string>\",\"price\":\"<decimal>\",\"title\":\"<string>\",\"compare_at_price\":\"<decimal>\",\"option2\":\"<string>\",\"option3\":\"<string>\",\"sku\":\"<string>\",\"position\":\"<integer>\",\"image_src\":\"<string>\",\"weight\":\"<double>\",\"weight_unit\":\"<string>\"}",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "variants",
+                  "value": "{\"inventory_policy\":\"<string>\",\"inventory_quantity\":\"<integer>\",\"option1\":\"<string>\",\"price\":\"<decimal>\",\"title\":\"<string>\",\"compare_at_price\":\"<decimal>\",\"option2\":\"<string>\",\"option3\":\"<string>\",\"sku\":\"<string>\",\"position\":\"<integer>\",\"image_src\":\"<string>\",\"weight\":\"<double>\",\"weight_unit\":\"<string>\"}",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "body_html",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "permalink",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "handle",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "image_src",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "images",
+                  "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                },
+                {
+                  "disabled": false,
+                  "key": "images",
+                  "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                },
+                {
+                  "disabled": false,
+                  "key": "product_type",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tags",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "vendor",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "shopify_taxonomy",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "is_listed",
+                  "value": "true"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "active"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "289ae9f8-aaec-4cc9-9eb1-999e2901dacc",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "title",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "variants",
+                      "value": "{\"inventory_policy\":\"<string>\",\"inventory_quantity\":\"<integer>\",\"option1\":\"<string>\",\"price\":\"<decimal>\",\"title\":\"<string>\",\"compare_at_price\":\"<decimal>\",\"option2\":\"<string>\",\"option3\":\"<string>\",\"sku\":\"<string>\",\"position\":\"<integer>\",\"image_src\":\"<string>\",\"weight\":\"<double>\",\"weight_unit\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "variants",
+                      "value": "{\"inventory_policy\":\"<string>\",\"inventory_quantity\":\"<integer>\",\"option1\":\"<string>\",\"price\":\"<decimal>\",\"title\":\"<string>\",\"compare_at_price\":\"<decimal>\",\"option2\":\"<string>\",\"option3\":\"<string>\",\"sku\":\"<string>\",\"position\":\"<integer>\",\"image_src\":\"<string>\",\"weight\":\"<double>\",\"weight_unit\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "body_html",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "permalink",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "handle",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "image_src",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "images",
+                      "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "images",
+                      "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "product_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tags",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "vendor",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "shopify_taxonomy",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "is_listed",
+                      "value": "true"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "status",
+                      "value": "active"
+                    }
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"4798811f-f4df-f023-fad3-95d011a7eaf2\",\n  \"shop\": {\n    \"country\": \"string\",\n    \"display_domain\": \"string\",\n    \"email\": \"string\",\n    \"id\": \"5b186ab0-68d0-0aa2-9ac1-053ce64aa0b2\",\n    \"myshopify_domain\": \"string\",\n    \"name\": \"string\",\n    \"phone\": \"string\",\n    \"description\": \"string\",\n    \"province\": \"string\",\n    \"domain\": \"string\",\n    \"privacy_policy_url\": \"https://H.jxcZuHFopmGe4dL06zOOQdKqkTRGzLz5DD0P69APAXAMa0GCSvVkVy\",\n    \"terms_of_service_url\": \"https://eaMXVLIhFrXxFNyXzthJAx.jdorVx7Ay-i-bOaA4r885KclQnbSzrbxUanpkqra1NaLtNy7-euf\"\n  },\n  \"title\": \"string\",\n  \"updated_at\": \"1981-09-18T18:46:00.141Z\",\n  \"variants\": [\n    {\n      \"available_for_ordering\": true,\n      \"id\": \"97702b27-18a0-9828-db25-3a1b939c8cdb\",\n      \"is_exclusive_offer\": true,\n      \"origin_supplier_currency\": \"string\",\n      \"origin_supplier_id\": \"string\",\n      \"origin_supplier_name\": \"string\",\n      \"position\": 1103,\n      \"price\": \"-\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"88ae1185-d351-1166-94c8-37c4efcb6da3\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"https://CPAhDkNrKaMmfvNNoCTGkrq.lsqsGPkDJScsY1kg436SL\",\n        \"terms_of_service_url\": \"https://Oa.vvnsp3M0Cu,UuDQ99qTPDgKi-,hJfALwH6xfG.vinTSUI8.XdbKsLzxe6er18syYw2ZKQ+emc\"\n      },\n      \"sku\": \"string\",\n      \"sup_compare_at_price\": \"string\",\n      \"sup_price\": \"string\",\n      \"supplier_sku\": \"string\",\n      \"title\": \"string\",\n      \"inventory_policy\": \"string\",\n      \"inventory_quantity\": -623872231,\n      \"inventory_item_cost\": 3609.1185729862373,\n      \"option1\": \"string\",\n      \"option2\": \"string\",\n      \"option3\": \"string\",\n      \"compare_at_price\": \"string\",\n      \"upc\": \"string\",\n      \"grams\": 7599.022369797166,\n      \"weight\": 7096.7657234126145,\n      \"weight_unit\": \"str\",\n      \"pause_selling\": true\n    },\n    {\n      \"available_for_ordering\": false,\n      \"id\": \"6a7bbdf3-9c1d-6821-fb09-71e80d7b4527\",\n      \"is_exclusive_offer\": true,\n      \"origin_supplier_currency\": \"string\",\n      \"origin_supplier_id\": \"string\",\n      \"origin_supplier_name\": \"string\",\n      \"position\": 7833,\n      \"price\": \"863\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"760247bb-96f5-fa86-bdd2-e4e7f48daa55\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"https://Hax.sfvCEvORoIYb1tqB3zdkjhZigBJ\",\n        \"terms_of_service_url\": \"http://EiXCfsFCZBLYb.zfrHg\"\n      },\n      \"sku\": \"string\",\n      \"sup_compare_at_price\": \"string\",\n      \"sup_price\": \"string\",\n      \"supplier_sku\": \"string\",\n      \"title\": \"string\",\n      \"inventory_policy\": \"string\",\n      \"inventory_quantity\": 2129117787,\n      \"inventory_item_cost\": 6631.346157427514,\n      \"option1\": \"string\",\n      \"option2\": \"string\",\n      \"option3\": \"string\",\n      \"compare_at_price\": \"string\",\n      \"upc\": \"string\",\n      \"grams\": 4313.885972185731,\n      \"weight\": 5339.266245160885,\n      \"weight_unit\": \"str\",\n      \"pause_selling\": true\n    }\n  ],\n  \"body_html\": \"string\",\n  \"handle\": \"string\",\n  \"image_src\": \"string\",\n  \"images\": [\n    {\n      \"src\": \"<uri>\",\n      \"id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"display_src\": \"<uri>\",\n      \"width\": \"<integer>\",\n      \"height\": \"<integer>\",\n      \"canal_variant_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"variant_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"origin_supplier_image_id\": \"<uuid>\"\n    },\n    {\n      \"src\": \"<uri>\",\n      \"id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"display_src\": \"<uri>\",\n      \"width\": \"<integer>\",\n      \"height\": \"<integer>\",\n      \"canal_variant_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"variant_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"origin_supplier_image_id\": \"<uuid>\"\n    }\n  ],\n  \"options\": {},\n  \"product_type\": \"string\",\n  \"published_at\": \"1973-11-26T16:17:34.771Z\",\n  \"status\": \"archived\",\n  \"vendor\": \"string\",\n  \"tags\": \"string\",\n  \"permalink\": \"https://YDXImeSrzznjNFakLQWtjHppT.mdhbNPzNMw8gVeLHzA5TQ5q\",\n  \"number_of_reviews\": 236161625,\n  \"star_rating\": 7961.08042533279\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6b0ca34e-4986-44fa-a1a3-089a7ecf1245",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "title",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "variants",
+                      "value": "{\"inventory_policy\":\"<string>\",\"inventory_quantity\":\"<integer>\",\"option1\":\"<string>\",\"price\":\"<decimal>\",\"title\":\"<string>\",\"compare_at_price\":\"<decimal>\",\"option2\":\"<string>\",\"option3\":\"<string>\",\"sku\":\"<string>\",\"position\":\"<integer>\",\"image_src\":\"<string>\",\"weight\":\"<double>\",\"weight_unit\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "variants",
+                      "value": "{\"inventory_policy\":\"<string>\",\"inventory_quantity\":\"<integer>\",\"option1\":\"<string>\",\"price\":\"<decimal>\",\"title\":\"<string>\",\"compare_at_price\":\"<decimal>\",\"option2\":\"<string>\",\"option3\":\"<string>\",\"sku\":\"<string>\",\"position\":\"<integer>\",\"image_src\":\"<string>\",\"weight\":\"<double>\",\"weight_unit\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "body_html",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "permalink",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "handle",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "image_src",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "images",
+                      "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "images",
+                      "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "product_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tags",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "vendor",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "shopify_taxonomy",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "is_listed",
+                      "value": "true"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "status",
+                      "value": "active"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "67bfec7e-0627-44fd-9f63-e795be35706a",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "title",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "variants",
+                      "value": "{\"inventory_policy\":\"<string>\",\"inventory_quantity\":\"<integer>\",\"option1\":\"<string>\",\"price\":\"<decimal>\",\"title\":\"<string>\",\"compare_at_price\":\"<decimal>\",\"option2\":\"<string>\",\"option3\":\"<string>\",\"sku\":\"<string>\",\"position\":\"<integer>\",\"image_src\":\"<string>\",\"weight\":\"<double>\",\"weight_unit\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "variants",
+                      "value": "{\"inventory_policy\":\"<string>\",\"inventory_quantity\":\"<integer>\",\"option1\":\"<string>\",\"price\":\"<decimal>\",\"title\":\"<string>\",\"compare_at_price\":\"<decimal>\",\"option2\":\"<string>\",\"option3\":\"<string>\",\"sku\":\"<string>\",\"position\":\"<integer>\",\"image_src\":\"<string>\",\"weight\":\"<double>\",\"weight_unit\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "body_html",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "permalink",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "handle",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "image_src",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "images",
+                      "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "images",
+                      "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "product_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tags",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "vendor",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "shopify_taxonomy",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "is_listed",
+                      "value": "true"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "status",
+                      "value": "active"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "995776cf-5289-4190-86fe-df72c339fa5a",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "title",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "variants",
+                      "value": "{\"inventory_policy\":\"<string>\",\"inventory_quantity\":\"<integer>\",\"option1\":\"<string>\",\"price\":\"<decimal>\",\"title\":\"<string>\",\"compare_at_price\":\"<decimal>\",\"option2\":\"<string>\",\"option3\":\"<string>\",\"sku\":\"<string>\",\"position\":\"<integer>\",\"image_src\":\"<string>\",\"weight\":\"<double>\",\"weight_unit\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "variants",
+                      "value": "{\"inventory_policy\":\"<string>\",\"inventory_quantity\":\"<integer>\",\"option1\":\"<string>\",\"price\":\"<decimal>\",\"title\":\"<string>\",\"compare_at_price\":\"<decimal>\",\"option2\":\"<string>\",\"option3\":\"<string>\",\"sku\":\"<string>\",\"position\":\"<integer>\",\"image_src\":\"<string>\",\"weight\":\"<double>\",\"weight_unit\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "body_html",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "permalink",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "handle",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "image_src",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "images",
+                      "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "images",
+                      "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "product_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tags",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "vendor",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "shopify_taxonomy",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "is_listed",
+                      "value": "true"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "status",
+                      "value": "active"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "06d07ff2-30a1-4e94-9714-914204350d9e",
+          "name": "products retrieve",
+          "request": {
+            "name": "products retrieve",
+            "description": {
+              "content": "\n**[Storefront Only]** Retrieve comprehensive details for a single product, identified by its Rokt Catalog `ID` (UUID) in the URL path.\n\nAccess is restricted: this endpoint only returns data for products sourced from Suppliers with whom your Storefront has an **active and approved** partnership connection.\n\nThe response (`ExternalProductSerializer`) includes all product-level information (title, description, vendor, etc.), a list of associated `images`, and a list of `variants`.\n\nCrucially, the variant information includes pricing (`price`, `compare_at_price`) and `inventory_quantity` that are specific to **your connection** with the Supplier, reflecting any agreed-upon terms or markups managed by Catalog.\n\nIf the provided product `ID` is invalid, or if the product belongs to a Supplier you are not actively connected with, a `404 Not Found` error is returned.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "products",
+                ":id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e9b540fd-1cbb-4033-a164-798eb7b291b3",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"customer_charge_amount\": {\n    \"key_0\": {},\n    \"key_1\": {},\n    \"key_2\": {}\n  },\n  \"id\": \"86098117-2428-f269-6261-5ceae3282da4\",\n  \"images\": [\n    {\n      \"key_0\": {},\n      \"key_1\": {},\n      \"key_2\": {}\n    },\n    {\n      \"key_0\": {}\n    }\n  ],\n  \"options\": [\n    {\n      \"key_0\": {}\n    },\n    {\n      \"key_0\": {},\n      \"key_1\": {},\n      \"key_2\": {}\n    }\n  ],\n  \"product_type_category\": \"string\",\n  \"shop\": {\n    \"country\": \"string\",\n    \"display_domain\": \"string\",\n    \"email\": \"string\",\n    \"id\": \"ec21fc6d-4d6a-3fc9-6154-a55d24ba7d35\",\n    \"myshopify_domain\": \"string\",\n    \"name\": \"string\",\n    \"phone\": \"string\",\n    \"description\": \"string\",\n    \"province\": \"string\",\n    \"domain\": \"string\",\n    \"privacy_policy_url\": \"http://WbW.swfmDKyZsYoege+FL8c7aMOozSxQ0mKoSFdRz+q\",\n    \"terms_of_service_url\": \"http://LlfMUYfL.noqh-xpCref+Rf1boFXjGpi25kkjXYJrwa\"\n  },\n  \"title\": \"string\",\n  \"updated_at\": \"2024-12-03T07:17:59.193Z\",\n  \"variants\": [\n    {\n      \"available_for_ordering\": false,\n      \"id\": \"4e532e7e-d5bd-fb06-9c03-16c84e97273e\",\n      \"is_exclusive_offer\": true,\n      \"origin_supplier_currency\": \"string\",\n      \"origin_supplier_id\": \"string\",\n      \"origin_supplier_name\": \"string\",\n      \"position\": 1171,\n      \"price\": \"820.1\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"6e696797-62ae-bc23-936c-55fb79e8e4c9\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"http://tvmPihLvOgyQMQwBqlklphOP.ugzCJuQ-7KOG+NEGuUR,K0+j+ho+h,dEa4\",\n        \"terms_of_service_url\": \"http://IgKzZWwVGvceRLwDJvVljrlKKvo.ckhdBiJ,KUqywWNa,7S,iWiH.44pHFQ6Y\"\n      },\n      \"sku\": \"string\",\n      \"sup_compare_at_price\": \"string\",\n      \"sup_price\": \"string\",\n      \"supplier_sku\": \"string\",\n      \"title\": \"string\",\n      \"inventory_policy\": \"string\",\n      \"inventory_quantity\": 350409090,\n      \"inventory_item_cost\": 6092.785735133683,\n      \"option1\": \"string\",\n      \"option2\": \"string\",\n      \"option3\": \"string\",\n      \"compare_at_price\": \"string\",\n      \"upc\": \"string\",\n      \"grams\": 5590.570919252929,\n      \"weight\": 1045.2251864780872,\n      \"weight_unit\": \"str\",\n      \"pause_selling\": true\n    },\n    {\n      \"available_for_ordering\": true,\n      \"id\": \"682eaf81-4dd4-93bc-09dd-0ebc1807032d\",\n      \"is_exclusive_offer\": true,\n      \"origin_supplier_currency\": \"string\",\n      \"origin_supplier_id\": \"string\",\n      \"origin_supplier_name\": \"string\",\n      \"position\": 4782,\n      \"price\": \"246945.72\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"51188b8a-3b46-64a9-8b8b-11325b9fe13e\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"http://jfblubCMFgvfdgYlEBOGbllnXmMKAKx.kmoa5d7nHuYx\",\n        \"terms_of_service_url\": \"http://RFKjL.pjiEqKSkLSazU5hYUpM32LOEEDkU1cGLoFIbEI-.G8\"\n      },\n      \"sku\": \"string\",\n      \"sup_compare_at_price\": \"string\",\n      \"sup_price\": \"string\",\n      \"supplier_sku\": \"string\",\n      \"title\": \"string\",\n      \"inventory_policy\": \"string\",\n      \"inventory_quantity\": -880534218,\n      \"inventory_item_cost\": 9486.335529934358,\n      \"option1\": \"string\",\n      \"option2\": \"string\",\n      \"option3\": \"string\",\n      \"compare_at_price\": \"string\",\n      \"upc\": \"string\",\n      \"grams\": 8980.697420532199,\n      \"weight\": 2757.6245640148754,\n      \"weight_unit\": \"str\",\n      \"pause_selling\": false\n    }\n  ],\n  \"body_html\": \"string\",\n  \"handle\": \"string\",\n  \"image_src\": \"string\",\n  \"product_type\": \"string\",\n  \"published_at\": \"1978-06-08T00:34:44.317Z\",\n  \"status\": \"draft\",\n  \"vendor\": \"string\",\n  \"tags\": \"string\",\n  \"permalink\": \"https://xnIloZmESnGQmpNpjpqpRcn.cwrvimGffNpgI21mm+mFaKaHqGk2JKn\",\n  \"number_of_reviews\": 1555786624,\n  \"star_rating\": 3167.5568402013123\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "026d8ebf-5728-4d54-b346-a71c814f0d19",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dfbbeb79-4167-4c10-b0de-f88564316f77",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5e2b8c0f-0fb0-4695-afac-1eeeec961ff2",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "09193eb9-9a04-4aa8-9745-954d258b43bb",
+          "name": "products update",
+          "request": {
+            "name": "products update",
+            "description": {
+              "content": "\n**[Supplier Only]** Update attributes of an existing product listing, identified by its Rokt Catalog `ID` (UUID) in the URL path.\n\nThis endpoint is used for modifying **product-level** details. Provide the fields you wish to change in the request body (e.g., `title`, `body_html`, `product_type`, `vendor`, `tags`).\n\n**Important:** To modify variant-specific details like price, SKU, inventory, or options, you **must** use the dedicated `/variants/{variant_id}/` endpoint. Updates to variants are not supported here.\n\nChanges made to product-level fields via this endpoint (like updating the description) are automatically synchronized to any connected Storefronts that are currently selling this product. This synchronization process runs **asynchronously** in the background.\n\nA successful update returns `200 OK` with the complete, updated product details (including all variants) using the `ProductSerializer`.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "products",
+                ":id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "title",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "body_html",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "handle",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "image_src",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "images",
+                  "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                },
+                {
+                  "disabled": false,
+                  "key": "images",
+                  "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                },
+                {
+                  "disabled": false,
+                  "key": "product_type",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "published_at",
+                  "value": "<dateTime>"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "vendor",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tags",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "permalink",
+                  "value": "<uri>"
+                },
+                {
+                  "disabled": false,
+                  "key": "number_of_reviews",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "star_rating",
+                  "value": "<double>"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2581d4d9-9dde-4b9e-8f82-55fc91dbb51c",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "title",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "body_html",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "handle",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "image_src",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "images",
+                      "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "images",
+                      "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "product_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "published_at",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "vendor",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tags",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "permalink",
+                      "value": "<uri>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "number_of_reviews",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "star_rating",
+                      "value": "<double>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"<string>\",\n  \"id\": \"e68529a6-33f0-3696-cae3-7ea3bcb02010\",\n  \"shop\": {\n    \"country\": \"string\",\n    \"display_domain\": \"string\",\n    \"email\": \"string\",\n    \"id\": \"3c2a5805-2b4b-b5b6-69f9-721892e2ada3\",\n    \"myshopify_domain\": \"string\",\n    \"name\": \"string\",\n    \"phone\": \"string\",\n    \"description\": \"string\",\n    \"province\": \"string\",\n    \"domain\": \"string\",\n    \"privacy_policy_url\": \"http://WfHkzIwgqVNwhCXSjwQkMgBzAWk.klbV+xvcyEuG0A-NEyCuoc9pS\",\n    \"terms_of_service_url\": \"http://lzrxK.pgmdCrHNiznsp-JeNPZlnVo+K,AezYXaeofwYy,\"\n  },\n  \"variants\": [\n    {\n      \"available_for_ordering\": false,\n      \"id\": \"e9e70d8a-08cb-0518-ceb1-34771f75e621\",\n      \"is_exclusive_offer\": false,\n      \"origin_supplier_currency\": \"string\",\n      \"origin_supplier_id\": \"string\",\n      \"origin_supplier_name\": \"string\",\n      \"position\": 594,\n      \"price\": \"328.39\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"46e79b8f-08d4-7a2a-21ab-61c4f56e578f\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"https://fyRPZyLCpFKXhgfUoUoDpbNR.myxikpRyvTpfV.O3IjhzUj2ZsC8lgmUlbiSgnWz,UX6c4gg9e9IUhDbKOx\",\n        \"terms_of_service_url\": \"https://xOqwfZCZuDhTydAYRbujgzMfays.raFPn3iO-gzNHjuxXhkugNE2beZfLJUcAQLKu+lgVAu\"\n      },\n      \"sku\": \"string\",\n      \"sup_compare_at_price\": \"string\",\n      \"sup_price\": \"string\",\n      \"supplier_sku\": \"string\",\n      \"title\": \"string\",\n      \"inventory_policy\": \"string\",\n      \"inventory_quantity\": -1830313329,\n      \"inventory_item_cost\": 8034.280560634254,\n      \"option1\": \"string\",\n      \"option2\": \"string\",\n      \"option3\": \"string\",\n      \"compare_at_price\": \"string\",\n      \"upc\": \"string\",\n      \"grams\": 4500.794087740442,\n      \"weight\": 3030.3333901137507,\n      \"weight_unit\": \"str\",\n      \"pause_selling\": false\n    },\n    {\n      \"available_for_ordering\": false,\n      \"id\": \"3781acc7-af75-9d79-b8d9-87c472607c02\",\n      \"is_exclusive_offer\": false,\n      \"origin_supplier_currency\": \"string\",\n      \"origin_supplier_id\": \"string\",\n      \"origin_supplier_name\": \"string\",\n      \"position\": 2272,\n      \"price\": \"-203\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"e5eaedf4-c8ea-1cb6-8bd2-7b2c41f7ba7f\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"https://Tld.wsXO2IULGqTP5\",\n        \"terms_of_service_url\": \"https://kHoPdjjDYKvyYJbRtkNCMNBD.nxydUNB58DpCNEBK+-EBZj.LMR5LYg\"\n      },\n      \"sku\": \"string\",\n      \"sup_compare_at_price\": \"string\",\n      \"sup_price\": \"string\",\n      \"supplier_sku\": \"string\",\n      \"title\": \"string\",\n      \"inventory_policy\": \"string\",\n      \"inventory_quantity\": -2134957877,\n      \"inventory_item_cost\": 9311.477712411746,\n      \"option1\": \"string\",\n      \"option2\": \"string\",\n      \"option3\": \"string\",\n      \"compare_at_price\": \"string\",\n      \"upc\": \"string\",\n      \"grams\": 9256.124267363068,\n      \"weight\": 7518.379336480782,\n      \"weight_unit\": \"str\",\n      \"pause_selling\": true\n    }\n  ],\n  \"body_html\": \"<string>\",\n  \"handle\": \"<string>\",\n  \"image_src\": \"<string>\",\n  \"images\": [\n    {\n      \"src\": \"<uri>\",\n      \"id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"display_src\": \"<uri>\",\n      \"width\": \"<integer>\",\n      \"height\": \"<integer>\",\n      \"canal_variant_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"variant_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"origin_supplier_image_id\": \"<uuid>\"\n    },\n    {\n      \"src\": \"<uri>\",\n      \"id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"display_src\": \"<uri>\",\n      \"width\": \"<integer>\",\n      \"height\": \"<integer>\",\n      \"canal_variant_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"variant_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"origin_supplier_image_id\": \"<uuid>\"\n    }\n  ],\n  \"options\": {},\n  \"product_type\": \"<string>\",\n  \"updated_at\": \"1976-12-06T03:15:09.320Z\",\n  \"published_at\": \"<dateTime>\",\n  \"status\": \"<string>\",\n  \"vendor\": \"<string>\",\n  \"tags\": \"<string>\",\n  \"permalink\": \"<uri>\",\n  \"number_of_reviews\": \"<integer>\",\n  \"star_rating\": \"<double>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0030f5d7-fb31-4ef2-9120-5bc26c68c587",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "title",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "body_html",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "handle",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "image_src",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "images",
+                      "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "images",
+                      "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "product_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "published_at",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "vendor",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tags",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "permalink",
+                      "value": "<uri>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "number_of_reviews",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "star_rating",
+                      "value": "<double>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "22b0ff62-a9dc-491f-aed6-23eff3b0be3e",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "title",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "body_html",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "handle",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "image_src",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "images",
+                      "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "images",
+                      "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "product_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "published_at",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "vendor",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tags",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "permalink",
+                      "value": "<uri>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "number_of_reviews",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "star_rating",
+                      "value": "<double>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "16074de2-c6ad-41cf-b0de-be32ff9e2b49",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "title",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "body_html",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "handle",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "image_src",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "images",
+                      "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "images",
+                      "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "product_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "published_at",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "vendor",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tags",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "permalink",
+                      "value": "<uri>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "number_of_reviews",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "star_rating",
+                      "value": "<double>"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "40f86f75-5e8c-4576-acbf-7713eb5b67d9",
+          "name": "products partial update",
+          "request": {
+            "name": "products partial update",
+            "description": {},
+            "url": {
+              "path": [
+                "products",
+                ":id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "body_html",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "handle",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "image_src",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "images",
+                  "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                },
+                {
+                  "disabled": false,
+                  "key": "images",
+                  "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                },
+                {
+                  "disabled": false,
+                  "key": "product_type",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "published_at",
+                  "value": "<dateTime>"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "title",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "vendor",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tags",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "permalink",
+                  "value": "<uri>"
+                },
+                {
+                  "disabled": false,
+                  "key": "number_of_reviews",
+                  "value": "<integer>"
+                },
+                {
+                  "disabled": false,
+                  "key": "star_rating",
+                  "value": "<double>"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "7f7f7d2b-8ee7-4199-b751-fdff9a329605",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "body_html",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "handle",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "image_src",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "images",
+                      "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "images",
+                      "value": "{\"src\":\"<uri>\",\"id\":\"<string>\",\"position\":\"<integer>\",\"display_src\":\"<uri>\",\"width\":\"<integer>\",\"height\":\"<integer>\",\"variant_ids\":[\"<string>\",\"<string>\"],\"origin_supplier_image_id\":\"<uuid>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "product_type",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "published_at",
+                      "value": "<dateTime>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "title",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "vendor",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tags",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "permalink",
+                      "value": "<uri>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "number_of_reviews",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "star_rating",
+                      "value": "<double>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"<string>\",\n  \"id\": \"e68529a6-33f0-3696-cae3-7ea3bcb02010\",\n  \"shop\": {\n    \"country\": \"string\",\n    \"display_domain\": \"string\",\n    \"email\": \"string\",\n    \"id\": \"3c2a5805-2b4b-b5b6-69f9-721892e2ada3\",\n    \"myshopify_domain\": \"string\",\n    \"name\": \"string\",\n    \"phone\": \"string\",\n    \"description\": \"string\",\n    \"province\": \"string\",\n    \"domain\": \"string\",\n    \"privacy_policy_url\": \"http://WfHkzIwgqVNwhCXSjwQkMgBzAWk.klbV+xvcyEuG0A-NEyCuoc9pS\",\n    \"terms_of_service_url\": \"http://lzrxK.pgmdCrHNiznsp-JeNPZlnVo+K,AezYXaeofwYy,\"\n  },\n  \"variants\": [\n    {\n      \"available_for_ordering\": false,\n      \"id\": \"e9e70d8a-08cb-0518-ceb1-34771f75e621\",\n      \"is_exclusive_offer\": false,\n      \"origin_supplier_currency\": \"string\",\n      \"origin_supplier_id\": \"string\",\n      \"origin_supplier_name\": \"string\",\n      \"position\": 594,\n      \"price\": \"328.39\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"46e79b8f-08d4-7a2a-21ab-61c4f56e578f\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"https://fyRPZyLCpFKXhgfUoUoDpbNR.myxikpRyvTpfV.O3IjhzUj2ZsC8lgmUlbiSgnWz,UX6c4gg9e9IUhDbKOx\",\n        \"terms_of_service_url\": \"https://xOqwfZCZuDhTydAYRbujgzMfays.raFPn3iO-gzNHjuxXhkugNE2beZfLJUcAQLKu+lgVAu\"\n      },\n      \"sku\": \"string\",\n      \"sup_compare_at_price\": \"string\",\n      \"sup_price\": \"string\",\n      \"supplier_sku\": \"string\",\n      \"title\": \"string\",\n      \"inventory_policy\": \"string\",\n      \"inventory_quantity\": -1830313329,\n      \"inventory_item_cost\": 8034.280560634254,\n      \"option1\": \"string\",\n      \"option2\": \"string\",\n      \"option3\": \"string\",\n      \"compare_at_price\": \"string\",\n      \"upc\": \"string\",\n      \"grams\": 4500.794087740442,\n      \"weight\": 3030.3333901137507,\n      \"weight_unit\": \"str\",\n      \"pause_selling\": false\n    },\n    {\n      \"available_for_ordering\": false,\n      \"id\": \"3781acc7-af75-9d79-b8d9-87c472607c02\",\n      \"is_exclusive_offer\": false,\n      \"origin_supplier_currency\": \"string\",\n      \"origin_supplier_id\": \"string\",\n      \"origin_supplier_name\": \"string\",\n      \"position\": 2272,\n      \"price\": \"-203\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"e5eaedf4-c8ea-1cb6-8bd2-7b2c41f7ba7f\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"https://Tld.wsXO2IULGqTP5\",\n        \"terms_of_service_url\": \"https://kHoPdjjDYKvyYJbRtkNCMNBD.nxydUNB58DpCNEBK+-EBZj.LMR5LYg\"\n      },\n      \"sku\": \"string\",\n      \"sup_compare_at_price\": \"string\",\n      \"sup_price\": \"string\",\n      \"supplier_sku\": \"string\",\n      \"title\": \"string\",\n      \"inventory_policy\": \"string\",\n      \"inventory_quantity\": -2134957877,\n      \"inventory_item_cost\": 9311.477712411746,\n      \"option1\": \"string\",\n      \"option2\": \"string\",\n      \"option3\": \"string\",\n      \"compare_at_price\": \"string\",\n      \"upc\": \"string\",\n      \"grams\": 9256.124267363068,\n      \"weight\": 7518.379336480782,\n      \"weight_unit\": \"str\",\n      \"pause_selling\": true\n    }\n  ],\n  \"body_html\": \"<string>\",\n  \"handle\": \"<string>\",\n  \"image_src\": \"<string>\",\n  \"images\": [\n    {\n      \"src\": \"<uri>\",\n      \"id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"display_src\": \"<uri>\",\n      \"width\": \"<integer>\",\n      \"height\": \"<integer>\",\n      \"canal_variant_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"variant_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"origin_supplier_image_id\": \"<uuid>\"\n    },\n    {\n      \"src\": \"<uri>\",\n      \"id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"display_src\": \"<uri>\",\n      \"width\": \"<integer>\",\n      \"height\": \"<integer>\",\n      \"canal_variant_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"variant_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"origin_supplier_image_id\": \"<uuid>\"\n    }\n  ],\n  \"options\": {},\n  \"product_type\": \"<string>\",\n  \"updated_at\": \"1976-12-06T03:15:09.320Z\",\n  \"published_at\": \"<dateTime>\",\n  \"status\": \"<string>\",\n  \"vendor\": \"<string>\",\n  \"tags\": \"<string>\",\n  \"permalink\": \"<uri>\",\n  \"number_of_reviews\": \"<integer>\",\n  \"star_rating\": \"<double>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "9bee46d5-8b5c-4aa6-a223-a3f6e04d5104",
+          "name": "products destroy",
+          "request": {
+            "name": "products destroy",
+            "description": {
+              "content": "\n**[Supplier Only]** Permanently remove a product listing, identified by its Rokt Catalog `ID` (UUID) in the URL path, from the Catalog platform.\n\n**Warning:** This action is **irreversible**. Ensure you intend to delete this product permanently.\n\nYou can only delete products that are directly owned by your Supplier account. Attempting to delete a product belonging to another shop will result in a `403 Forbidden` error.\n\n**Effect on Storefronts:** When a product is deleted, Catalog automatically **pauses** the corresponding product listings on any connected Storefronts that were actively selling it. An asynchronous task is initiated to inform these Storefronts about the product's removal.\n\nA successful deletion returns an HTTP `204 No Content` status with an empty response body.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "products",
+                ":id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "bd744718-cc66-4644-a5b0-b6b93b7456cd",
+              "name": "No response body",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3bf84ad7-7c1c-494d-8351-966a04b49501",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9ec46dcf-2650-4ba0-9c34-2c8ac8a7fcbe",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bb6a1d9f-d50b-419a-b99a-f8b7dec975e2",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "310afab9-731b-486d-bab6-7f89f6ef1983",
+          "name": "products reorder variants create",
+          "request": {
+            "name": "products reorder variants create",
+            "description": {
+              "content": "\n**[Supplier Only]** Update the display sequence of variants for a specific product. The product is identified by its Rokt Catalog `ID` (UUID) in the URL path.\n\nThe request body must contain a field named `variant_order`, which is a list of Catalog variant `ID`s (UUIDs) sorted in the desired display order (0-indexed).\n\n**Requirement:** The `variant_order` list **must** include the IDs of **all** currently existing variants for the specified product. Omitting or adding incorrect IDs will result in a validation error (400 Bad Request).\n\nThis reordering affects how variants are presented within the Catalog platform (e.g., in the Supplier dashboard). It may also influence the display order on connected Storefronts if their integration respects the `position` attribute of the variants.\n\nA successful update returns `200 OK` with the full product details (`ProductSerializer`), reflecting the new `position` values for each variant.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "products",
+                ":id",
+                "reorder_variants",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "variant_order",
+                  "value": "<uuid>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "variant_order",
+                  "value": "<uuid>",
+                  "description": "(Required) "
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "7ce91bcd-93a9-4eba-82af-0eaf8506eb53",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    "reorder_variants",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "variant_order",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "variant_order",
+                      "value": "<uuid>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"title\": \"<string>\",\n  \"id\": \"e68529a6-33f0-3696-cae3-7ea3bcb02010\",\n  \"shop\": {\n    \"country\": \"string\",\n    \"display_domain\": \"string\",\n    \"email\": \"string\",\n    \"id\": \"3c2a5805-2b4b-b5b6-69f9-721892e2ada3\",\n    \"myshopify_domain\": \"string\",\n    \"name\": \"string\",\n    \"phone\": \"string\",\n    \"description\": \"string\",\n    \"province\": \"string\",\n    \"domain\": \"string\",\n    \"privacy_policy_url\": \"http://WfHkzIwgqVNwhCXSjwQkMgBzAWk.klbV+xvcyEuG0A-NEyCuoc9pS\",\n    \"terms_of_service_url\": \"http://lzrxK.pgmdCrHNiznsp-JeNPZlnVo+K,AezYXaeofwYy,\"\n  },\n  \"variants\": [\n    {\n      \"available_for_ordering\": false,\n      \"id\": \"e9e70d8a-08cb-0518-ceb1-34771f75e621\",\n      \"is_exclusive_offer\": false,\n      \"origin_supplier_currency\": \"string\",\n      \"origin_supplier_id\": \"string\",\n      \"origin_supplier_name\": \"string\",\n      \"position\": 594,\n      \"price\": \"328.39\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"46e79b8f-08d4-7a2a-21ab-61c4f56e578f\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"https://fyRPZyLCpFKXhgfUoUoDpbNR.myxikpRyvTpfV.O3IjhzUj2ZsC8lgmUlbiSgnWz,UX6c4gg9e9IUhDbKOx\",\n        \"terms_of_service_url\": \"https://xOqwfZCZuDhTydAYRbujgzMfays.raFPn3iO-gzNHjuxXhkugNE2beZfLJUcAQLKu+lgVAu\"\n      },\n      \"sku\": \"string\",\n      \"sup_compare_at_price\": \"string\",\n      \"sup_price\": \"string\",\n      \"supplier_sku\": \"string\",\n      \"title\": \"string\",\n      \"inventory_policy\": \"string\",\n      \"inventory_quantity\": -1830313329,\n      \"inventory_item_cost\": 8034.280560634254,\n      \"option1\": \"string\",\n      \"option2\": \"string\",\n      \"option3\": \"string\",\n      \"compare_at_price\": \"string\",\n      \"upc\": \"string\",\n      \"grams\": 4500.794087740442,\n      \"weight\": 3030.3333901137507,\n      \"weight_unit\": \"str\",\n      \"pause_selling\": false\n    },\n    {\n      \"available_for_ordering\": false,\n      \"id\": \"3781acc7-af75-9d79-b8d9-87c472607c02\",\n      \"is_exclusive_offer\": false,\n      \"origin_supplier_currency\": \"string\",\n      \"origin_supplier_id\": \"string\",\n      \"origin_supplier_name\": \"string\",\n      \"position\": 2272,\n      \"price\": \"-203\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"e5eaedf4-c8ea-1cb6-8bd2-7b2c41f7ba7f\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"https://Tld.wsXO2IULGqTP5\",\n        \"terms_of_service_url\": \"https://kHoPdjjDYKvyYJbRtkNCMNBD.nxydUNB58DpCNEBK+-EBZj.LMR5LYg\"\n      },\n      \"sku\": \"string\",\n      \"sup_compare_at_price\": \"string\",\n      \"sup_price\": \"string\",\n      \"supplier_sku\": \"string\",\n      \"title\": \"string\",\n      \"inventory_policy\": \"string\",\n      \"inventory_quantity\": -2134957877,\n      \"inventory_item_cost\": 9311.477712411746,\n      \"option1\": \"string\",\n      \"option2\": \"string\",\n      \"option3\": \"string\",\n      \"compare_at_price\": \"string\",\n      \"upc\": \"string\",\n      \"grams\": 9256.124267363068,\n      \"weight\": 7518.379336480782,\n      \"weight_unit\": \"str\",\n      \"pause_selling\": true\n    }\n  ],\n  \"body_html\": \"<string>\",\n  \"handle\": \"<string>\",\n  \"image_src\": \"<string>\",\n  \"images\": [\n    {\n      \"src\": \"<uri>\",\n      \"id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"display_src\": \"<uri>\",\n      \"width\": \"<integer>\",\n      \"height\": \"<integer>\",\n      \"canal_variant_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"variant_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"origin_supplier_image_id\": \"<uuid>\"\n    },\n    {\n      \"src\": \"<uri>\",\n      \"id\": \"<string>\",\n      \"position\": \"<integer>\",\n      \"display_src\": \"<uri>\",\n      \"width\": \"<integer>\",\n      \"height\": \"<integer>\",\n      \"canal_variant_ids\": [\n        \"string\",\n        \"string\"\n      ],\n      \"variant_ids\": [\n        \"<string>\",\n        \"<string>\"\n      ],\n      \"origin_supplier_image_id\": \"<uuid>\"\n    }\n  ],\n  \"options\": {},\n  \"product_type\": \"<string>\",\n  \"updated_at\": \"1976-12-06T03:15:09.320Z\",\n  \"published_at\": \"<dateTime>\",\n  \"status\": \"<string>\",\n  \"vendor\": \"<string>\",\n  \"tags\": \"<string>\",\n  \"permalink\": \"<uri>\",\n  \"number_of_reviews\": \"<integer>\",\n  \"star_rating\": \"<double>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "972a8647-0f13-4583-bfa7-2d40f4b5f284",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    "reorder_variants",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "variant_order",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "variant_order",
+                      "value": "<uuid>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4c42079c-8466-4f2c-b539-6b095fddea19",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    "reorder_variants",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "variant_order",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "variant_order",
+                      "value": "<uuid>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "01c01efa-755e-4b12-a046-f0b2339d6dcf",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    "reorder_variants",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "variant_order",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "variant_order",
+                      "value": "<uuid>"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "629e8cfb-a0e2-44c6-970b-ec5622e699a3",
+          "name": "products resync create",
+          "request": {
+            "name": "products resync create",
+            "description": {
+              "content": "\nResynchronize a retailer (Shopkeep) product with its origin supplier product.\n\nIf `fields_to_resync` is provided, only those fields will be updated; otherwise all fields are resynced.\n\nOn success, returns the updated product data. If the resync is queued to run asynchronously (e.g. due to rate limits), returns a message indicating the resync has started.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "products",
+                ":id",
+                "resync",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "fields_to_resync",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "fields_to_resync",
+                  "value": "<string>"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2dc48029-0bc4-4ba3-b72d-f8db23eef2c8",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    "resync",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "fields_to_resync",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "fields_to_resync",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"status\": \"string\",\n  \"shopify_product\": {\n    \"title\": \"<string>\",\n    \"id\": \"4f29a825-237d-689c-ccb5-1ca4db956b16\",\n    \"shop\": {\n      \"country\": \"string\",\n      \"display_domain\": \"string\",\n      \"email\": \"string\",\n      \"id\": \"7d015704-a154-9be9-4b6c-2df3b4129827\",\n      \"myshopify_domain\": \"string\",\n      \"name\": \"string\",\n      \"phone\": \"string\",\n      \"description\": \"string\",\n      \"province\": \"string\",\n      \"domain\": \"string\",\n      \"privacy_policy_url\": \"https://gKbfyrSvNDeAMwMEmTF.mzsK58O4paC9sITi6FETowfo0Hk7nJoqMP2Vd3oQ2jGCj5yWtHNRzy6kuZBcln2qSSm1mNRgqJ\",\n      \"terms_of_service_url\": \"https://RRtefYFVMgHkQbYjy.rpvHAPtba9h8OabzGT1ZS4YihuEZPxW7aCAg\"\n    },\n    \"variants\": [\n      {\n        \"available_for_ordering\": true,\n        \"id\": \"404168fa-7152-0e38-d826-962953d30b55\",\n        \"is_exclusive_offer\": true,\n        \"origin_supplier_currency\": \"string\",\n        \"origin_supplier_id\": \"string\",\n        \"origin_supplier_name\": \"string\",\n        \"position\": 7513,\n        \"price\": \"0150300869.74\",\n        \"shop\": {\n          \"country\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"display_domain\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"email\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"myshopify_domain\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"phone\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"province\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"domain\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"privacy_policy_url\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"terms_of_service_url\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"sku\": \"string\",\n        \"sup_compare_at_price\": \"string\",\n        \"sup_price\": \"string\",\n        \"supplier_sku\": \"string\",\n        \"title\": \"string\",\n        \"inventory_policy\": \"string\",\n        \"inventory_quantity\": 621181552,\n        \"inventory_item_cost\": 7151.448870903056,\n        \"option1\": \"string\",\n        \"option2\": \"string\",\n        \"option3\": \"string\",\n        \"compare_at_price\": \"string\",\n        \"upc\": \"string\",\n        \"grams\": 8609.536501778275,\n        \"weight\": 3553.20617957541,\n        \"weight_unit\": \"str\",\n        \"pause_selling\": false\n      },\n      {\n        \"available_for_ordering\": false,\n        \"id\": \"55f5c6f6-ab00-ad6f-2637-afdee7050439\",\n        \"is_exclusive_offer\": false,\n        \"origin_supplier_currency\": \"string\",\n        \"origin_supplier_id\": \"string\",\n        \"origin_supplier_name\": \"string\",\n        \"position\": 9461,\n        \"price\": \"44483655\",\n        \"shop\": {\n          \"country\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"display_domain\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"email\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"myshopify_domain\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"phone\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"province\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"domain\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"privacy_policy_url\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"terms_of_service_url\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"sku\": \"string\",\n        \"sup_compare_at_price\": \"string\",\n        \"sup_price\": \"string\",\n        \"supplier_sku\": \"string\",\n        \"title\": \"string\",\n        \"inventory_policy\": \"string\",\n        \"inventory_quantity\": 1623561429,\n        \"inventory_item_cost\": 2368.2804965184523,\n        \"option1\": \"string\",\n        \"option2\": \"string\",\n        \"option3\": \"string\",\n        \"compare_at_price\": \"string\",\n        \"upc\": \"string\",\n        \"grams\": 8351.237302643865,\n        \"weight\": 4754.129181117441,\n        \"weight_unit\": \"str\",\n        \"pause_selling\": false\n      }\n    ],\n    \"body_html\": \"<string>\",\n    \"handle\": \"<string>\",\n    \"image_src\": \"<string>\",\n    \"images\": [\n      {\n        \"src\": \"<uri>\",\n        \"id\": \"<string>\",\n        \"position\": \"<integer>\",\n        \"display_src\": \"<uri>\",\n        \"width\": \"<integer>\",\n        \"height\": \"<integer>\",\n        \"canal_variant_ids\": [\n          \"string\",\n          \"string\"\n        ],\n        \"variant_ids\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"origin_supplier_image_id\": \"<uuid>\"\n      },\n      {\n        \"src\": \"<uri>\",\n        \"id\": \"<string>\",\n        \"position\": \"<integer>\",\n        \"display_src\": \"<uri>\",\n        \"width\": \"<integer>\",\n        \"height\": \"<integer>\",\n        \"canal_variant_ids\": [\n          \"string\",\n          \"string\"\n        ],\n        \"variant_ids\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"origin_supplier_image_id\": \"<uuid>\"\n      }\n    ],\n    \"options\": {},\n    \"product_type\": \"<string>\",\n    \"updated_at\": \"2014-08-10T14:56:01.074Z\",\n    \"published_at\": \"<dateTime>\",\n    \"status\": \"<string>\",\n    \"vendor\": \"<string>\",\n    \"tags\": \"<string>\",\n    \"permalink\": \"<uri>\",\n    \"number_of_reviews\": \"<integer>\",\n    \"star_rating\": \"<double>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f6f52d43-94a2-4ea1-999c-474e984b044e",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    "resync",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "fields_to_resync",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "fields_to_resync",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ok\": false,\n  \"status\": \"string\",\n  \"shopify_product\": {\n    \"title\": \"<string>\",\n    \"id\": \"4f29a825-237d-689c-ccb5-1ca4db956b16\",\n    \"shop\": {\n      \"country\": \"string\",\n      \"display_domain\": \"string\",\n      \"email\": \"string\",\n      \"id\": \"7d015704-a154-9be9-4b6c-2df3b4129827\",\n      \"myshopify_domain\": \"string\",\n      \"name\": \"string\",\n      \"phone\": \"string\",\n      \"description\": \"string\",\n      \"province\": \"string\",\n      \"domain\": \"string\",\n      \"privacy_policy_url\": \"https://gKbfyrSvNDeAMwMEmTF.mzsK58O4paC9sITi6FETowfo0Hk7nJoqMP2Vd3oQ2jGCj5yWtHNRzy6kuZBcln2qSSm1mNRgqJ\",\n      \"terms_of_service_url\": \"https://RRtefYFVMgHkQbYjy.rpvHAPtba9h8OabzGT1ZS4YihuEZPxW7aCAg\"\n    },\n    \"variants\": [\n      {\n        \"available_for_ordering\": true,\n        \"id\": \"404168fa-7152-0e38-d826-962953d30b55\",\n        \"is_exclusive_offer\": true,\n        \"origin_supplier_currency\": \"string\",\n        \"origin_supplier_id\": \"string\",\n        \"origin_supplier_name\": \"string\",\n        \"position\": 7513,\n        \"price\": \"0150300869.74\",\n        \"shop\": {\n          \"country\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"display_domain\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"email\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"myshopify_domain\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"phone\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"province\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"domain\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"privacy_policy_url\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"terms_of_service_url\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"sku\": \"string\",\n        \"sup_compare_at_price\": \"string\",\n        \"sup_price\": \"string\",\n        \"supplier_sku\": \"string\",\n        \"title\": \"string\",\n        \"inventory_policy\": \"string\",\n        \"inventory_quantity\": 621181552,\n        \"inventory_item_cost\": 7151.448870903056,\n        \"option1\": \"string\",\n        \"option2\": \"string\",\n        \"option3\": \"string\",\n        \"compare_at_price\": \"string\",\n        \"upc\": \"string\",\n        \"grams\": 8609.536501778275,\n        \"weight\": 3553.20617957541,\n        \"weight_unit\": \"str\",\n        \"pause_selling\": false\n      },\n      {\n        \"available_for_ordering\": false,\n        \"id\": \"55f5c6f6-ab00-ad6f-2637-afdee7050439\",\n        \"is_exclusive_offer\": false,\n        \"origin_supplier_currency\": \"string\",\n        \"origin_supplier_id\": \"string\",\n        \"origin_supplier_name\": \"string\",\n        \"position\": 9461,\n        \"price\": \"44483655\",\n        \"shop\": {\n          \"country\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"display_domain\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"email\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"id\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"myshopify_domain\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"name\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"phone\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"description\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"province\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"domain\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"privacy_policy_url\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          },\n          \"terms_of_service_url\": {\n            \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n          }\n        },\n        \"sku\": \"string\",\n        \"sup_compare_at_price\": \"string\",\n        \"sup_price\": \"string\",\n        \"supplier_sku\": \"string\",\n        \"title\": \"string\",\n        \"inventory_policy\": \"string\",\n        \"inventory_quantity\": 1623561429,\n        \"inventory_item_cost\": 2368.2804965184523,\n        \"option1\": \"string\",\n        \"option2\": \"string\",\n        \"option3\": \"string\",\n        \"compare_at_price\": \"string\",\n        \"upc\": \"string\",\n        \"grams\": 8351.237302643865,\n        \"weight\": 4754.129181117441,\n        \"weight_unit\": \"str\",\n        \"pause_selling\": false\n      }\n    ],\n    \"body_html\": \"<string>\",\n    \"handle\": \"<string>\",\n    \"image_src\": \"<string>\",\n    \"images\": [\n      {\n        \"src\": \"<uri>\",\n        \"id\": \"<string>\",\n        \"position\": \"<integer>\",\n        \"display_src\": \"<uri>\",\n        \"width\": \"<integer>\",\n        \"height\": \"<integer>\",\n        \"canal_variant_ids\": [\n          \"string\",\n          \"string\"\n        ],\n        \"variant_ids\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"origin_supplier_image_id\": \"<uuid>\"\n      },\n      {\n        \"src\": \"<uri>\",\n        \"id\": \"<string>\",\n        \"position\": \"<integer>\",\n        \"display_src\": \"<uri>\",\n        \"width\": \"<integer>\",\n        \"height\": \"<integer>\",\n        \"canal_variant_ids\": [\n          \"string\",\n          \"string\"\n        ],\n        \"variant_ids\": [\n          \"<string>\",\n          \"<string>\"\n        ],\n        \"origin_supplier_image_id\": \"<uuid>\"\n      }\n    ],\n    \"options\": {},\n    \"product_type\": \"<string>\",\n    \"updated_at\": \"2014-08-10T14:56:01.074Z\",\n    \"published_at\": \"<dateTime>\",\n    \"status\": \"<string>\",\n    \"vendor\": \"<string>\",\n    \"tags\": \"<string>\",\n    \"permalink\": \"<uri>\",\n    \"number_of_reviews\": \"<integer>\",\n    \"star_rating\": \"<double>\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dc134a28-0919-4c5c-8212-815be45549fb",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    "resync",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "fields_to_resync",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "fields_to_resync",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f27e5790-554a-4728-bbe4-2f17c91b2ccd",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    "resync",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "fields_to_resync",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "fields_to_resync",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5b91d115-3b8e-4ca7-9d29-608e22f1fcf2",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    ":id",
+                    "resync",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "fields_to_resync",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "fields_to_resync",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "dc67dfc8-560c-455e-a11f-51e5a3f3f023",
+          "name": "products upsell products list",
+          "request": {
+            "name": "products upsell products list",
+            "description": {
+              "content": "\n**[Storefront Only]** Retrieve a paginated list of active products that are eligible for upselling.\n\nThis endpoint returns products from Suppliers with whom you have an active and approved partnership.\n\nProducts must meet the following criteria:\n\n1) Have status='active',\n\n2) Have at least one variant that is connected to a supplier variant, listed on Catalog, and not paused for selling,\n\n3) Have passed ads eligibility checks,\n\n4) Have at least one available variant in a non-deleted product set,\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "products",
+                "upsell_products",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "ordering",
+                  "value": "<string>",
+                  "description": "Which field to use when ordering the results."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "The pagination cursor value."
+                },
+                {
+                  "disabled": false,
+                  "key": "supplier_id",
+                  "value": "<uuid>",
+                  "description": "Filter products by the Catalog ID of a specific connected Supplier."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ac6ff45d-ec24-448f-9af2-89b7f91e363f",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    "upsell_products",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "supplier_id",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    {\n      \"customer_charge_amount\": {\n        \"key_0\": {}\n      },\n      \"id\": \"c948ab45-f2b4-ee35-1807-5c5ec42700e0\",\n      \"images\": [\n        {\n          \"key_0\": {}\n        },\n        {\n          \"key_0\": {},\n          \"key_1\": {}\n        }\n      ],\n      \"options\": [\n        {\n          \"key_0\": {},\n          \"key_1\": {},\n          \"key_2\": {}\n        },\n        {\n          \"key_0\": {},\n          \"key_1\": {}\n        }\n      ],\n      \"product_type_category\": \"string\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"060a735b-3983-34d3-a8c6-cc8e6e7f7502\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"https://vkbhETLJKUEfTsXixNQysBWbvSitx.rntPr\",\n        \"terms_of_service_url\": \"http://QrQZGqo.pghucpp0kRSPy4u6RkoLGAv8A+tme4LkvaLAq+\"\n      },\n      \"title\": \"string\",\n      \"updated_at\": \"1950-04-07T16:57:42.952Z\",\n      \"variants\": [\n        {\n          \"available_for_ordering\": false,\n          \"id\": \"521f1413-147f-01d7-c643-ed225895ba64\",\n          \"is_exclusive_offer\": false,\n          \"origin_supplier_currency\": \"string\",\n          \"origin_supplier_id\": \"string\",\n          \"origin_supplier_name\": \"string\",\n          \"position\": 3311,\n          \"price\": \".00\",\n          \"shop\": {\n            \"country\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"display_domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"myshopify_domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"phone\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"province\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"privacy_policy_url\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"terms_of_service_url\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"sku\": \"string\",\n          \"sup_compare_at_price\": \"string\",\n          \"sup_price\": \"string\",\n          \"supplier_sku\": \"string\",\n          \"title\": \"string\",\n          \"inventory_policy\": \"string\",\n          \"inventory_quantity\": 918293147,\n          \"inventory_item_cost\": 4037.900468407807,\n          \"option1\": \"string\",\n          \"option2\": \"string\",\n          \"option3\": \"string\",\n          \"compare_at_price\": \"string\",\n          \"upc\": \"string\",\n          \"grams\": 5652.704421020158,\n          \"weight\": 2227.160207614347,\n          \"weight_unit\": \"str\",\n          \"pause_selling\": true\n        },\n        {\n          \"available_for_ordering\": true,\n          \"id\": \"2bacf117-b220-6bf6-d49c-9262f934dfea\",\n          \"is_exclusive_offer\": true,\n          \"origin_supplier_currency\": \"string\",\n          \"origin_supplier_id\": \"string\",\n          \"origin_supplier_name\": \"string\",\n          \"position\": 5487,\n          \"price\": \"-53780365\",\n          \"shop\": {\n            \"country\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"display_domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"myshopify_domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"phone\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"province\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"privacy_policy_url\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"terms_of_service_url\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"sku\": \"string\",\n          \"sup_compare_at_price\": \"string\",\n          \"sup_price\": \"string\",\n          \"supplier_sku\": \"string\",\n          \"title\": \"string\",\n          \"inventory_policy\": \"string\",\n          \"inventory_quantity\": 1865120774,\n          \"inventory_item_cost\": 5861.188670065895,\n          \"option1\": \"string\",\n          \"option2\": \"string\",\n          \"option3\": \"string\",\n          \"compare_at_price\": \"string\",\n          \"upc\": \"string\",\n          \"grams\": 7181.986434129223,\n          \"weight\": 4097.788947506593,\n          \"weight_unit\": \"str\",\n          \"pause_selling\": false\n        }\n      ],\n      \"body_html\": \"string\",\n      \"handle\": \"string\",\n      \"image_src\": \"string\",\n      \"product_type\": \"string\",\n      \"published_at\": \"2000-07-01T10:34:43.286Z\",\n      \"status\": \"<string>\",\n      \"vendor\": \"string\",\n      \"tags\": \"string\",\n      \"permalink\": \"http://MICByazBMuVaVuhNymPVJB.ivoESGwAT2qsrlcnjM48.CqoYzhsW3-\",\n      \"number_of_reviews\": 372812289,\n      \"star_rating\": 5287.557751716208\n    },\n    {\n      \"customer_charge_amount\": {\n        \"key_0\": {}\n      },\n      \"id\": \"687ced85-b576-a9fe-a912-784ccd1c9fea\",\n      \"images\": [\n        {\n          \"key_0\": {}\n        },\n        {\n          \"key_0\": {},\n          \"key_1\": {}\n        }\n      ],\n      \"options\": [\n        {\n          \"key_0\": {},\n          \"key_1\": {},\n          \"key_2\": {},\n          \"key_3\": {},\n          \"key_4\": {}\n        },\n        {\n          \"key_0\": {},\n          \"key_1\": {},\n          \"key_2\": {}\n        }\n      ],\n      \"product_type_category\": \"string\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"89ebb9d0-5576-b8bd-202a-d3d5d762d968\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"https://acSBlabAPhtpleWHBjoTODcSVgaWPQWj.cuPmz+MiCqJkkReNEWSjikij9HnjnuaibhAYk\",\n        \"terms_of_service_url\": \"https://wPcdHDNzAmSYFvcWfmGSV.zujg5Jqm2u,k0Qx4O5fCIGwma5,4UUnhCK\"\n      },\n      \"title\": \"string\",\n      \"updated_at\": \"2019-09-05T19:26:45.965Z\",\n      \"variants\": [\n        {\n          \"available_for_ordering\": true,\n          \"id\": \"1d4b4865-82af-02cf-0544-4b0a168c8941\",\n          \"is_exclusive_offer\": true,\n          \"origin_supplier_currency\": \"string\",\n          \"origin_supplier_id\": \"string\",\n          \"origin_supplier_name\": \"string\",\n          \"position\": 9685,\n          \"price\": \"558\",\n          \"shop\": {\n            \"country\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"display_domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"myshopify_domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"phone\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"province\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"privacy_policy_url\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"terms_of_service_url\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"sku\": \"string\",\n          \"sup_compare_at_price\": \"string\",\n          \"sup_price\": \"string\",\n          \"supplier_sku\": \"string\",\n          \"title\": \"string\",\n          \"inventory_policy\": \"string\",\n          \"inventory_quantity\": 924218627,\n          \"inventory_item_cost\": 1030.1049831662478,\n          \"option1\": \"string\",\n          \"option2\": \"string\",\n          \"option3\": \"string\",\n          \"compare_at_price\": \"string\",\n          \"upc\": \"string\",\n          \"grams\": 824.0216459017646,\n          \"weight\": 2661.7806984324066,\n          \"weight_unit\": \"str\",\n          \"pause_selling\": false\n        },\n        {\n          \"available_for_ordering\": false,\n          \"id\": \"ab413b47-56f8-bc59-eb24-a4c07e06486c\",\n          \"is_exclusive_offer\": false,\n          \"origin_supplier_currency\": \"string\",\n          \"origin_supplier_id\": \"string\",\n          \"origin_supplier_name\": \"string\",\n          \"position\": 6304,\n          \"price\": \".69\",\n          \"shop\": {\n            \"country\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"display_domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"email\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"id\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"myshopify_domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"name\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"phone\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"description\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"province\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"domain\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"privacy_policy_url\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"terms_of_service_url\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"sku\": \"string\",\n          \"sup_compare_at_price\": \"string\",\n          \"sup_price\": \"string\",\n          \"supplier_sku\": \"string\",\n          \"title\": \"string\",\n          \"inventory_policy\": \"string\",\n          \"inventory_quantity\": 1892979184,\n          \"inventory_item_cost\": 1799.3576940236221,\n          \"option1\": \"string\",\n          \"option2\": \"string\",\n          \"option3\": \"string\",\n          \"compare_at_price\": \"string\",\n          \"upc\": \"string\",\n          \"grams\": 9943.181912580858,\n          \"weight\": 7949.2399002465145,\n          \"weight_unit\": \"str\",\n          \"pause_selling\": false\n        }\n      ],\n      \"body_html\": \"string\",\n      \"handle\": \"string\",\n      \"image_src\": \"string\",\n      \"product_type\": \"string\",\n      \"published_at\": \"1958-02-11T03:22:48.017Z\",\n      \"status\": \"<string>\",\n      \"vendor\": \"string\",\n      \"tags\": \"string\",\n      \"permalink\": \"http://fNjMFZOXnV.plmgS,fco+-v,z,MeAuf7V75v\",\n      \"number_of_reviews\": -841705850,\n      \"star_rating\": 652.5404891411468\n    }\n  ],\n  \"next\": \"http://dIcHehRCJEIQbWGKTkFCS.ygiTMLz4f7UpNkUUZluYPGfBi0tKS,snKQotmso4OcUPqI0.aXVTz\",\n  \"previous\": \"http://api.example.org/accounts/?cursor=cj0xJnA9NDg3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7271ca75-a312-4492-8b9a-ae3b4acafd57",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    "upsell_products",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "supplier_id",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1f3937be-a863-4067-8dfb-cbafef8a9e7f",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    "upsell_products",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "supplier_id",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e16612b3-a9a1-4ffe-a0d0-b110af6b5029",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "products",
+                    "upsell_products",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "supplier_id",
+                      "value": "<uuid>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.shopcanal.com/platform",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "e003e143-871b-4629-8323-de1d471ebfbb",
+    "name": "Rokt Catalog csv products API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Integrate with Rokt Catalog",
+      "type": "text/plain"
+    }
+  }
+}

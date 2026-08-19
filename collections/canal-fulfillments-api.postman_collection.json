@@ -1,0 +1,2162 @@
+{
+  "item": [
+    {
+      "id": "ca0e4013-32a0-48b5-8207-fd4c9661558e",
+      "name": "fulfillments",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "12179e1d-0770-40df-a3eb-f676295c0f9d",
+          "name": "fulfillments list",
+          "request": {
+            "name": "fulfillments list",
+            "description": {
+              "content": "\nRetrieve a paginated list of fulfillment records associated with the authenticated store, reflecting its role in the order process.\n\n- **If called by a Storefront:** Returns fulfillments created by connected Suppliers for orders originating from the Storefront. This allows the Storefront to track shipments for items their customers ordered.\n\n- **If called by a Supplier:** Returns fulfillments created *by* this Supplier for orders they received from connected Storefronts.\n\nResults (`FulfillmentSerializer`) include tracking details when present, status, associated line items, and timestamps.\n\nPagination is cursor-based (`PlatformPagination`). Ordering is available on `created_at` and `updated_at`, defaulting to `-created_at`.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "fulfillments",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "ordering",
+                  "value": "<string>",
+                  "description": "Which field to use when ordering the results."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "The pagination cursor value."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "21db1782-b297-47ca-9009-b2d46cab09c3",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillments",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    {\n      \"id\": \"5725dc01-4780-f998-5705-fda6b275f63a\",\n      \"line_items\": [\n        {\n          \"fulfillable_quantity\": 4105,\n          \"id\": \"23752672-f009-28f4-92a6-bacfebf65b1b\",\n          \"price\": 6695.031159104601,\n          \"quantity\": 4001,\n          \"variant_id\": \"791af92d-a200-016a-df7b-b7af9a65925b\",\n          \"requires_shipping\": true,\n          \"title\": \"string\",\n          \"sku\": \"string\"\n        },\n        {\n          \"fulfillable_quantity\": 7184,\n          \"id\": \"be5e27eb-ec4f-f963-10d4-fef3765dcc60\",\n          \"price\": 8713.593804857073,\n          \"quantity\": 3928,\n          \"variant_id\": \"b74cd7a3-81a8-5d30-bbfa-fa136308f991\",\n          \"requires_shipping\": false,\n          \"title\": \"string\",\n          \"sku\": \"string\"\n        }\n      ],\n      \"name\": \"string\",\n      \"order_id\": \"d9671cf2-76f1-3d51-768c-db12c56fddfa\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"798caefb-c8d6-7529-cae8-d141009e2582\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"http://CLRv.ocdW8yv-XCn2j.Pmoulyi4mkRFNS\",\n        \"terms_of_service_url\": \"https://kwuyh.fyyeAK9fCVKUt,nhlEIJ-CPdwYruZd\"\n      },\n      \"service\": \"string\",\n      \"shipment_status\": \"string\",\n      \"status\": \"string\",\n      \"tracking_company\": \"string\",\n      \"tracking_numbers\": [\n        \"string\",\n        \"string\"\n      ],\n      \"tracking_urls\": [\n        \"string\",\n        \"string\"\n      ]\n    },\n    {\n      \"id\": \"b58d4d2c-3f20-6bcc-898c-74c91fdd3ffd\",\n      \"line_items\": [\n        {\n          \"fulfillable_quantity\": 3988,\n          \"id\": \"36d2df57-b45c-1785-b7b3-8646ef790671\",\n          \"price\": 9375.941725129022,\n          \"quantity\": 2614,\n          \"variant_id\": \"1ab50e37-fd32-392d-9cc0-37943f5a321a\",\n          \"requires_shipping\": true,\n          \"title\": \"string\",\n          \"sku\": \"string\"\n        },\n        {\n          \"fulfillable_quantity\": 3985,\n          \"id\": \"db8ae2b2-370d-c1c9-5ec8-7869775f1ee7\",\n          \"price\": 9502.201711453214,\n          \"quantity\": 7014,\n          \"variant_id\": \"a12667b7-a90c-0ec5-d91e-2fd88938276c\",\n          \"requires_shipping\": true,\n          \"title\": \"string\",\n          \"sku\": \"string\"\n        }\n      ],\n      \"name\": \"string\",\n      \"order_id\": \"08e2e365-804a-01c7-4fbd-5c452aec45a2\",\n      \"shop\": {\n        \"country\": \"string\",\n        \"display_domain\": \"string\",\n        \"email\": \"string\",\n        \"id\": \"b465a430-228d-209d-cb92-8e7fcc8cbbc8\",\n        \"myshopify_domain\": \"string\",\n        \"name\": \"string\",\n        \"phone\": \"string\",\n        \"description\": \"string\",\n        \"province\": \"string\",\n        \"domain\": \"string\",\n        \"privacy_policy_url\": \"http://EuWrWCCIfqpcRzDLykNVyvIwbr.zrP3S0HP2abvTwHfesZVYImPYVBqUqhlfp\",\n        \"terms_of_service_url\": \"https://jBwBaoEOzwPHYoPeBwdPHohIJOaOpA.bpssazuVDpuzb5Q4Cw\"\n      },\n      \"service\": \"string\",\n      \"shipment_status\": \"string\",\n      \"status\": \"string\",\n      \"tracking_company\": \"string\",\n      \"tracking_numbers\": [\n        \"string\",\n        \"string\"\n      ],\n      \"tracking_urls\": [\n        \"string\",\n        \"string\"\n      ]\n    }\n  ],\n  \"next\": \"http://LowOkblEBNTcbOUfUutJqZpfg.zkvgBmFftewiDbnPf8\",\n  \"previous\": \"http://api.example.org/accounts/?cursor=cj0xJnA9NDg3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "afd654ba-fac5-4234-9c8b-9f9a10c32a35",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillments",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c1f5acf6-db92-453c-9245-cd95fcdd7788",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillments",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aa8b2d33-8f04-47df-a0c7-e3e10f7b2efa",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillments",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "931f1b3d-c054-4a12-8d5c-ae348079446b",
+          "name": "fulfillments create",
+          "request": {
+            "name": "fulfillments create",
+            "description": {
+              "content": "\n**[Supplier Only]** Create a fulfillment record for items in an order received from a connected Storefront.\n\nThe request body (`CreateFulfillmentSerializer`) must specify:\n\n`order_id` (UUID of the *Supplier's* Rokt Catalog order record) and a list of `line_items`.\n\nEach object in `line_items` needs the Catalog `id` (UUID) of the *Supplier's* line item record and the `quantity` being fulfilled.\n\nFor physical shipments, include tracking information (`tracking_company`, `tracking_numbers`, `tracking_urls`) when available. For digital/email fulfillment with no shipment, omit the tracking fields.\n\n**Process:**\n\n1. **Validation:** Checks if the order exists, belongs to the Supplier, is a connected order, and if the provided line items are valid. Returns `400 Bad Request` or `404 Not Found` on failure.\n\n2. **Create Supplier Fulfillment:** Creates the fulfillment record associated with the Supplier's order in Catalog. Considers feature flags to determine if the `notify_customer` flag should be set during downstream sync.\n\n3. **Sync to Storefront:** Triggers a synchronization process. This attempts to create or update the corresponding fulfillment record on the original Storefront's order (e.g., via Shopify API), including tracking information when present.\n\n4. **Webhook:** Emits a `FULFILLMENT_UPDATE` webhook event containing details of the **Supplier's** newly created fulfillment record.\n\nA successful creation returns `201 Created` with the details of the Supplier's fulfillment record (`FulfillmentSerializer`).\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "fulfillments",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "line_items",
+                  "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "line_items",
+                  "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "order_id",
+                  "value": "<uuid>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "service",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "shipment_status",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "tracking_company",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tracking_numbers",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tracking_numbers",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tracking_urls",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tracking_urls",
+                  "value": "<string>"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "85fd4f62-33e7-43ff-8fd3-3e211917b11f",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillments",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "order_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "service",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "shipment_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_company",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_numbers",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_numbers",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_urls",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_urls",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"03f41929-eab3-c1fa-265a-07456583a3b7\",\n  \"line_items\": [\n    {\n      \"fulfillable_quantity\": 6076,\n      \"id\": \"dd24f325-a1b6-2660-1b2a-1a20ac252978\",\n      \"price\": 3407.0704196946353,\n      \"quantity\": 4204,\n      \"variant_id\": \"9ee362ac-32b3-f9af-7e71-738e0fbf2ce3\",\n      \"requires_shipping\": true,\n      \"title\": \"string\",\n      \"sku\": \"string\"\n    },\n    {\n      \"fulfillable_quantity\": 9278,\n      \"id\": \"8b17fd00-bbd5-ddd4-b401-34de34190ab4\",\n      \"price\": 1790.885513733581,\n      \"quantity\": 2480,\n      \"variant_id\": \"3e2baa24-c1fe-c4b6-acd5-00a455e6e123\",\n      \"requires_shipping\": true,\n      \"title\": \"string\",\n      \"sku\": \"string\"\n    }\n  ],\n  \"name\": \"string\",\n  \"order_id\": \"3f4aa542-0e03-cc48-5487-d89cd36a98ac\",\n  \"shop\": {\n    \"country\": \"string\",\n    \"display_domain\": \"string\",\n    \"email\": \"string\",\n    \"id\": \"2a6b09f5-561e-dca7-3723-149fef078857\",\n    \"myshopify_domain\": \"string\",\n    \"name\": \"string\",\n    \"phone\": \"string\",\n    \"description\": \"string\",\n    \"province\": \"string\",\n    \"domain\": \"string\",\n    \"privacy_policy_url\": \"https://ChRVtONbbZVzfqKrnbsBcbNA.siopd.Mq5c00hvRxGkCLpl5GXXvJZ5Pz1BGctSJchDx-fMoeeUJ2MFSWcYNr\",\n    \"terms_of_service_url\": \"http://n.pgcu5QMLtSfkCa3AXO7VeYZqiyEB9Phir2Wl\"\n  },\n  \"service\": \"string\",\n  \"shipment_status\": \"string\",\n  \"status\": \"string\",\n  \"tracking_company\": \"string\",\n  \"tracking_numbers\": [\n    \"string\",\n    \"string\"\n  ],\n  \"tracking_urls\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "756d27c2-6223-4590-b399-ba0675b68bac",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillments",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "order_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "service",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "shipment_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_company",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_numbers",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_numbers",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_urls",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_urls",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2e2091cf-0e99-47fa-a727-cf1bb995531f",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillments",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "order_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "service",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "shipment_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_company",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_numbers",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_numbers",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_urls",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_urls",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "17c58a47-9a2a-4378-8769-7b1c563d2fd5",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillments",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "line_items",
+                      "value": "{\"id\":\"<uuid>\",\"quantity\":\"<integer>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "order_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "service",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "shipment_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_company",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_numbers",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_numbers",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_urls",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_urls",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "69eb39e1-f515-4aef-95f1-aa528ab4d6fb",
+          "name": "fulfillments retrieve",
+          "request": {
+            "name": "fulfillments retrieve",
+            "description": {
+              "content": "\nRetrieve the full details for a specific fulfillment record, identified by its Rokt Catalog `ID` (UUID) in the URL path.\n\nAccess is restricted to fulfillments associated with the authenticated store (`request.shop`). This means:\n\n- **Storefronts** can retrieve details of fulfillments created by their Suppliers for their orders.\n\n- **Suppliers** can retrieve details of fulfillments they created.\n\nThe response (`FulfillmentSerializer`) includes the fulfillment `status` (e.g., 'fulfilled', 'cancelled'), optional `tracking_company`, optional `tracking_numbers`, optional `tracking_urls`, the list of `line_items` included in this fulfillment (with quantities), and relevant timestamps.\n\nIf the fulfillment `ID` is invalid or not associated with an order linked to your store, a `404 Not Found` error is returned.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "fulfillments",
+                ":id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "9e06ec92-bf8e-4c6f-8905-0a9f66215fd8",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillments",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"03f41929-eab3-c1fa-265a-07456583a3b7\",\n  \"line_items\": [\n    {\n      \"fulfillable_quantity\": 6076,\n      \"id\": \"dd24f325-a1b6-2660-1b2a-1a20ac252978\",\n      \"price\": 3407.0704196946353,\n      \"quantity\": 4204,\n      \"variant_id\": \"9ee362ac-32b3-f9af-7e71-738e0fbf2ce3\",\n      \"requires_shipping\": true,\n      \"title\": \"string\",\n      \"sku\": \"string\"\n    },\n    {\n      \"fulfillable_quantity\": 9278,\n      \"id\": \"8b17fd00-bbd5-ddd4-b401-34de34190ab4\",\n      \"price\": 1790.885513733581,\n      \"quantity\": 2480,\n      \"variant_id\": \"3e2baa24-c1fe-c4b6-acd5-00a455e6e123\",\n      \"requires_shipping\": true,\n      \"title\": \"string\",\n      \"sku\": \"string\"\n    }\n  ],\n  \"name\": \"string\",\n  \"order_id\": \"3f4aa542-0e03-cc48-5487-d89cd36a98ac\",\n  \"shop\": {\n    \"country\": \"string\",\n    \"display_domain\": \"string\",\n    \"email\": \"string\",\n    \"id\": \"2a6b09f5-561e-dca7-3723-149fef078857\",\n    \"myshopify_domain\": \"string\",\n    \"name\": \"string\",\n    \"phone\": \"string\",\n    \"description\": \"string\",\n    \"province\": \"string\",\n    \"domain\": \"string\",\n    \"privacy_policy_url\": \"https://ChRVtONbbZVzfqKrnbsBcbNA.siopd.Mq5c00hvRxGkCLpl5GXXvJZ5Pz1BGctSJchDx-fMoeeUJ2MFSWcYNr\",\n    \"terms_of_service_url\": \"http://n.pgcu5QMLtSfkCa3AXO7VeYZqiyEB9Phir2Wl\"\n  },\n  \"service\": \"string\",\n  \"shipment_status\": \"string\",\n  \"status\": \"string\",\n  \"tracking_company\": \"string\",\n  \"tracking_numbers\": [\n    \"string\",\n    \"string\"\n  ],\n  \"tracking_urls\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7557d4f6-5925-403c-ab01-c6cc72380cad",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillments",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0b54908e-90d1-4bb2-85fc-608e42dec0de",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillments",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fd281a6c-70f6-4eec-bfc1-455d30101ecf",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillments",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1bd50931-4eff-464e-a596-bb1eaf4f3007",
+          "name": "fulfillments update",
+          "request": {
+            "name": "fulfillments update",
+            "description": {
+              "content": "\n**[Supplier Only]** Update an existing fulfillment record created by your Supplier account. Identify the fulfillment by its Rokt Catalog `ID` (UUID) in the URL path.\n\nThe request body (`UpdateFulfillmentSerializer`) should contain the fields to update, such as `tracking_company`, `tracking_numbers`, and/or `tracking_urls` for physical shipments. Tracking fields are optional and can be omitted for digital/email fulfillments with no shipment. Partial updates are allowed (only include the fields you want to change).\n\n**Process:**\n\n1. **Update Supplier Fulfillment:** Updates the specified fields on the Supplier's fulfillment record in Catalog.\n\n2. **Sync to Storefront:** Triggers a synchronization process. This attempts to update the corresponding fulfillment record on the original Storefront's order (e.g., via Shopify API) with the new tracking information when present.\n\n3. **Webhook:** Emits a `FULFILLMENT_UPDATE` webhook event containing details of the **Supplier's** updated fulfillment record. If the sync to the Storefront also resulted in an update to the Storefront's fulfillment record in Catalog, a separate `FULFILLMENT_UPDATE` event for the **Storefront's** fulfillment might also be emitted (depending on the sync logic).\n\nA successful update returns `200 OK` with the updated details of the Supplier's fulfillment record (`FulfillmentSerializer`).\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "fulfillments",
+                ":id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "service",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "shipment_status",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "tracking_company",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tracking_numbers",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tracking_numbers",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tracking_urls",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tracking_urls",
+                  "value": "<string>"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "7669e864-2fd2-4faa-8bee-34a3a6e1899b",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillments",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "service",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "shipment_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_company",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_numbers",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_numbers",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_urls",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_urls",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"03f41929-eab3-c1fa-265a-07456583a3b7\",\n  \"line_items\": [\n    {\n      \"fulfillable_quantity\": 6076,\n      \"id\": \"dd24f325-a1b6-2660-1b2a-1a20ac252978\",\n      \"price\": 3407.0704196946353,\n      \"quantity\": 4204,\n      \"variant_id\": \"9ee362ac-32b3-f9af-7e71-738e0fbf2ce3\",\n      \"requires_shipping\": true,\n      \"title\": \"string\",\n      \"sku\": \"string\"\n    },\n    {\n      \"fulfillable_quantity\": 9278,\n      \"id\": \"8b17fd00-bbd5-ddd4-b401-34de34190ab4\",\n      \"price\": 1790.885513733581,\n      \"quantity\": 2480,\n      \"variant_id\": \"3e2baa24-c1fe-c4b6-acd5-00a455e6e123\",\n      \"requires_shipping\": true,\n      \"title\": \"string\",\n      \"sku\": \"string\"\n    }\n  ],\n  \"name\": \"string\",\n  \"order_id\": \"3f4aa542-0e03-cc48-5487-d89cd36a98ac\",\n  \"shop\": {\n    \"country\": \"string\",\n    \"display_domain\": \"string\",\n    \"email\": \"string\",\n    \"id\": \"2a6b09f5-561e-dca7-3723-149fef078857\",\n    \"myshopify_domain\": \"string\",\n    \"name\": \"string\",\n    \"phone\": \"string\",\n    \"description\": \"string\",\n    \"province\": \"string\",\n    \"domain\": \"string\",\n    \"privacy_policy_url\": \"https://ChRVtONbbZVzfqKrnbsBcbNA.siopd.Mq5c00hvRxGkCLpl5GXXvJZ5Pz1BGctSJchDx-fMoeeUJ2MFSWcYNr\",\n    \"terms_of_service_url\": \"http://n.pgcu5QMLtSfkCa3AXO7VeYZqiyEB9Phir2Wl\"\n  },\n  \"service\": \"string\",\n  \"shipment_status\": \"string\",\n  \"status\": \"string\",\n  \"tracking_company\": \"string\",\n  \"tracking_numbers\": [\n    \"string\",\n    \"string\"\n  ],\n  \"tracking_urls\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "63ba21ae-0621-4362-b213-6b6de2196a44",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillments",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "service",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "shipment_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_company",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_numbers",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_numbers",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_urls",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_urls",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b2372a32-49c2-4209-b688-5afb2b35c680",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillments",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "service",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "shipment_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_company",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_numbers",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_numbers",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_urls",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_urls",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ef9a2245-b645-44c0-b55b-71820b958dfb",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillments",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "service",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "shipment_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_company",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_numbers",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_numbers",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_urls",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_urls",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "39653f5d-13ee-4683-a6c6-d2058ccb9f4d",
+          "name": "fulfillments partial update",
+          "request": {
+            "name": "fulfillments partial update",
+            "description": {},
+            "url": {
+              "path": [
+                "fulfillments",
+                ":id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "order_id",
+                  "value": "<uuid>"
+                },
+                {
+                  "disabled": false,
+                  "key": "country",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "myshopify_domain",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "phone",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "description",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "province",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "domain",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "privacy_policy_url",
+                  "value": "<uri>"
+                },
+                {
+                  "disabled": false,
+                  "key": "terms_of_service_url",
+                  "value": "<uri>"
+                },
+                {
+                  "disabled": false,
+                  "key": "line_items",
+                  "value": "{\"fulfillable_quantity\":\"<integer>\",\"id\":\"<uuid>\",\"price\":\"<double>\",\"quantity\":\"<integer>\",\"variant_id\":\"<uuid>\",\"requires_shipping\":\"<boolean>\",\"title\":\"<string>\",\"sku\":\"<string>\"}"
+                },
+                {
+                  "disabled": false,
+                  "key": "line_items",
+                  "value": "{\"fulfillable_quantity\":\"<integer>\",\"id\":\"<uuid>\",\"price\":\"<double>\",\"quantity\":\"<integer>\",\"variant_id\":\"<uuid>\",\"requires_shipping\":\"<boolean>\",\"title\":\"<string>\",\"sku\":\"<string>\"}"
+                },
+                {
+                  "disabled": false,
+                  "key": "service",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "shipment_status",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tracking_company",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tracking_numbers",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tracking_numbers",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tracking_urls",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tracking_urls",
+                  "value": "<string>"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "afd14a13-5b87-4996-a0e8-12e59a77d320",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "fulfillments",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "order_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "country",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "myshopify_domain",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "phone",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "description",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "province",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "domain",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "privacy_policy_url",
+                      "value": "<uri>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "terms_of_service_url",
+                      "value": "<uri>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "line_items",
+                      "value": "{\"fulfillable_quantity\":\"<integer>\",\"id\":\"<uuid>\",\"price\":\"<double>\",\"quantity\":\"<integer>\",\"variant_id\":\"<uuid>\",\"requires_shipping\":\"<boolean>\",\"title\":\"<string>\",\"sku\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "line_items",
+                      "value": "{\"fulfillable_quantity\":\"<integer>\",\"id\":\"<uuid>\",\"price\":\"<double>\",\"quantity\":\"<integer>\",\"variant_id\":\"<uuid>\",\"requires_shipping\":\"<boolean>\",\"title\":\"<string>\",\"sku\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "service",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "shipment_status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_company",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_numbers",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_numbers",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_urls",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_urls",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"5b93813f-4ccd-91d4-a219-1cbfb90e3d15\",\n  \"line_items\": [\n    {\n      \"fulfillable_quantity\": \"<integer>\",\n      \"id\": \"<uuid>\",\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\",\n      \"variant_id\": \"<uuid>\",\n      \"requires_shipping\": \"<boolean>\",\n      \"title\": \"<string>\",\n      \"sku\": \"<string>\"\n    },\n    {\n      \"fulfillable_quantity\": \"<integer>\",\n      \"id\": \"<uuid>\",\n      \"price\": \"<double>\",\n      \"quantity\": \"<integer>\",\n      \"variant_id\": \"<uuid>\",\n      \"requires_shipping\": \"<boolean>\",\n      \"title\": \"<string>\",\n      \"sku\": \"<string>\"\n    }\n  ],\n  \"name\": \"string\",\n  \"order_id\": \"1d3ace13-8e06-69b4-8953-2281096e3d22\",\n  \"shop\": {\n    \"country\": \"<string>\",\n    \"myshopify_domain\": \"<string>\",\n    \"name\": \"<string>\",\n    \"id\": \"55750a67-cbac-b5b6-75d2-538045aa926e\",\n    \"email\": \"string\",\n    \"phone\": \"<string>\",\n    \"description\": \"<string>\",\n    \"province\": \"<string>\",\n    \"domain\": \"<string>\",\n    \"display_domain\": \"string\",\n    \"privacy_policy_url\": \"<uri>\",\n    \"terms_of_service_url\": \"<uri>\"\n  },\n  \"service\": \"string\",\n  \"shipment_status\": \"string\",\n  \"status\": \"string\",\n  \"tracking_company\": \"string\",\n  \"tracking_numbers\": [\n    \"string\",\n    \"string\"\n  ],\n  \"tracking_urls\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.shopcanal.com/platform",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "993e607e-6fef-4932-ab89-30d1253fba1e",
+    "name": "Rokt Catalog csv fulfillments API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Integrate with Rokt Catalog",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rokt Catalog csv refunds API",
+    "version": "1.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "refunds",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "refunds_list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shopcanal.com/platform/refunds/",
+            "params": [
+              {
+                "name": "ordering",
+                "value": "",
+                "type": "query",
+                "description": "Which field to use when ordering the results."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The pagination cursor value."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\nRetrieve a paginated list of refund records associated with the authenticated store, reflecting its role in the order process.\n\n- **If called by a Storefront:** Returns refund records linked to orders originating from the Storefront. This includes refunds initiated *by* the Storefront and refunds initiated *by* connected Suppliers for those orders.\n\n- **If called by a Supplier:** Returns refund records linked to orders received by the Supplier from connected Storefronts. This includes refunds i"
+        },
+        {
+          "info": {
+            "name": "refunds_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/refunds/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\nInitiate a refund for specific quantities of line items within a Rokt Catalog order. This endpoint handles refund requests originating from both Storefronts and Suppliers.\n\n**Request Body (`RefundCreateSerializer`):**\n\n- `order_id` (UUID, required): The Catalog ID of the order to be refunded.\n\n- `line_items` (list, required): A list of objects, each specifying:\n\n  - `id` (UUID, required): The Catalog ID of the line item to refund.\n\n  - `quantity` (integer, required): The quantity of this line i"
+        },
+        {
+          "info": {
+            "name": "refunds_retrieve",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shopcanal.com/platform/refunds/:id/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\nRetrieve the full details for a specific refund record, identified by its Rokt Catalog `ID` (UUID) in the URL path.\n\nAccess is restricted to refunds associated with orders linked to the authenticated store (`request.shop`).\n\nThe response (`RefundSerializer`) includes the `total_refunded_amount`, `currency`, the list of `refund_line_items` (specifying the exact items, quantities, and subtotal refunded), the associated `order_id`, `note` (if any), `processed_at` timestamp, and other relevant deta"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

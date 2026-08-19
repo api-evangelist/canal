@@ -1,0 +1,104 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rokt Catalog csv product_sets API",
+    "version": "1.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "product_sets",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "product_sets_list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shopcanal.com/platform/product_sets/",
+            "params": [
+              {
+                "name": "ordering",
+                "value": "",
+                "type": "query",
+                "description": "Which field to use when ordering the results."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The pagination cursor value."
+              },
+              {
+                "name": "supplier_id",
+                "value": "",
+                "type": "query",
+                "description": "Restrict results to product sets belonging to this supplier."
+              },
+              {
+                "name": "updated_since",
+                "value": "",
+                "type": "query",
+                "description": "Returns only sets updated after this date (ISO 8601 format)."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\nReturns a paginated list of product sets (IDs and lightweight metadata) for suppliers\nconnected to the authenticated store. Each result includes: product_set_id, supplier_id,\nname, description, type (e.g., MANUAL, RULE_BASED), created_at, updated_at.\n**Optional filters:** supplier_id (UUID), updated_since (ISO 8601).\nResults use cursor-based pagination, ordered by updated_at descending.\n"
+        },
+        {
+          "info": {
+            "name": "product_sets_items_list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shopcanal.com/platform/product_sets/items/",
+            "params": [
+              {
+                "name": "ordering",
+                "value": "",
+                "type": "query",
+                "description": "Which field to use when ordering the results."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The pagination cursor value."
+              },
+              {
+                "name": "product_set_id",
+                "value": "",
+                "type": "query",
+                "description": "If present: only variants in this product set. If absent: variants across all product sets."
+              },
+              {
+                "name": "updated_since",
+                "value": "",
+                "type": "query",
+                "description": "Returns only items updated after this date (ISO 8601 format)."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\nReturns a paginated list of variants that belong to product sets. Each result includes:\nvariant_id, product_id, product_set_id, created_at, updated_at.\n**Optional filters:** product_set_id (UUID), updated_since (ISO 8601).\nResults use cursor-based pagination, ordered by updated_at descending.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,94 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rokt Catalog csv shops API",
+    "version": "1.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "shops",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "shops_list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shopcanal.com/platform/shops/",
+            "params": [
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The pagination cursor value."
+              },
+              {
+                "name": "email",
+                "value": "",
+                "type": "query",
+                "description": "Filter by the Supplier's primary contact email address."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Storefront Only]** Retrieve a paginated list of Supplier shops with whom your Storefront has an **active and approved** partnership connection.\n\nThis endpoint provides essential details for each connected Supplier, such as their name, Rokt Catalog ID, contact information, and domain.\n\nUse this to get an overview of your current Supplier network within Catalog.\n\nYou can filter this list to find a specific Supplier by providing their `canal_contact_email` using the `email` query parameter (ens"
+        },
+        {
+          "info": {
+            "name": "shops_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/shops/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Storefront Only]** Initiate partnership connection requests with one or more existing Rokt Catalog Suppliers by specifying their primary contact email addresses.\n\nIn the request body, provide a list of strings under the key `canal_contact_emails`.\n\nFor each email address that corresponds to an active Catalog Supplier shop, Catalog will record your request to connect, initially in a **pending** state.\n\nThe Supplier must then **approve** this request (usually through the Catalog web applicatio"
+        },
+        {
+          "info": {
+            "name": "shops_retrieve",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shopcanal.com/platform/shops/:id/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Storefront Only]** Retrieve the full profile details for a specific Supplier shop, identified by its unique Rokt Catalog `ID` (UUID) provided in the URL path.\n\nAccess is restricted: this endpoint will only return data if an **active and approved** partnership connection exists between your Storefront and the specified Supplier.\n\nThe response includes comprehensive details like shop name, ID, contact info, address, configured settings (if applicable), etc.\n\nIf the provided `ID` is invalid, do"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

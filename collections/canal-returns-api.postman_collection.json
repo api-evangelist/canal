@@ -1,0 +1,2371 @@
+{
+  "item": [
+    {
+      "id": "457a0eb0-ccb4-4d30-8b0b-1eafb59bc109",
+      "name": "returns",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "54c1954a-d48a-423f-9508-c3c29abb4f2f",
+          "name": "returns list",
+          "request": {
+            "name": "returns list",
+            "description": {
+              "content": "\nRetrieve a paginated list of return requests associated with the authenticated store, reflecting its role.\n\n- **If called by a Storefront:** Returns `ReturnRequest` records initiated *by* this Storefront for orders placed on their platform.\n\n- **If called by a Supplier:** Returns `ReturnRequest` records received *from* connected Storefronts for orders the Supplier fulfilled.\n\n**Filtering:** You can filter the list by `status` using a query parameter (e.g., `?status=OPEN` or `?status=CLOSED`).\n\n**Response (`ReturnSerializer`, paginated):** Includes details for each return request: `id`, `name`, `rma`, associated `order_id`, `status` ('OPEN' or 'CLOSED'), `return_line_items` (with quantities, reasons), `reverse_deliveries` (tracking info), and timestamps.\n\nPagination is cursor-based (`PlatformPagination`). Ordering is available on `created_at` and `updated_at`, defaulting to `-created_at`.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "returns",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "ordering",
+                  "value": "<string>",
+                  "description": "Which field to use when ordering the results."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "The pagination cursor value."
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>",
+                  "description": "Filter returns by status"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "3efb0ff2-f531-4ab7-98bc-9811aee432ce",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "returns",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    {\n      \"created_at\": \"2022-06-27T04:30:19.788Z\",\n      \"id\": \"ecebebbc-a044-f23d-05ae-b97aa0997b82\",\n      \"order\": \"87b29ee8-bec0-e789-f378-78d6bf386655\",\n      \"return_line_items\": [\n        {\n          \"id\": \"1de8e912-24a6-82b7-f11b-e1f7ee7c11ea\",\n          \"line_item_id\": \"e12f4df8-e641-d8bb-420a-cfacd63cd3a0\",\n          \"quantity\": 1692269493,\n          \"customer_note\": \"string\",\n          \"return_reason\": \"size_too_large\",\n          \"return_reason_note\": \"string\"\n        },\n        {\n          \"id\": \"b309de15-7984-74c9-e6ce-232ca886c0ac\",\n          \"line_item_id\": \"3fda4271-f07a-d668-1b77-39aabd7fbcae\",\n          \"quantity\": -1033977096,\n          \"customer_note\": \"string\",\n          \"return_reason\": \"wrong_item\",\n          \"return_reason_note\": \"string\"\n        }\n      ],\n      \"total_return_line_items\": 26253,\n      \"tracking\": [\n        {\n          \"id\": \"e867723a-3729-47f3-9287-381ecd8420ed\",\n          \"carrier_name\": \"string\",\n          \"tracking_number\": \"string\",\n          \"tracking_url\": \"http://XbI.aakgAHl3uEHT\",\n          \"shipping_label_file_url\": \"https://zSoHSDMfuNP.bygN1HNsf1JAeXTXovPAc2aK1G5,6W8kvPTGrmzAQ00PmTudElkCvujvRn\"\n        },\n        {\n          \"id\": \"45cb10f7-1ff0-0be6-1d9c-1004a0e19777\",\n          \"carrier_name\": \"string\",\n          \"tracking_number\": \"string\",\n          \"tracking_url\": \"http://b.gapcU8Nv3rz9J+JXXPaEB2BI\",\n          \"shipping_label_file_url\": \"http://xte.ayqueg9Twd25JBXQpheJh8ObcN\"\n        }\n      ],\n      \"updated_at\": \"1948-01-01T19:25:38.482Z\",\n      \"status\": \"declined\",\n      \"name\": \"string\",\n      \"rma\": \"string\"\n    },\n    {\n      \"created_at\": \"1969-10-04T22:49:11.232Z\",\n      \"id\": \"a3c34755-6e22-634b-0460-746c52378066\",\n      \"order\": \"def2b2fb-303c-f57d-84ea-8b3d6cc4885f\",\n      \"return_line_items\": [\n        {\n          \"id\": \"3f28f713-30c9-f30e-a53b-1028320e1ae8\",\n          \"line_item_id\": \"a718cf95-5ced-68d9-4edf-6f14dfc46f33\",\n          \"quantity\": -1727631366,\n          \"customer_note\": \"string\",\n          \"return_reason\": \"wrong_item\",\n          \"return_reason_note\": \"string\"\n        },\n        {\n          \"id\": \"f1dddc72-9c99-e1cc-ebd9-77c64fdee7bd\",\n          \"line_item_id\": \"34b6553b-6f88-7770-5ea5-9e9c5e02e62b\",\n          \"quantity\": -515232753,\n          \"customer_note\": \"string\",\n          \"return_reason\": \"size_too_large\",\n          \"return_reason_note\": \"string\"\n        }\n      ],\n      \"total_return_line_items\": 30699,\n      \"tracking\": [\n        {\n          \"id\": \"fead3195-2569-2c50-24d0-fbf7c24e5498\",\n          \"carrier_name\": \"string\",\n          \"tracking_number\": \"string\",\n          \"tracking_url\": \"http://chWQZmRsyNCPzppUuyfTtvU.wnqUdrlBtr7MiO3U\",\n          \"shipping_label_file_url\": \"https://LbZOpdauoifOxYLxvvGtjTHameb.reqziAFDqxyY2morkuMZY,i9Bv90rSs0W48ZhWcGSO4b8s4lpEMON0ODM\"\n        },\n        {\n          \"id\": \"89632b0c-cbd8-a52c-0128-11d40872c9f9\",\n          \"carrier_name\": \"string\",\n          \"tracking_number\": \"string\",\n          \"tracking_url\": \"https://sLViBNsPluHWKDNTJwBKUeuGbh.qcirIZYgfuiIU9HqRyhxR-i+.JnWT6-2zYZnt2bEn0jBLZc5sasBpibI9E5e\",\n          \"shipping_label_file_url\": \"https://nZtUYnNlychNUWiTXJnR.shfrDRCM0sBK5RzvmSjW8dOIBrdIhXq0oLzAq4WxJUFMR+SMhQaUewWOhrdui9wPpGtB3\"\n        }\n      ],\n      \"updated_at\": \"1961-10-29T15:37:51.760Z\",\n      \"status\": \"closed\",\n      \"name\": \"string\",\n      \"rma\": \"string\"\n    }\n  ],\n  \"next\": \"https://iqgYlpVU.nkjxjdS3,fupAsl.3X8aHcdP6edvjDKr4GgLN-Ulem.R,iSS4RkOq0DxhLs\",\n  \"previous\": \"http://api.example.org/accounts/?cursor=cj0xJnA9NDg3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "88243338-b4f0-4780-bbe4-3e514a29d302",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "returns",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b920c9b0-74bd-4378-8e50-24548f3b91a2",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "returns",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "59d8a19b-dd0d-42f6-bd1b-40e1f0d8ef98",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "returns",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "status",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "6bc90710-70f8-421c-807b-42a88c2046b7",
+          "name": "returns create",
+          "request": {
+            "name": "returns create",
+            "description": {
+              "content": "\n**[Storefront Only]** Initiate a return process for items purchased in a Rokt Catalog-facilitated order.\n\n**Request Body (`ReturnCreateSerializer`):**\n\n- `order_id` (UUID, required): The Catalog ID of the original Storefront order containing the items to be returned.\n\n- `name` (string, required): A unique identifier for this return request (e.g., your system's RMA number).\n\n- `rma` (string, optional): An alternative return merchandise authorization identifier.\n\n- `return_line_items` (list, required): A list of objects, each specifying:\n\n  - `line_item_id` (UUID, required): The Catalog ID of the *Storefront's* line item record to be returned.\n\n  - `quantity` (integer, required): The quantity of this line item being returned.\n\n  - `return_reason` (string, optional): A code or description for the return reason.\n\n  - `customer_note` (string, optional): Any notes provided by the customer.\n\n- `reverse_deliveries` (list, optional): Allows providing initial return shipping tracking information (see `ReverseDeliveryCreateSerializer`) within the same request.\n\n**Process:**\n\n1. **Validation:** Checks if the order and line items exist, belong to the Storefront, and if the requested return quantities are valid (e.g., not exceeding fulfilled quantity). Acquires a lock on the order.\n\n2. **Create Storefront Return Request:** Creates the primary return request record associated with the Storefront's order in Rokt Catalog.\n\n3. **Create Initial Tracking (Optional):** If `reverse_deliveries` are provided, creates associated return tracking records.\n\n4. **Dispatch to Suppliers (Async):** Triggers an **asynchronous** task to create corresponding return request records for each relevant Supplier involved in the returned line items. These Supplier return requests are linked back to the Storefront's request.\n\n**Error Handling:** Returns `400 Bad Request` for validation errors (e.g., invalid quantity, bad IDs). Returns `500 Internal Server Error` for unexpected issues.\n\n**Response:** On success, returns `201 Created` with the details of the newly created **Storefront** return request (`ReturnSerializer`).\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "returns",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "order_id",
+                  "value": "<uuid>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "return_line_items",
+                  "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"return_reason\":\"<string>\",\"customer_note\":\"<string>\"}",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "return_line_items",
+                  "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"return_reason\":\"<string>\",\"customer_note\":\"<string>\"}",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "carrier_name",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "tracking_number",
+                  "value": "<string>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "tracking_url",
+                  "value": "<uri>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "shipping_label_file_url",
+                  "value": "<uri>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "rma",
+                  "value": "<string>"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "0adcf4cd-35d5-419b-800e-019b3a5d8bac",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "returns",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "order_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "return_line_items",
+                      "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"return_reason\":\"<string>\",\"customer_note\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "return_line_items",
+                      "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"return_reason\":\"<string>\",\"customer_note\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "carrier_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "tracking_number",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "tracking_url",
+                      "value": "<uri>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "shipping_label_file_url",
+                      "value": "<uri>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "rma",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created_at\": \"2007-11-14T06:11:54.049Z\",\n  \"id\": \"363ace74-3426-2da9-006d-d11b6012f569\",\n  \"order\": \"0ce83d62-b256-9341-8fd6-3c3ae6b330b1\",\n  \"return_line_items\": [\n    {\n      \"id\": \"c7e802bf-698e-5cba-4725-3d22d1e954dc\",\n      \"line_item_id\": \"73ba4ca5-90db-ce86-cb75-7090d075ac8e\",\n      \"quantity\": 2031562320,\n      \"customer_note\": \"string\",\n      \"return_reason\": \"<string>\",\n      \"return_reason_note\": \"string\"\n    },\n    {\n      \"id\": \"72d1858b-fc0c-28a0-5493-1f3d15727da1\",\n      \"line_item_id\": \"f67f8802-7346-0d7c-34a6-d70c86c910e0\",\n      \"quantity\": -845540169,\n      \"customer_note\": \"string\",\n      \"return_reason\": \"<string>\",\n      \"return_reason_note\": \"string\"\n    }\n  ],\n  \"total_return_line_items\": -450,\n  \"tracking\": [\n    {\n      \"id\": \"b2989b11-f911-1448-aeb3-8db368397d22\",\n      \"carrier_name\": \"string\",\n      \"tracking_number\": \"string\",\n      \"tracking_url\": \"http://ExWhzrevbdpUcenYakLKqJBDnLGR.jjjhC0vSfeadpT\",\n      \"shipping_label_file_url\": \"http://HbvUwCiRIMjhozGhz.jxvpnqNQ7mtSzG0Z85NcBWySPe8SCSfXQHvzT9L9TU9Jntsd\"\n    },\n    {\n      \"id\": \"6b3b1d3c-bf05-869f-20b3-fb3a168ed725\",\n      \"carrier_name\": \"string\",\n      \"tracking_number\": \"string\",\n      \"tracking_url\": \"http://WThTTxCvDlHGXAqRRadhKxirm.malbft,Bt-8XmzBk-T26Cw\",\n      \"shipping_label_file_url\": \"https://LaEvlraQHwLWtgQGVBQxKZSnZMeOOBBH.lwdgryUbEB43.bZBSvgr1XO6arCfjWD9\"\n    }\n  ],\n  \"updated_at\": \"1987-12-12T08:30:11.042Z\",\n  \"status\": \"closed\",\n  \"name\": \"string\",\n  \"rma\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "40e386f6-ecce-4b79-a7c9-2df6953215c3",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "returns",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "order_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "return_line_items",
+                      "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"return_reason\":\"<string>\",\"customer_note\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "return_line_items",
+                      "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"return_reason\":\"<string>\",\"customer_note\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "carrier_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "tracking_number",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "tracking_url",
+                      "value": "<uri>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "shipping_label_file_url",
+                      "value": "<uri>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "rma",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6daff086-abff-4b11-afc6-813841726b72",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "returns",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "order_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "return_line_items",
+                      "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"return_reason\":\"<string>\",\"customer_note\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "return_line_items",
+                      "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"return_reason\":\"<string>\",\"customer_note\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "carrier_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "tracking_number",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "tracking_url",
+                      "value": "<uri>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "shipping_label_file_url",
+                      "value": "<uri>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "rma",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "93e9abdf-157b-436f-9e65-7d564bdbb686",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "returns",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "order_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "return_line_items",
+                      "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"return_reason\":\"<string>\",\"customer_note\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "return_line_items",
+                      "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"return_reason\":\"<string>\",\"customer_note\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "carrier_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "tracking_number",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "tracking_url",
+                      "value": "<uri>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "shipping_label_file_url",
+                      "value": "<uri>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "rma",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "af1fdb75-3042-44d5-9c93-951423f07b09",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "returns",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "order_id",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "return_line_items",
+                      "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"return_reason\":\"<string>\",\"customer_note\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "return_line_items",
+                      "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"return_reason\":\"<string>\",\"customer_note\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "carrier_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "tracking_number",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "tracking_url",
+                      "value": "<uri>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "shipping_label_file_url",
+                      "value": "<uri>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "rma",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "347df736-0819-4604-85b3-223886c46301",
+          "name": "returns retrieve",
+          "request": {
+            "name": "returns retrieve",
+            "description": {},
+            "url": {
+              "path": [
+                "returns",
+                ":id",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "241a87e2-f004-46bf-acf1-818f26342d9f",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "returns",
+                    ":id",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"created_at\": \"2007-11-14T06:11:54.049Z\",\n  \"id\": \"363ace74-3426-2da9-006d-d11b6012f569\",\n  \"order\": \"0ce83d62-b256-9341-8fd6-3c3ae6b330b1\",\n  \"return_line_items\": [\n    {\n      \"id\": \"c7e802bf-698e-5cba-4725-3d22d1e954dc\",\n      \"line_item_id\": \"73ba4ca5-90db-ce86-cb75-7090d075ac8e\",\n      \"quantity\": 2031562320,\n      \"customer_note\": \"string\",\n      \"return_reason\": \"<string>\",\n      \"return_reason_note\": \"string\"\n    },\n    {\n      \"id\": \"72d1858b-fc0c-28a0-5493-1f3d15727da1\",\n      \"line_item_id\": \"f67f8802-7346-0d7c-34a6-d70c86c910e0\",\n      \"quantity\": -845540169,\n      \"customer_note\": \"string\",\n      \"return_reason\": \"<string>\",\n      \"return_reason_note\": \"string\"\n    }\n  ],\n  \"total_return_line_items\": -450,\n  \"tracking\": [\n    {\n      \"id\": \"b2989b11-f911-1448-aeb3-8db368397d22\",\n      \"carrier_name\": \"string\",\n      \"tracking_number\": \"string\",\n      \"tracking_url\": \"http://ExWhzrevbdpUcenYakLKqJBDnLGR.jjjhC0vSfeadpT\",\n      \"shipping_label_file_url\": \"http://HbvUwCiRIMjhozGhz.jxvpnqNQ7mtSzG0Z85NcBWySPe8SCSfXQHvzT9L9TU9Jntsd\"\n    },\n    {\n      \"id\": \"6b3b1d3c-bf05-869f-20b3-fb3a168ed725\",\n      \"carrier_name\": \"string\",\n      \"tracking_number\": \"string\",\n      \"tracking_url\": \"http://WThTTxCvDlHGXAqRRadhKxirm.malbft,Bt-8XmzBk-T26Cw\",\n      \"shipping_label_file_url\": \"https://LaEvlraQHwLWtgQGVBQxKZSnZMeOOBBH.lwdgryUbEB43.bZBSvgr1XO6arCfjWD9\"\n    }\n  ],\n  \"updated_at\": \"1987-12-12T08:30:11.042Z\",\n  \"status\": \"closed\",\n  \"name\": \"string\",\n  \"rma\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "879803a9-e09a-4def-b85f-1bf8c53f8e62",
+          "name": "returns close create",
+          "request": {
+            "name": "returns close create",
+            "description": {
+              "content": "\n**[Supplier Only]** Mark a return request that your Supplier account received from a Storefront as 'CLOSED'.\n\nIdentify the return request by its Rokt Catalog `ID` (UUID) provided in the URL path.\n\n**Use Case:** This endpoint should typically be called by the Supplier once they have received the physical returned items from the customer/Storefront and completed their internal processing (inspection, restocking, etc.).\n\n**Action:** Sets the `status` field of the **Supplier's** return request record in Catalog to `CLOSED`.\n\n**Important Limitation:** This action **only** updates the status of the Supplier's return record. It **does not** automatically update the status of the original Storefront's return request, nor does it trigger any notifications or refunds. Subsequent actions, such as initiating a refund using the `/refunds/` endpoint, might be required based on the agreed return policy and workflow.\n\n**Permissions:** Requires the request to be authenticated as the Supplier associated with the return request. Attempting to close a return belonging to another shop results in `403 Forbidden`.\n\nA successful update returns `200 OK` with the updated details of the **Supplier's** return request (`ReturnSerializer`), showing the status as 'CLOSED'.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "returns",
+                ":id",
+                "close",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "order",
+                  "value": "<uuid>",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "return_line_items",
+                  "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"customer_note\":\"<string>\",\"return_reason\":\"<string>\",\"return_reason_note\":\"<string>\"}",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "return_line_items",
+                  "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"customer_note\":\"<string>\",\"return_reason\":\"<string>\",\"return_reason_note\":\"<string>\"}",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "total_return_line_items",
+                  "value": "<integer>",
+                  "description": "(Required) The sum of all return line item quantities for the return."
+                },
+                {
+                  "disabled": false,
+                  "key": "tracking",
+                  "value": "{\"carrier_name\":\"<string>\",\"tracking_number\":\"<string>\",\"tracking_url\":\"<uri>\",\"shipping_label_file_url\":\"<uri>\"}",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "tracking",
+                  "value": "{\"carrier_name\":\"<string>\",\"tracking_number\":\"<string>\",\"tracking_url\":\"<uri>\",\"shipping_label_file_url\":\"<uri>\"}",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "key": "status",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "name",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "rma",
+                  "value": "<string>",
+                  "description": "\"Return merchandise authorization\" -- used as reference number for SK to SUP comms"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "72ea2873-91f5-463f-aa84-75619a075425",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "returns",
+                    ":id",
+                    "close",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "order",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "return_line_items",
+                      "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"customer_note\":\"<string>\",\"return_reason\":\"<string>\",\"return_reason_note\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "return_line_items",
+                      "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"customer_note\":\"<string>\",\"return_reason\":\"<string>\",\"return_reason_note\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The sum of all return line item quantities for the return.",
+                        "type": "text/plain"
+                      },
+                      "key": "total_return_line_items",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "tracking",
+                      "value": "{\"carrier_name\":\"<string>\",\"tracking_number\":\"<string>\",\"tracking_url\":\"<uri>\",\"shipping_label_file_url\":\"<uri>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "tracking",
+                      "value": "{\"carrier_name\":\"<string>\",\"tracking_number\":\"<string>\",\"tracking_url\":\"<uri>\",\"shipping_label_file_url\":\"<uri>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "\"Return merchandise authorization\" -- used as reference number for SK to SUP comms",
+                        "type": "text/plain"
+                      },
+                      "key": "rma",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"order\": \"<uuid>\",\n  \"return_line_items\": [\n    {\n      \"line_item_id\": \"<uuid>\",\n      \"quantity\": \"<integer>\",\n      \"id\": \"9554f5bf-fc0e-e806-d24b-e4671f22b46a\",\n      \"customer_note\": \"<string>\",\n      \"return_reason\": \"<string>\",\n      \"return_reason_note\": \"<string>\"\n    },\n    {\n      \"line_item_id\": \"<uuid>\",\n      \"quantity\": \"<integer>\",\n      \"id\": \"db1344cb-999e-ae68-21db-fda32c1b1ea3\",\n      \"customer_note\": \"<string>\",\n      \"return_reason\": \"<string>\",\n      \"return_reason_note\": \"<string>\"\n    }\n  ],\n  \"total_return_line_items\": \"<integer>\",\n  \"tracking\": [\n    {\n      \"id\": \"05d10d13-fb26-effa-7a7a-0c61e190b105\",\n      \"carrier_name\": \"<string>\",\n      \"tracking_number\": \"<string>\",\n      \"tracking_url\": \"<uri>\",\n      \"shipping_label_file_url\": \"<uri>\"\n    },\n    {\n      \"id\": \"2b779ac0-ba5f-dd7a-36ef-c22d7e0ae9aa\",\n      \"carrier_name\": \"<string>\",\n      \"tracking_number\": \"<string>\",\n      \"tracking_url\": \"<uri>\",\n      \"shipping_label_file_url\": \"<uri>\"\n    }\n  ],\n  \"id\": \"df0e0932-4c7d-5ed2-a409-f301a7102bb4\",\n  \"status\": \"<string>\",\n  \"name\": \"<string>\",\n  \"created_at\": \"1989-02-14T04:42:43.849Z\",\n  \"updated_at\": \"2026-01-18T04:44:41.265Z\",\n  \"rma\": \"<string>\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d7308574-e578-48ff-8137-f64c01f0ba56",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "returns",
+                    ":id",
+                    "close",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "order",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "return_line_items",
+                      "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"customer_note\":\"<string>\",\"return_reason\":\"<string>\",\"return_reason_note\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "return_line_items",
+                      "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"customer_note\":\"<string>\",\"return_reason\":\"<string>\",\"return_reason_note\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The sum of all return line item quantities for the return.",
+                        "type": "text/plain"
+                      },
+                      "key": "total_return_line_items",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "tracking",
+                      "value": "{\"carrier_name\":\"<string>\",\"tracking_number\":\"<string>\",\"tracking_url\":\"<uri>\",\"shipping_label_file_url\":\"<uri>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "tracking",
+                      "value": "{\"carrier_name\":\"<string>\",\"tracking_number\":\"<string>\",\"tracking_url\":\"<uri>\",\"shipping_label_file_url\":\"<uri>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "\"Return merchandise authorization\" -- used as reference number for SK to SUP comms",
+                        "type": "text/plain"
+                      },
+                      "key": "rma",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c32f0369-5abc-4913-a5de-3983b6e523f5",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "returns",
+                    ":id",
+                    "close",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "order",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "return_line_items",
+                      "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"customer_note\":\"<string>\",\"return_reason\":\"<string>\",\"return_reason_note\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "return_line_items",
+                      "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"customer_note\":\"<string>\",\"return_reason\":\"<string>\",\"return_reason_note\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The sum of all return line item quantities for the return.",
+                        "type": "text/plain"
+                      },
+                      "key": "total_return_line_items",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "tracking",
+                      "value": "{\"carrier_name\":\"<string>\",\"tracking_number\":\"<string>\",\"tracking_url\":\"<uri>\",\"shipping_label_file_url\":\"<uri>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "tracking",
+                      "value": "{\"carrier_name\":\"<string>\",\"tracking_number\":\"<string>\",\"tracking_url\":\"<uri>\",\"shipping_label_file_url\":\"<uri>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "\"Return merchandise authorization\" -- used as reference number for SK to SUP comms",
+                        "type": "text/plain"
+                      },
+                      "key": "rma",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fad40e78-bd26-4e62-b13f-576645e73dd6",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "returns",
+                    ":id",
+                    "close",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "order",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "return_line_items",
+                      "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"customer_note\":\"<string>\",\"return_reason\":\"<string>\",\"return_reason_note\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "return_line_items",
+                      "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"customer_note\":\"<string>\",\"return_reason\":\"<string>\",\"return_reason_note\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The sum of all return line item quantities for the return.",
+                        "type": "text/plain"
+                      },
+                      "key": "total_return_line_items",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "tracking",
+                      "value": "{\"carrier_name\":\"<string>\",\"tracking_number\":\"<string>\",\"tracking_url\":\"<uri>\",\"shipping_label_file_url\":\"<uri>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "tracking",
+                      "value": "{\"carrier_name\":\"<string>\",\"tracking_number\":\"<string>\",\"tracking_url\":\"<uri>\",\"shipping_label_file_url\":\"<uri>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "\"Return merchandise authorization\" -- used as reference number for SK to SUP comms",
+                        "type": "text/plain"
+                      },
+                      "key": "rma",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "371e35a8-4cbc-454a-896c-6978bc49f087",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "returns",
+                    ":id",
+                    "close",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "order",
+                      "value": "<uuid>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "return_line_items",
+                      "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"customer_note\":\"<string>\",\"return_reason\":\"<string>\",\"return_reason_note\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "return_line_items",
+                      "value": "{\"line_item_id\":\"<uuid>\",\"quantity\":\"<integer>\",\"customer_note\":\"<string>\",\"return_reason\":\"<string>\",\"return_reason_note\":\"<string>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) The sum of all return line item quantities for the return.",
+                        "type": "text/plain"
+                      },
+                      "key": "total_return_line_items",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "tracking",
+                      "value": "{\"carrier_name\":\"<string>\",\"tracking_number\":\"<string>\",\"tracking_url\":\"<uri>\",\"shipping_label_file_url\":\"<uri>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "(Required) ",
+                        "type": "text/plain"
+                      },
+                      "key": "tracking",
+                      "value": "{\"carrier_name\":\"<string>\",\"tracking_number\":\"<string>\",\"tracking_url\":\"<uri>\",\"shipping_label_file_url\":\"<uri>\"}"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "status",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "\"Return merchandise authorization\" -- used as reference number for SK to SUP comms",
+                        "type": "text/plain"
+                      },
+                      "key": "rma",
+                      "value": "<string>"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "89f26060-ed0c-496a-820f-2ea11550d9dd",
+          "name": "returns update tracking create",
+          "request": {
+            "name": "returns update tracking create",
+            "description": {
+              "content": "\n**[Storefront Only]** Add or update the tracking information for the shipment returning items back to the Supplier(s). Identify the specific return request using its Rokt Catalog `ID` (UUID) in the URL path.\n\n**Request Body (`ReverseDeliveryCreateSerializer`):**\n\n- `carrier_name` (string, optional): Name of the shipping carrier (e.g., 'USPS', 'FedEx').\n\n- `tracking_number` (string, optional): The tracking number for the return shipment.\n\n- `tracking_url` (string, optional): A direct URL to track the shipment.\n\n- `shipping_label_file_url` (string, optional): URL to a downloadable shipping label file (e.g., PDF).\n\n- `shipping_label_created_at` (datetime string, optional): Timestamp when the label was created.\n\n**Process:**\n\n1. **Validation:** Checks if the return request exists and belongs to the Storefront.\n\n2. **Create Storefront Return Tracking:** Creates a return tracking record containing the provided tracking/label info and associates it with the Storefront's return request.\n\n3. **Sync to Suppliers (Sync):** This **synchronously** attempts to add the same return tracking information to the corresponding return request records on the Supplier side(s).\n\n**Response:** Returns `200 OK` with the updated details of the **Storefront's** return request (`ReturnSerializer`), now including the added return tracking information.\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "returns",
+                ":id",
+                "update_tracking",
+                ""
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "ordering",
+                  "value": "<string>",
+                  "description": "Which field to use when ordering the results."
+                },
+                {
+                  "disabled": false,
+                  "key": "cursor",
+                  "value": "<string>",
+                  "description": "The pagination cursor value."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "apikey",
+              "apikey": [
+                {
+                  "key": "key",
+                  "value": "X-CANAL-APP-ID"
+                },
+                {
+                  "key": "value",
+                  "value": "{{apiKey}}"
+                },
+                {
+                  "key": "in",
+                  "value": "header"
+                }
+              ]
+            },
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "carrier_name",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tracking_number",
+                  "value": "<string>"
+                },
+                {
+                  "disabled": false,
+                  "key": "tracking_url",
+                  "value": "<uri>"
+                },
+                {
+                  "disabled": false,
+                  "key": "shipping_label_file_url",
+                  "value": "<uri>"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "97561e57-8cd2-4cf8-8a10-e344ea659244",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "returns",
+                    ":id",
+                    "update_tracking",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "carrier_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_number",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_url",
+                      "value": "<uri>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "shipping_label_file_url",
+                      "value": "<uri>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"results\": [\n    {\n      \"order\": \"<uuid>\",\n      \"return_line_items\": [\n        {\n          \"line_item_id\": \"<uuid>\",\n          \"quantity\": \"<integer>\",\n          \"id\": \"08ffd3ec-9945-9258-b423-7863497dba70\",\n          \"customer_note\": \"<string>\",\n          \"return_reason\": \"<string>\",\n          \"return_reason_note\": \"<string>\"\n        },\n        {\n          \"line_item_id\": \"<uuid>\",\n          \"quantity\": \"<integer>\",\n          \"id\": \"b0d5dd3e-926f-cd1c-6ecc-b02f1584afac\",\n          \"customer_note\": \"<string>\",\n          \"return_reason\": \"<string>\",\n          \"return_reason_note\": \"<string>\"\n        }\n      ],\n      \"total_return_line_items\": \"<integer>\",\n      \"tracking\": [\n        {\n          \"id\": \"f4a3388d-3ae6-ff40-4eaa-0fa2d5bba809\",\n          \"carrier_name\": \"<string>\",\n          \"tracking_number\": \"<string>\",\n          \"tracking_url\": \"<uri>\",\n          \"shipping_label_file_url\": \"<uri>\"\n        },\n        {\n          \"id\": \"7a2aaf48-1af0-4cf9-d7ec-671927ee6862\",\n          \"carrier_name\": \"<string>\",\n          \"tracking_number\": \"<string>\",\n          \"tracking_url\": \"<uri>\",\n          \"shipping_label_file_url\": \"<uri>\"\n        }\n      ],\n      \"id\": \"52a6acce-7966-bee5-0037-0ea0cde557b1\",\n      \"status\": \"<string>\",\n      \"name\": \"<string>\",\n      \"created_at\": \"1993-05-22T04:29:04.557Z\",\n      \"updated_at\": \"1975-08-23T06:05:38.190Z\",\n      \"rma\": \"<string>\"\n    },\n    {\n      \"order\": \"<uuid>\",\n      \"return_line_items\": [\n        {\n          \"line_item_id\": \"<uuid>\",\n          \"quantity\": \"<integer>\",\n          \"id\": \"57f45e55-e697-5fe0-dd0d-0d6a39e69cf1\",\n          \"customer_note\": \"<string>\",\n          \"return_reason\": \"<string>\",\n          \"return_reason_note\": \"<string>\"\n        },\n        {\n          \"line_item_id\": \"<uuid>\",\n          \"quantity\": \"<integer>\",\n          \"id\": \"ae49c5ac-ed37-daf6-b4b5-61b6b8cc37b4\",\n          \"customer_note\": \"<string>\",\n          \"return_reason\": \"<string>\",\n          \"return_reason_note\": \"<string>\"\n        }\n      ],\n      \"total_return_line_items\": \"<integer>\",\n      \"tracking\": [\n        {\n          \"id\": \"4cadf932-baae-e704-16f3-59c6c7267ed1\",\n          \"carrier_name\": \"<string>\",\n          \"tracking_number\": \"<string>\",\n          \"tracking_url\": \"<uri>\",\n          \"shipping_label_file_url\": \"<uri>\"\n        },\n        {\n          \"id\": \"5947ccd8-641c-6101-700d-954f4a75800e\",\n          \"carrier_name\": \"<string>\",\n          \"tracking_number\": \"<string>\",\n          \"tracking_url\": \"<uri>\",\n          \"shipping_label_file_url\": \"<uri>\"\n        }\n      ],\n      \"id\": \"b4c5e42f-2c3e-c7ee-b084-c9369b5f4c92\",\n      \"status\": \"<string>\",\n      \"name\": \"<string>\",\n      \"created_at\": \"1986-03-16T20:20:54.995Z\",\n      \"updated_at\": \"2007-07-15T12:04:20.413Z\",\n      \"rma\": \"<string>\"\n    }\n  ],\n  \"next\": \"https://AueVLZCaQJsjlLRVUPStSEBTNdCSIQpKS.rnwny2ivryX5FafuWThwRIoXZRAmFxton+XRH+ibJwhiKZQ2TrpLn5KlvyPchJ-i+mQMnKqC5vXwzp8cn1\",\n  \"previous\": \"http://api.example.org/accounts/?cursor=cj0xJnA9NDg3\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3382325b-b32b-4d7f-b3d6-41eec0f9800d",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "returns",
+                    ":id",
+                    "update_tracking",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "carrier_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_number",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_url",
+                      "value": "<uri>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "shipping_label_file_url",
+                      "value": "<uri>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bbf667c3-644e-4a61-a0f2-82191dd42a8f",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "returns",
+                    ":id",
+                    "update_tracking",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "carrier_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_number",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_url",
+                      "value": "<uri>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "shipping_label_file_url",
+                      "value": "<uri>"
+                    }
+                  ]
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6785b4fd-fa5f-4a5c-8294-80b56f928877",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "returns",
+                    ":id",
+                    "update_tracking",
+                    ""
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "ordering",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "cursor",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "X-CANAL-APP-ID",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "key": "carrier_name",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_number",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "tracking_url",
+                      "value": "<uri>"
+                    },
+                    {
+                      "disabled": false,
+                      "key": "shipping_label_file_url",
+                      "value": "<uri>"
+                    }
+                  ]
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"message\": \"string\",\n  \"detail\": \"\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.shopcanal.com/platform",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "a3ae27fd-62c0-4b97-82ea-f2373eaec5d4",
+    "name": "Rokt Catalog csv returns API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Integrate with Rokt Catalog",
+      "type": "text/plain"
+    }
+  }
+}

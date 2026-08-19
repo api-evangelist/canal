@@ -1,0 +1,167 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rokt Catalog csv webhooks API",
+    "version": "1.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "webhooks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "webhooks_list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shopcanal.com/platform/webhooks/",
+            "params": [
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The pagination cursor value."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\nRetrieve a paginated list of all webhook subscriptions currently registered and active for the authenticated application (identified by the API credentials used in the request).\n\nThe response (`RegisteredWebhookSerializer`, paginated) includes the unique Rokt Catalog `ID` (UUID), the subscribed `topic`, and the target `address` (URL) for each registered webhook.\n\nResults are returned using cursor-based pagination (`PlatformPagination`).\n\n"
+        },
+        {
+          "info": {
+            "name": "webhooks_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/webhooks/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\nRegister a new endpoint URL to receive notifications (webhooks) from Rokt Catalog when specific events occur related to your store.\n\nThe request body (`CreateUpdateWebhookSerializer`) requires:\n\n`topic`: A string representing the event type you want to subscribe to (e.g., `product/update`, `order/cancel`, `fulfillment/update`). See Catalog documentation for the full list of available topics.\n\n`address`: The HTTPS URL of your application's endpoint that will receive the webhook POST requests fro"
+        },
+        {
+          "info": {
+            "name": "webhooks_retrieve",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shopcanal.com/platform/webhooks/:id/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\nRetrieve the details for a single, specific webhook subscription, identified by its Rokt Catalog `ID` (UUID) provided in the URL path.\n\nAccess is restricted to subscriptions belonging to the authenticated application.\n\nThe response (`RegisteredWebhookSerializer`) includes the `id`, `topic`, and `address`.\n\nIf the provided `ID` is invalid or does not correspond to a webhook registered by your application, a `404 Not Found` error is returned.\n\n"
+        },
+        {
+          "info": {
+            "name": "webhooks_update",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.shopcanal.com/platform/webhooks/:id/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\nUpdate the configuration of an existing webhook subscription. Identify the subscription by its Rokt Catalog `ID` (UUID) in the URL path.\n\nThe request body (`CreateUpdateWebhookSerializer`) can include the new `topic` and/or `address` you want to set. Partial updates are allowed (only include the fields you want to change).\n\n**Validation:** If provided, the `topic` must be one of the valid `WEBHOOK_TOPICS`.\n\nA successful update returns `200 OK` with the complete, updated details of the webhook s"
+        },
+        {
+          "info": {
+            "name": "webhooks_partial_update",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.shopcanal.com/platform/webhooks/:id/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          }
+        },
+        {
+          "info": {
+            "name": "webhooks_destroy",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.shopcanal.com/platform/webhooks/:id/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\nPermanently remove an existing webhook subscription, identified by its Rokt Catalog `ID` (UUID) in the URL path.\n\nAccess is restricted to subscriptions belonging to the authenticated application.\n\nOnce deleted, Catalog will immediately stop sending notifications for the associated `topic` to the registered `address`.\n\n**Warning:** This action is **irreversible**. To resume receiving notifications, you must create a new subscription.\n\nA successful deletion returns an HTTP `200 OK` status with an"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

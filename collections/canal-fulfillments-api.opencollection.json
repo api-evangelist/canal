@@ -1,0 +1,149 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Rokt Catalog csv fulfillments API",
+    "version": "1.0.1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "fulfillments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "fulfillments_list",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shopcanal.com/platform/fulfillments/",
+            "params": [
+              {
+                "name": "ordering",
+                "value": "",
+                "type": "query",
+                "description": "Which field to use when ordering the results."
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "The pagination cursor value."
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\nRetrieve a paginated list of fulfillment records associated with the authenticated store, reflecting its role in the order process.\n\n- **If called by a Storefront:** Returns fulfillments created by connected Suppliers for orders originating from the Storefront. This allows the Storefront to track shipments for items their customers ordered.\n\n- **If called by a Supplier:** Returns fulfillments created *by* this Supplier for orders they received from connected Storefronts.\n\nResults (`FulfillmentS"
+        },
+        {
+          "info": {
+            "name": "fulfillments_create",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.shopcanal.com/platform/fulfillments/",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Supplier Only]** Create a fulfillment record for items in an order received from a connected Storefront.\n\nThe request body (`CreateFulfillmentSerializer`) must specify:\n\n`order_id` (UUID of the *Supplier's* Rokt Catalog order record) and a list of `line_items`.\n\nEach object in `line_items` needs the Catalog `id` (UUID) of the *Supplier's* line item record and the `quantity` being fulfilled.\n\nFor physical shipments, include tracking information (`tracking_company`, `tracking_numbers`, `tracki"
+        },
+        {
+          "info": {
+            "name": "fulfillments_retrieve",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.shopcanal.com/platform/fulfillments/:id/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\nRetrieve the full details for a specific fulfillment record, identified by its Rokt Catalog `ID` (UUID) in the URL path.\n\nAccess is restricted to fulfillments associated with the authenticated store (`request.shop`). This means:\n\n- **Storefronts** can retrieve details of fulfillments created by their Suppliers for their orders.\n\n- **Suppliers** can retrieve details of fulfillments they created.\n\nThe response (`FulfillmentSerializer`) includes the fulfillment `status` (e.g., 'fulfilled', 'cancel"
+        },
+        {
+          "info": {
+            "name": "fulfillments_update",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.shopcanal.com/platform/fulfillments/:id/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          },
+          "docs": "\n**[Supplier Only]** Update an existing fulfillment record created by your Supplier account. Identify the fulfillment by its Rokt Catalog `ID` (UUID) in the URL path.\n\nThe request body (`UpdateFulfillmentSerializer`) should contain the fields to update, such as `tracking_company`, `tracking_numbers`, and/or `tracking_urls` for physical shipments. Tracking fields are optional and can be omitted for digital/email fulfillments with no shipment. Partial updates are allowed (only include the fields y"
+        },
+        {
+          "info": {
+            "name": "fulfillments_partial_update",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.shopcanal.com/platform/fulfillments/:id/",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "apikey",
+              "key": "X-CANAL-APP-ID",
+              "value": "{{X-CANAL-APP-ID}}",
+              "placement": "header"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
