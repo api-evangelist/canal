@@ -36,6 +36,17 @@ created: '2026-07-17'
 modified: '2026-07-18'
 tags:
 - Company
+- E-Commerce
+- Dropshipping
+- Marketplace
+- Commerce
+- Retail
+- Fulfillment
+- Order
+- Product
+- Webhook
+tags_raw:
+- Company
 - eCommerce
 - Dropshipping
 - Marketplace
@@ -52,6 +63,8 @@ apis:
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
   tags:
+  - CSV
+  tags_raw:
   - csv
   properties:
   - type: OpenAPI
@@ -64,6 +77,8 @@ apis:
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
   tags:
+  - Fulfillments
+  tags_raw:
   - fulfillments
   properties:
   - type: OpenAPI
@@ -76,6 +91,8 @@ apis:
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
   tags:
+  - Markets
+  tags_raw:
   - markets
   properties:
   - type: OpenAPI
@@ -100,6 +117,8 @@ apis:
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
   tags:
+  - Order
+  tags_raw:
   - orders
   properties:
   - type: OpenAPI
@@ -111,7 +130,8 @@ apis:
   description: The product_sets API from Canal — 2 operation(s) for product_sets.
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
-  tags:
+  tags: []
+  tags_raw:
   - product_sets
   properties:
   - type: OpenAPI
@@ -124,6 +144,8 @@ apis:
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
   tags:
+  - Product
+  tags_raw:
   - products
   properties:
   - type: OpenAPI
@@ -136,6 +158,8 @@ apis:
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
   tags:
+  - Refunds
+  tags_raw:
   - refunds
   properties:
   - type: OpenAPI
@@ -148,6 +172,8 @@ apis:
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
   tags:
+  - Returns
+  tags_raw:
   - returns
   properties:
   - type: OpenAPI
@@ -160,6 +186,8 @@ apis:
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
   tags:
+  - Selection
+  tags_raw:
   - selection
   properties:
   - type: OpenAPI
@@ -172,6 +200,8 @@ apis:
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
   tags:
+  - Shipping
+  tags_raw:
   - shipping
   properties:
   - type: OpenAPI
@@ -196,6 +226,8 @@ apis:
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
   tags:
+  - Shops
+  tags_raw:
   - shops
   properties:
   - type: OpenAPI
@@ -220,6 +252,8 @@ apis:
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
   tags:
+  - Tax
+  tags_raw:
   - tax
   properties:
   - type: OpenAPI
@@ -232,6 +266,8 @@ apis:
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
   tags:
+  - Variants
+  tags_raw:
   - variants
   properties:
   - type: OpenAPI
@@ -244,6 +280,8 @@ apis:
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
   tags:
+  - Webhook
+  tags_raw:
   - webhooks
   properties:
   - type: OpenAPI
