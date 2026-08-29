@@ -306,6 +306,9 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: CapabilityMap
+  url: capabilities/canal-capability-edges.yml
+  name: Canal Business Capability Map
 - type: DomainSecurity
   url: security/canal-domain-security.yml
 - type: Authentication
