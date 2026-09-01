@@ -75,7 +75,7 @@ apis:
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
   tags:
-  - csv
+  - CSV
   tags_raw:
   - csv
   properties:
@@ -89,7 +89,7 @@ apis:
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
   tags:
-  - fulfillments
+  - Fulfillments
   tags_raw:
   - fulfillments
   properties:
@@ -142,7 +142,8 @@ apis:
   description: The product_sets API from Canal — 2 operation(s) for product_sets.
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
-  tags: []
+  tags:
+  - Product Sets
   tags_raw:
   - product_sets
   properties:
@@ -184,7 +185,7 @@ apis:
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
   tags:
-  - returns
+  - Returns
   tags_raw:
   - returns
   properties:
@@ -198,7 +199,7 @@ apis:
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
   tags:
-  - selection
+  - Selection
   tags_raw:
   - selection
   properties:
@@ -278,7 +279,7 @@ apis:
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
   tags:
-  - variants
+  - Variants
   tags_raw:
   - variants
   properties:
