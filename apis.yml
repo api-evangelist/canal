@@ -26,15 +26,17 @@ deliveryModel:
   method: derived
 accessModel:
   pricing: unknown
-  onboarding: self-serve
+  onboarding: unknown
   trial: false
   try_now: false
   public: false
-  label: Self-serve signup
-  confidence: medium
+  label: Unknown
+  confidence: low
   source:
   - authentication
-  generated: '2026-07-22'
+  - security
+  - sandbox
+  generated: '2026-09-03'
   method: derived
 image: https://cdn.prod.website-files.com/633617b15a78ccbe02dcf627/657cdf8810129b1d520e01c1_Site%20Opengrap%20Image.png
 x-type: company
@@ -334,8 +336,9 @@ common:
   url: sandbox/canal-sandbox.yml
 - type: Conformance
   url: conformance/canal-conformance.yml
-- type: MCPServer
+- type: X-MCPServerCandidate
   url: mcp/canal-mcp.yml
+  note: 'Renamed from MCPServer 2026-09-03 (roadmap#247): the manifest self-describes as status: candidate — a tool list derived from the published API contracts, not an existing server. The scorer already read the manifest and reported mcp_server correctly; the MCPServer type was crediting the artifact-type surfaces with a server that does not exist.'
 - type: Webhooks
   url: asyncapi/canal-webhooks.yml
 - type: AgentSkill
