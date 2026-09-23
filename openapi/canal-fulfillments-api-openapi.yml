@@ -1,20 +1,18 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Rokt Catalog csv fulfillments API
+  title: Rokt Catalog Fulfillments API
   version: 1.0.1
   description: Integrate with Rokt Catalog
 servers:
 - url: https://api.shopcanal.com/platform
   description: Rokt Catalog Storefront Public API
 tags:
-- name: fulfillments
+- name: Fulfillments
 paths:
   /fulfillments/:
     get:
       operationId: fulfillments_list
-      description: '
-
-        Retrieve a paginated list of fulfillment records associated with the authenticated store, reflecting its role in the order process.
+      description: 'Retrieve a paginated list of fulfillment records associated with the authenticated store, reflecting its role in the order process.
 
 
         - **If called by a Storefront:** Returns fulfillments created by connected Suppliers for orders originating from the Storefront. This allows the Storefront to track shipments for items their customers ordered.
@@ -26,10 +24,7 @@ paths:
         Results (`FulfillmentSerializer`) include tracking details when present, status, associated line items, and timestamps.
 
 
-        Pagination is cursor-based (`PlatformPagination`). Ordering is available on `created_at` and `updated_at`, defaulting to `-created_at`.
-
-
-        '
+        Pagination is cursor-based (`PlatformPagination`). Ordering is available on `created_at` and `updated_at`, defaulting to `-created_at`.'
       parameters:
       - name: ordering
         required: false
@@ -44,7 +39,7 @@ paths:
         schema:
           type: string
       tags:
-      - fulfillments
+      - Fulfillments
       security:
       - platformAppId: []
         platformAppToken: []
@@ -73,11 +68,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
           description: ''
+      summary: Fulfillments list
+      x-summary-source: derived
     post:
       operationId: fulfillments_create
-      description: '
-
-        **[Supplier Only]** Create a fulfillment record for items in an order received from a connected Storefront.
+      description: '**[Supplier Only]** Create a fulfillment record for items in an order received from a connected Storefront.
 
 
         The request body (`CreateFulfillmentSerializer`) must specify:
@@ -107,12 +102,9 @@ paths:
         4. **Webhook:** Emits a `FULFILLMENT_UPDATE` webhook event containing details of the **Supplier''s** newly created fulfillment record.
 
 
-        A successful creation returns `201 Created` with the details of the Supplier''s fulfillment record (`FulfillmentSerializer`).
-
-
-        '
+        A successful creation returns `201 Created` with the details of the Supplier''s fulfillment record (`FulfillmentSerializer`).'
       tags:
-      - fulfillments
+      - Fulfillments
       requestBody:
         content:
           application/json:
@@ -153,12 +145,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
           description: ''
+      summary: Fulfillments create
+      x-summary-source: derived
   /fulfillments/{id}/:
     get:
       operationId: fulfillments_retrieve
-      description: '
-
-        Retrieve the full details for a specific fulfillment record, identified by its Rokt Catalog `ID` (UUID) in the URL path.
+      description: 'Retrieve the full details for a specific fulfillment record, identified by its Rokt Catalog `ID` (UUID) in the URL path.
 
 
         Access is restricted to fulfillments associated with the authenticated store (`request.shop`). This means:
@@ -173,10 +165,7 @@ paths:
         The response (`FulfillmentSerializer`) includes the fulfillment `status` (e.g., ''fulfilled'', ''cancelled''), optional `tracking_company`, optional `tracking_numbers`, optional `tracking_urls`, the list of `line_items` included in this fulfillment (with quantities), and relevant timestamps.
 
 
-        If the fulfillment `ID` is invalid or not associated with an order linked to your store, a `404 Not Found` error is returned.
-
-
-        '
+        If the fulfillment `ID` is invalid or not associated with an order linked to your store, a `404 Not Found` error is returned.'
       parameters:
       - in: path
         name: id
@@ -184,7 +173,7 @@ paths:
           type: string
         required: true
       tags:
-      - fulfillments
+      - Fulfillments
       security:
       - platformAppId: []
         platformAppToken: []
@@ -213,11 +202,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
           description: ''
+      summary: Fulfillments retrieve
+      x-summary-source: derived
     put:
       operationId: fulfillments_update
-      description: '
-
-        **[Supplier Only]** Update an existing fulfillment record created by your Supplier account. Identify the fulfillment by its Rokt Catalog `ID` (UUID) in the URL path.
+      description: '**[Supplier Only]** Update an existing fulfillment record created by your Supplier account. Identify the fulfillment by its Rokt Catalog `ID` (UUID) in the URL path.
 
 
         The request body (`UpdateFulfillmentSerializer`) should contain the fields to update, such as `tracking_company`, `tracking_numbers`, and/or `tracking_urls` for physical shipments. Tracking fields are optional and can be omitted for digital/email fulfillments with no shipment. Partial updates are allowed (only include the fields you want to change).
@@ -235,10 +224,7 @@ paths:
         3. **Webhook:** Emits a `FULFILLMENT_UPDATE` webhook event containing details of the **Supplier''s** updated fulfillment record. If the sync to the Storefront also resulted in an update to the Storefront''s fulfillment record in Catalog, a separate `FULFILLMENT_UPDATE` event for the **Storefront''s** fulfillment might also be emitted (depending on the sync logic).
 
 
-        A successful update returns `200 OK` with the updated details of the Supplier''s fulfillment record (`FulfillmentSerializer`).
-
-
-        '
+        A successful update returns `200 OK` with the updated details of the Supplier''s fulfillment record (`FulfillmentSerializer`).'
       parameters:
       - in: path
         name: id
@@ -246,7 +232,7 @@ paths:
           type: string
         required: true
       tags:
-      - fulfillments
+      - Fulfillments
       requestBody:
         content:
           application/json:
@@ -287,6 +273,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
           description: ''
+      summary: Fulfillments update
+      x-summary-source: derived
     patch:
       operationId: fulfillments_partial_update
       parameters:
@@ -296,7 +284,7 @@ paths:
           type: string
         required: true
       tags:
-      - fulfillments
+      - Fulfillments
       requestBody:
         content:
           application/json:
@@ -318,137 +306,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/Fulfillment'
           description: ''
+      summary: Fulfillments partial update
+      x-summary-source: derived
 components:
   schemas:
-    PatchedFulfillment:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-          maxLength: 255
-        order_id:
-          type: string
-          format: uuid
-        shop:
-          $ref: '#/components/schemas/Shop'
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/LineItemRead'
-        service:
-          type: string
-          nullable: true
-          maxLength: 258
-        shipment_status:
-          type: string
-          nullable: true
-          maxLength: 32
-        status:
-          type: string
-          nullable: true
-          maxLength: 32
-        tracking_company:
-          type: string
-          nullable: true
-          maxLength: 257
-        tracking_numbers:
-          type: array
-          items:
-            type: string
-            maxLength: 128
-          nullable: true
-        tracking_urls:
-          type: array
-          items:
-            type: string
-            maxLength: 256
-          nullable: true
-    Fulfillment:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-          maxLength: 255
-        order_id:
-          type: string
-          format: uuid
-        shop:
-          $ref: '#/components/schemas/Shop'
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/LineItemRead'
-        service:
-          type: string
-          nullable: true
-          maxLength: 258
-        shipment_status:
-          type: string
-          nullable: true
-          maxLength: 32
-        status:
-          type: string
-          nullable: true
-          maxLength: 32
-        tracking_company:
-          type: string
-          nullable: true
-          maxLength: 257
-        tracking_numbers:
-          type: array
-          items:
-            type: string
-            maxLength: 128
-          nullable: true
-        tracking_urls:
-          type: array
-          items:
-            type: string
-            maxLength: 256
-          nullable: true
-      required:
-      - id
-      - line_items
-      - name
-      - order_id
-      - shop
-    UpdateFulfillment:
-      type: object
-      properties:
-        name:
-          type: string
-        service:
-          type: string
-        shipment_status:
-          $ref: '#/components/schemas/ShipmentStatusEnum'
-        status:
-          $ref: '#/components/schemas/Status406Enum'
-        tracking_company:
-          type: string
-          nullable: true
-        tracking_numbers:
-          type: array
-          items:
-            type: string
-          nullable: true
-        tracking_urls:
-          type: array
-          items:
-            type: string
-          nullable: true
-      required:
-      - name
-      - service
-      - shipment_status
-      - status
     Shop:
       type: object
       properties:
@@ -457,47 +318,55 @@ components:
           format: uuid
           readOnly: true
         email:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           readOnly: true
         phone:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           maxLength: 128
         name:
           type: string
           maxLength: 129
         description:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           maxLength: 6144
         myshopify_domain:
           type: string
           maxLength: 128
         province:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           maxLength: 122
         country:
           type: string
           maxLength: 64
         domain:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           maxLength: 128
         display_domain:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           readOnly: true
         privacy_policy_url:
-          type: string
+          type:
+          - string
+          - 'null'
           format: uri
-          nullable: true
           maxLength: 500
         terms_of_service_url:
-          type: string
+          type:
+          - string
+          - 'null'
           format: uri
-          nullable: true
           maxLength: 500
       required:
       - country
@@ -526,19 +395,150 @@ components:
         * `error` - error
 
         * `failure` - failure'
+    Fulfillment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        order_id:
+          type: string
+          format: uuid
+        shop:
+          $ref: '#/components/schemas/Shop'
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItemRead'
+        service:
+          type:
+          - string
+          - 'null'
+          maxLength: 258
+        shipment_status:
+          type:
+          - string
+          - 'null'
+          maxLength: 32
+        status:
+          type:
+          - string
+          - 'null'
+          maxLength: 32
+        tracking_company:
+          type:
+          - string
+          - 'null'
+          maxLength: 257
+        tracking_numbers:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            maxLength: 128
+        tracking_urls:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            maxLength: 256
+      required:
+      - id
+      - line_items
+      - name
+      - order_id
+      - shop
+    ShipmentStatusEnum:
+      enum:
+      - label_printed
+      - label_purchased
+      - attempted_delivery
+      - ready_for_pickup
+      - confirmed
+      - in_transit
+      - out_for_delivery
+      - delivered
+      - failure
+      type: string
+      description: '* `label_printed` - label_printed
+
+        * `label_purchased` - label_purchased
+
+        * `attempted_delivery` - attempted_delivery
+
+        * `ready_for_pickup` - ready_for_pickup
+
+        * `confirmed` - confirmed
+
+        * `in_transit` - in_transit
+
+        * `out_for_delivery` - out_for_delivery
+
+        * `delivered` - delivered
+
+        * `failure` - failure'
+    CreateFulfillment:
+      type: object
+      properties:
+        name:
+          type: string
+        service:
+          type: string
+        shipment_status:
+          $ref: '#/components/schemas/ShipmentStatusEnum'
+        status:
+          $ref: '#/components/schemas/Status406Enum'
+        tracking_company:
+          type:
+          - string
+          - 'null'
+        tracking_numbers:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        tracking_urls:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        order_id:
+          type: string
+          format: uuid
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItem'
+      required:
+      - line_items
+      - name
+      - order_id
+      - service
+      - shipment_status
+      - status
     PaginatedFulfillmentList:
       type: object
       required:
       - results
       properties:
         next:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           format: uri
           example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
         previous:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           format: uri
           example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
         results:
@@ -573,79 +573,6 @@ components:
       - price
       - quantity
       - variant_id
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        detail: {}
-    CreateFulfillment:
-      type: object
-      properties:
-        name:
-          type: string
-        service:
-          type: string
-        shipment_status:
-          $ref: '#/components/schemas/ShipmentStatusEnum'
-        status:
-          $ref: '#/components/schemas/Status406Enum'
-        tracking_company:
-          type: string
-          nullable: true
-        tracking_numbers:
-          type: array
-          items:
-            type: string
-          nullable: true
-        tracking_urls:
-          type: array
-          items:
-            type: string
-          nullable: true
-        order_id:
-          type: string
-          format: uuid
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/LineItem'
-      required:
-      - line_items
-      - name
-      - order_id
-      - service
-      - shipment_status
-      - status
-    ShipmentStatusEnum:
-      enum:
-      - label_printed
-      - label_purchased
-      - attempted_delivery
-      - ready_for_pickup
-      - confirmed
-      - in_transit
-      - out_for_delivery
-      - delivered
-      - failure
-      type: string
-      description: '* `label_printed` - label_printed
-
-        * `label_purchased` - label_purchased
-
-        * `attempted_delivery` - attempted_delivery
-
-        * `ready_for_pickup` - ready_for_pickup
-
-        * `confirmed` - confirmed
-
-        * `in_transit` - in_transit
-
-        * `out_for_delivery` - out_for_delivery
-
-        * `delivered` - delivered
-
-        * `failure` - failure'
     LineItem:
       type: object
       properties:
@@ -657,6 +584,97 @@ components:
       required:
       - id
       - quantity
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+    PatchedFulfillment:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        order_id:
+          type: string
+          format: uuid
+        shop:
+          $ref: '#/components/schemas/Shop'
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItemRead'
+        service:
+          type:
+          - string
+          - 'null'
+          maxLength: 258
+        shipment_status:
+          type:
+          - string
+          - 'null'
+          maxLength: 32
+        status:
+          type:
+          - string
+          - 'null'
+          maxLength: 32
+        tracking_company:
+          type:
+          - string
+          - 'null'
+          maxLength: 257
+        tracking_numbers:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            maxLength: 128
+        tracking_urls:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            maxLength: 256
+    UpdateFulfillment:
+      type: object
+      properties:
+        name:
+          type: string
+        service:
+          type: string
+        shipment_status:
+          $ref: '#/components/schemas/ShipmentStatusEnum'
+        status:
+          $ref: '#/components/schemas/Status406Enum'
+        tracking_company:
+          type:
+          - string
+          - 'null'
+        tracking_numbers:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        tracking_urls:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      required:
+      - name
+      - service
+      - shipment_status
+      - status
   securitySchemes:
     basicAuth:
       type: http

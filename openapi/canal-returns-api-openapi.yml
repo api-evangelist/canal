@@ -1,20 +1,18 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Rokt Catalog csv returns API
+  title: Rokt Catalog Returns API
   version: 1.0.1
   description: Integrate with Rokt Catalog
 servers:
 - url: https://api.shopcanal.com/platform
   description: Rokt Catalog Storefront Public API
 tags:
-- name: returns
+- name: Returns
 paths:
   /returns/:
     get:
       operationId: returns_list
-      description: '
-
-        Retrieve a paginated list of return requests associated with the authenticated store, reflecting its role.
+      description: 'Retrieve a paginated list of return requests associated with the authenticated store, reflecting its role.
 
 
         - **If called by a Storefront:** Returns `ReturnRequest` records initiated *by* this Storefront for orders placed on their platform.
@@ -29,10 +27,7 @@ paths:
         **Response (`ReturnSerializer`, paginated):** Includes details for each return request: `id`, `name`, `rma`, associated `order_id`, `status` (''OPEN'' or ''CLOSED''), `return_line_items` (with quantities, reasons), `reverse_deliveries` (tracking info), and timestamps.
 
 
-        Pagination is cursor-based (`PlatformPagination`). Ordering is available on `created_at` and `updated_at`, defaulting to `-created_at`.
-
-
-        '
+        Pagination is cursor-based (`PlatformPagination`). Ordering is available on `created_at` and `updated_at`, defaulting to `-created_at`.'
       parameters:
       - name: ordering
         required: false
@@ -55,7 +50,7 @@ paths:
           - open
         description: Filter returns by status
       tags:
-      - returns
+      - Returns
       security:
       - platformAppId: []
         platformAppToken: []
@@ -84,11 +79,64 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
           description: ''
+      summary: Returns list
+      x-summary-source: derived
     post:
       operationId: returns_create
-      description: "\n**[Storefront Only]** Initiate a return process for items purchased in a Rokt Catalog-facilitated order.\n\n**Request Body (`ReturnCreateSerializer`):**\n\n- `order_id` (UUID, required): The Catalog ID of the original Storefront order containing the items to be returned.\n\n- `name` (string, required): A unique identifier for this return request (e.g., your system's RMA number).\n\n- `rma` (string, optional): An alternative return merchandise authorization identifier.\n\n- `return_line_items` (list, required): A list of objects, each specifying:\n\n  - `line_item_id` (UUID, required): The Catalog ID of the *Storefront's* line item record to be returned.\n\n  - `quantity` (integer, required): The quantity of this line item being returned.\n\n  - `return_reason` (string, optional): A code or description for the return reason.\n\n  - `customer_note` (string, optional): Any notes provided by the customer.\n\n- `reverse_deliveries` (list, optional): Allows providing initial return shipping tracking information (see `ReverseDeliveryCreateSerializer`) within the same request.\n\n**Process:**\n\n1. **Validation:** Checks if the order and line items exist, belong to the Storefront, and if the requested return quantities are valid (e.g., not exceeding fulfilled quantity). Acquires a lock on the order.\n\n2. **Create Storefront Return Request:** Creates the primary return request record associated with the Storefront's order in Rokt Catalog.\n\n3. **Create Initial Tracking (Optional):** If `reverse_deliveries` are provided, creates associated return tracking records.\n\n4. **Dispatch to Suppliers (Async):** Triggers an **asynchronous** task to create corresponding return request records for each relevant Supplier involved in the returned line items. These Supplier return requests are linked back to the Storefront's request.\n\n**Error Handling:** Returns `400 Bad Request` for validation errors (e.g., invalid quantity, bad IDs). Returns `500 Internal Server Error` for unexpected issues.\n\n**Response:** On success, returns `201 Created` with the details of the newly created **Storefront** return request (`ReturnSerializer`).\n\n"
+      description: '**[Storefront Only]** Initiate a return process for items purchased in a Rokt Catalog-facilitated order.
+
+
+        **Request Body (`ReturnCreateSerializer`):**
+
+
+        - `order_id` (UUID, required): The Catalog ID of the original Storefront order containing the items to be returned.
+
+
+        - `name` (string, required): A unique identifier for this return request (e.g., your system''s RMA number).
+
+
+        - `rma` (string, optional): An alternative return merchandise authorization identifier.
+
+
+        - `return_line_items` (list, required): A list of objects, each specifying:
+
+
+        - `line_item_id` (UUID, required): The Catalog ID of the *Storefront''s* line item record to be returned.
+
+
+        - `quantity` (integer, required): The quantity of this line item being returned.
+
+
+        - `return_reason` (string, optional): A code or description for the return reason.
+
+
+        - `customer_note` (string, optional): Any notes provided by the customer.
+
+
+        - `reverse_deliveries` (list, optional): Allows providing initial return shipping tracking information (see `ReverseDeliveryCreateSerializer`) within the same request.
+
+
+        **Process:**
+
+
+        1. **Validation:** Checks if the order and line items exist, belong to the Storefront, and if the requested return quantities are valid (e.g., not exceeding fulfilled quantity). Acquires a lock on the order.
+
+
+        2. **Create Storefront Return Request:** Creates the primary return request record associated with the Storefront''s order in Rokt Catalog.
+
+
+        3. **Create Initial Tracking (Optional):** If `reverse_deliveries` are provided, creates associated return tracking records.
+
+
+        4. **Dispatch to Suppliers (Async):** Triggers an **asynchronous** task to create corresponding return request records for each relevant Supplier involved in the returned line items. These Supplier return requests are linked back to the Storefront''s request.
+
+
+        **Error Handling:** Returns `400 Bad Request` for validation errors (e.g., invalid quantity, bad IDs). Returns `500 Internal Server Error` for unexpected issues.
+
+
+        **Response:** On success, returns `201 Created` with the details of the newly created **Storefront** return request (`ReturnSerializer`).'
       tags:
-      - returns
+      - Returns
       requestBody:
         content:
           application/json:
@@ -135,6 +183,8 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
           description: ''
+      summary: Returns create
+      x-summary-source: derived
   /returns/{id}/:
     get:
       operationId: returns_retrieve
@@ -145,7 +195,7 @@ paths:
           type: string
         required: true
       tags:
-      - returns
+      - Returns
       security:
       - platformAppId: []
         platformAppToken: []
@@ -156,12 +206,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/Return'
           description: ''
+      summary: Returns retrieve
+      x-summary-source: derived
   /returns/{id}/close/:
     post:
       operationId: returns_close_create
-      description: '
-
-        **[Supplier Only]** Mark a return request that your Supplier account received from a Storefront as ''CLOSED''.
+      description: '**[Supplier Only]** Mark a return request that your Supplier account received from a Storefront as ''CLOSED''.
 
 
         Identify the return request by its Rokt Catalog `ID` (UUID) provided in the URL path.
@@ -179,10 +229,7 @@ paths:
         **Permissions:** Requires the request to be authenticated as the Supplier associated with the return request. Attempting to close a return belonging to another shop results in `403 Forbidden`.
 
 
-        A successful update returns `200 OK` with the updated details of the **Supplier''s** return request (`ReturnSerializer`), showing the status as ''CLOSED''.
-
-
-        '
+        A successful update returns `200 OK` with the updated details of the **Supplier''s** return request (`ReturnSerializer`), showing the status as ''CLOSED''.'
       parameters:
       - in: path
         name: id
@@ -190,7 +237,7 @@ paths:
           type: string
         required: true
       tags:
-      - returns
+      - Returns
       requestBody:
         content:
           application/json:
@@ -237,12 +284,12 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
           description: ''
+      summary: Returns close create
+      x-summary-source: derived
   /returns/{id}/update_tracking/:
     post:
       operationId: returns_update_tracking_create
-      description: '
-
-        **[Storefront Only]** Add or update the tracking information for the shipment returning items back to the Supplier(s). Identify the specific return request using its Rokt Catalog `ID` (UUID) in the URL path.
+      description: '**[Storefront Only]** Add or update the tracking information for the shipment returning items back to the Supplier(s). Identify the specific return request using its Rokt Catalog `ID` (UUID) in the URL path.
 
 
         **Request Body (`ReverseDeliveryCreateSerializer`):**
@@ -275,10 +322,7 @@ paths:
         3. **Sync to Suppliers (Sync):** This **synchronously** attempts to add the same return tracking information to the corresponding return request records on the Supplier side(s).
 
 
-        **Response:** Returns `200 OK` with the updated details of the **Storefront''s** return request (`ReturnSerializer`), now including the added return tracking information.
-
-
-        '
+        **Response:** Returns `200 OK` with the updated details of the **Storefront''s** return request (`ReturnSerializer`), now including the added return tracking information.'
       parameters:
       - in: path
         name: id
@@ -298,7 +342,7 @@ paths:
         schema:
           type: string
       tags:
-      - returns
+      - Returns
       requestBody:
         content:
           application/json:
@@ -338,35 +382,49 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
           description: ''
+      summary: Returns update tracking create
+      x-summary-source: derived
 components:
   schemas:
-    ReverseDelivery:
+    PaginatedReturnList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Return'
+    CreateReturnLineItem:
       type: object
       properties:
-        id:
+        line_item_id:
           type: string
           format: uuid
-          readOnly: true
-        carrier_name:
-          type: string
-          nullable: true
-          maxLength: 100
-        tracking_number:
-          type: string
-          nullable: true
-          maxLength: 100
-        tracking_url:
-          type: string
-          format: uri
-          nullable: true
-          maxLength: 200
-        shipping_label_file_url:
-          type: string
-          format: uri
-          nullable: true
-          maxLength: 1279
+        quantity:
+          type: integer
+        customer_note:
+          type:
+          - string
+          - 'null'
+        return_reason:
+          $ref: '#/components/schemas/ReturnReasonEnum'
       required:
-      - id
+      - line_item_id
+      - quantity
+      - return_reason
     ReturnLineItem:
       type: object
       properties:
@@ -382,14 +440,16 @@ components:
           maximum: 2147483647
           minimum: -2147483648
         customer_note:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           maxLength: 300
         return_reason:
           $ref: '#/components/schemas/ReturnReasonEnum'
         return_reason_note:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
           maxLength: 255
       required:
       - id
@@ -427,119 +487,6 @@ components:
         * `unwanted` - unwanted
 
         * `wrong_item` - wrong_item'
-    CreateReturnLineItem:
-      type: object
-      properties:
-        line_item_id:
-          type: string
-          format: uuid
-        quantity:
-          type: integer
-        customer_note:
-          type: string
-          nullable: true
-        return_reason:
-          $ref: '#/components/schemas/ReturnReasonEnum'
-      required:
-      - line_item_id
-      - quantity
-      - return_reason
-    ReverseDeliveryCreate:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        carrier_name:
-          type: string
-          nullable: true
-          maxLength: 100
-        tracking_number:
-          type: string
-          nullable: true
-          maxLength: 100
-        tracking_url:
-          type: string
-          format: uri
-          nullable: true
-          maxLength: 200
-        shipping_label_file_url:
-          type: string
-          format: uri
-          nullable: true
-          maxLength: 1279
-      required:
-      - id
-    Return:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        order:
-          type: string
-          format: uuid
-        return_line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReturnLineItem'
-        status:
-          $ref: '#/components/schemas/Status602Enum'
-        name:
-          type: string
-          nullable: true
-          maxLength: 501
-        total_return_line_items:
-          type: integer
-          maximum: 32767
-          minimum: -32768
-          description: The sum of all return line item quantities for the return.
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-        tracking:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReverseDelivery'
-        rma:
-          type: string
-          nullable: true
-          description: '"Return merchandise authorization" -- used as reference number for SK to SUP comms'
-          maxLength: 501
-      required:
-      - created_at
-      - id
-      - order
-      - return_line_items
-      - total_return_line_items
-      - tracking
-      - updated_at
-    PaginatedReturnList:
-      type: object
-      required:
-      - results
-      properties:
-        next:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
-        previous:
-          type: string
-          nullable: true
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Return'
     Error:
       type: object
       properties:
@@ -576,8 +523,9 @@ components:
         tracking:
           $ref: '#/components/schemas/ReverseDeliveryCreate'
         name:
-          type: string
-          nullable: true
+          type:
+          - string
+          - 'null'
         status:
           allOf:
           - $ref: '#/components/schemas/Status602Enum'
@@ -590,6 +538,120 @@ components:
       - return_line_items
       - status
       - tracking
+    Return:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        order:
+          type: string
+          format: uuid
+        return_line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReturnLineItem'
+        status:
+          $ref: '#/components/schemas/Status602Enum'
+        name:
+          type:
+          - string
+          - 'null'
+          maxLength: 501
+        total_return_line_items:
+          type: integer
+          maximum: 32767
+          minimum: -32768
+          description: The sum of all return line item quantities for the return.
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        tracking:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReverseDelivery'
+        rma:
+          type:
+          - string
+          - 'null'
+          description: '"Return merchandise authorization" -- used as reference number for SK to SUP comms'
+          maxLength: 501
+      required:
+      - created_at
+      - id
+      - order
+      - return_line_items
+      - total_return_line_items
+      - tracking
+      - updated_at
+    ReverseDelivery:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        carrier_name:
+          type:
+          - string
+          - 'null'
+          maxLength: 100
+        tracking_number:
+          type:
+          - string
+          - 'null'
+          maxLength: 100
+        tracking_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+          maxLength: 200
+        shipping_label_file_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+          maxLength: 1279
+      required:
+      - id
+    ReverseDeliveryCreate:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        carrier_name:
+          type:
+          - string
+          - 'null'
+          maxLength: 100
+        tracking_number:
+          type:
+          - string
+          - 'null'
+          maxLength: 100
+        tracking_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+          maxLength: 200
+        shipping_label_file_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+          maxLength: 1279
+      required:
+      - id
   securitySchemes:
     basicAuth:
       type: http

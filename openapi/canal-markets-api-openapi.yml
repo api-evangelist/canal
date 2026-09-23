@@ -1,19 +1,19 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Rokt Catalog csv markets API
+  title: Rokt Catalog Markets API
   version: 1.0.1
   description: Integrate with Rokt Catalog
 servers:
 - url: https://api.shopcanal.com/platform
   description: Rokt Catalog Storefront Public API
 tags:
-- name: markets
+- name: Markets
 paths:
   /markets/prices/import/:
     post:
       operationId: markets_prices_import_create
       tags:
-      - markets
+      - Markets
       security:
       - basicAuth: []
       - platformAppId: []
@@ -22,6 +22,8 @@ paths:
       responses:
         '200':
           description: No response body
+      summary: Markets prices import create
+      x-summary-source: derived
 components:
   securitySchemes:
     basicAuth:

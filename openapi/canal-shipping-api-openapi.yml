@@ -1,20 +1,20 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Rokt Catalog csv shipping API
+  title: Rokt Catalog Shipping API
   version: 1.0.1
   description: Integrate with Rokt Catalog
 servers:
 - url: https://api.shopcanal.com/platform
   description: Rokt Catalog Storefront Public API
 tags:
-- name: shipping
+- name: Shipping
 paths:
   /shipping/v1/calculate/:
     post:
       operationId: shipping_v1_calculate_create
       description: Calculate shipping rates for supplier variants identified by `supplier_variant_rid` and `supplier_id`. Requires the ROKT_ADS_SHOP feature flag.
       tags:
-      - shipping
+      - Shipping
       requestBody:
         content:
           application/json:
@@ -55,45 +55,40 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
           description: ''
+      summary: Shipping v1 calculate create
+      x-summary-source: derived
 components:
   schemas:
-    ShippingDetailsData:
+    ShippingCalculationQuery:
       type: object
       properties:
-        price:
-          type: string
-        code:
-          type: string
-        title:
-          type: string
-        description:
-          type: string
-          nullable: true
-          default: ''
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplierShippingLineItem'
+        shipping_address:
+          allOf:
+          - $ref: '#/components/schemas/TaxAndShippingAddress'
+          description: The destination address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
       required:
-      - code
-      - price
-      - title
-    ShippingLineItemData:
+      - line_items
+      - shipping_address
+    ShippingCalculationResponse:
       type: object
       properties:
-        supplier_variant_rid:
-          type: string
-        supplier_id:
-          type: string
-          format: uuid
-        quantity:
-          type: integer
-        shipping_amount:
-          type: string
-        shipping_details:
-          $ref: '#/components/schemas/ShippingDetailsData'
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShippingLineItemData'
+          description: List of shipping calculation results per line item.
+        calculation_errors:
+          type: array
+          items:
+            type: string
+          description: Error messages
       required:
-      - quantity
-      - shipping_amount
-      - shipping_details
-      - supplier_id
-      - supplier_variant_rid
+      - calculation_errors
+      - line_items
     TaxAndShippingAddress:
       type: object
       description: Address serializer for tax and shipping calculations where address1 and name are optional
@@ -123,6 +118,12 @@ components:
       - country
       - province
       - zip
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
     SupplierShippingLineItem:
       type: object
       properties:
@@ -138,42 +139,44 @@ components:
       - quantity
       - supplier_id
       - supplier_variant_rid
-    ShippingCalculationResponse:
+    ShippingLineItemData:
       type: object
       properties:
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ShippingLineItemData'
-          description: List of shipping calculation results per line item.
-        calculation_errors:
-          type: array
-          items:
-            type: string
-          description: Error messages
-      required:
-      - calculation_errors
-      - line_items
-    ShippingCalculationQuery:
-      type: object
-      properties:
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/SupplierShippingLineItem'
-        shipping_address:
-          allOf:
-          - $ref: '#/components/schemas/TaxAndShippingAddress'
-          description: The destination address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
-      required:
-      - line_items
-      - shipping_address
-    Error:
-      type: object
-      properties:
-        message:
+        supplier_variant_rid:
           type: string
-        detail: {}
+        supplier_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        shipping_amount:
+          type: string
+        shipping_details:
+          $ref: '#/components/schemas/ShippingDetailsData'
+      required:
+      - quantity
+      - shipping_amount
+      - shipping_details
+      - supplier_id
+      - supplier_variant_rid
+    ShippingDetailsData:
+      type: object
+      properties:
+        price:
+          type: string
+        code:
+          type: string
+        title:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+          default: ''
+      required:
+      - code
+      - price
+      - title
   securitySchemes:
     basicAuth:
       type: http

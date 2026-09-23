@@ -1,20 +1,73 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Rokt Catalog csv selection API
+  title: Rokt Catalog Selection API
   version: 1.0.1
   description: Integrate with Rokt Catalog
 servers:
 - url: https://api.shopcanal.com/platform
   description: Rokt Catalog Storefront Public API
 tags:
-- name: selection
+- name: Selection
 paths:
   /selection/ai-select/:
     post:
       operationId: selection_ai_select_create
-      description: "AI-powered product selection endpoint.\n\nAccepts arbitrary JSON for items and context, uses parallel per-item GPT calls,\nand returns the zero-based index of the best item with reasoning and confidence.\n\nRequest format:\n{\n  \"items\": [arbitrary JSON objects, at least one],\n  \"context\": {arbitrary JSON object, non-empty},\n  \"session_id\": \"optional string\",\n  \"timeout_ms\": optional int or null,\n  \"metadata\": {\n    \"temperature\": 0.5,\n    \"llmModel\": \"gpt-4o\",\n    \"embeddingModel\": \"text-embedding-3-small\",\n    \"prompt\": \"default\",\n    \"verbosity\": \"low\",  // GPT-5 only: \"low\", \"medium\", or \"high\"\n    \"reasoningEffort\": \"low\"  // reasoning models: \"low\" or \"medium\";\n                              // newer GPT-5 models may also use \"none\"\n  }\n}\n\nResponse format:\n{\n  \"chosenIndex\": 0,\n  \"reasoning\": \"I would buy the Nike shoe cleaner...\",\n  \"confidence\": 0.82,\n  \"processingTimeMs\": 1245\n}"
+      description: 'AI-powered product selection endpoint.
+
+
+        Accepts arbitrary JSON for items and context, uses parallel per-item GPT calls,
+
+        and returns the zero-based index of the best item with reasoning and confidence.
+
+
+        Request format:
+
+        {
+
+        "items": [arbitrary JSON objects, at least one],
+
+        "context": {arbitrary JSON object, non-empty},
+
+        "session_id": "optional string",
+
+        "timeout_ms": optional int or null,
+
+        "metadata": {
+
+        "temperature": 0.5,
+
+        "llmModel": "gpt-4o",
+
+        "embeddingModel": "text-embedding-3-small",
+
+        "prompt": "default",
+
+        "verbosity": "low", // GPT-5 only: "low", "medium", or "high"
+
+        "reasoningEffort": "low" // reasoning models: "low" or "medium";
+
+        // newer GPT-5 models may also use "none"
+
+        }
+
+        }
+
+
+        Response format:
+
+        {
+
+        "chosenIndex": 0,
+
+        "reasoning": "I would buy the Nike shoe cleaner...",
+
+        "confidence": 0.82,
+
+        "processingTimeMs": 1245
+
+        }'
       tags:
-      - selection
+      - Selection
       security:
       - basicAuth: []
       - platformAppId: []
@@ -22,6 +75,8 @@ paths:
       responses:
         '200':
           description: No response body
+      summary: Selection ai select create
+      x-summary-source: derived
 components:
   securitySchemes:
     basicAuth:

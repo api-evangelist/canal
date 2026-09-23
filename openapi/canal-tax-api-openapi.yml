@@ -1,20 +1,20 @@
-openapi: 3.0.3
+openapi: 3.2.0
 info:
-  title: Rokt Catalog csv tax API
+  title: Rokt Catalog Tax API
   version: 1.0.1
   description: Integrate with Rokt Catalog
 servers:
 - url: https://api.shopcanal.com/platform
   description: Rokt Catalog Storefront Public API
 tags:
-- name: tax
+- name: Tax
 paths:
   /tax/calculate/:
     post:
       operationId: tax_calculate_create
       description: '**[Storefront Only]** Calculate estimated tax lines for a set of line items and a shipping address.'
       tags:
-      - tax
+      - Tax
       requestBody:
         content:
           application/json:
@@ -55,23 +55,10 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
           description: ''
+      summary: Tax calculate create
+      x-summary-source: derived
 components:
   schemas:
-    CreateOrderLineItem:
-      type: object
-      properties:
-        variant_id:
-          type: string
-          format: uuid
-        quantity:
-          type: integer
-        price:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
-      required:
-      - quantity
-      - variant_id
     TaxLineResponse:
       type: object
       properties:
@@ -95,6 +82,24 @@ components:
       - rate
       - tax_amount
       - title
+    TaxCalculationQuery:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        shipping_address:
+          allOf:
+          - $ref: '#/components/schemas/TaxAndShippingAddress'
+          description: The destination address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
+        billing_address:
+          allOf:
+          - $ref: '#/components/schemas/TaxAndShippingAddress'
+          description: The billing address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
+      required:
+      - line_items
+      - shipping_address
     TaxAndShippingAddress:
       type: object
       description: Address serializer for tax and shipping calculations where address1 and name are optional
@@ -124,24 +129,27 @@ components:
       - country
       - province
       - zip
-    TaxCalculationQuery:
+    Error:
       type: object
       properties:
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateOrderLineItem'
-        shipping_address:
-          allOf:
-          - $ref: '#/components/schemas/TaxAndShippingAddress'
-          description: The destination address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
-        billing_address:
-          allOf:
-          - $ref: '#/components/schemas/TaxAndShippingAddress'
-          description: The billing address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
+        message:
+          type: string
+        detail: {}
+    CreateOrderLineItem:
+      type: object
+      properties:
+        variant_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
       required:
-      - line_items
-      - shipping_address
+      - quantity
+      - variant_id
     TaxLinePerSupplierResponse:
       type: object
       properties:
@@ -169,12 +177,6 @@ components:
       - calculation_errors
       - tax_amount
       - tax_lines_per_supplier
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        detail: {}
   securitySchemes:
     basicAuth:
       type: http
