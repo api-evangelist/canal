@@ -317,6 +317,39 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    TopicEnum:
+      enum:
+      - order/create
+      - order/update
+      - order/cancel
+      - product/create
+      - product/update
+      - fulfillment/create
+      - fulfillment/update
+      type: string
+      description: '* `order/create` - order/create
+
+        * `order/update` - order/update
+
+        * `order/cancel` - order/cancel
+
+        * `product/create` - product/create
+
+        * `product/update` - product/update
+
+        * `fulfillment/create` - fulfillment/create
+
+        * `fulfillment/update` - fulfillment/update'
+    CreateUpdateWebhook:
+      type: object
+      properties:
+        topic:
+          type: string
+        address:
+          type: string
+      required:
+      - address
+      - topic
     PaginatedRegisteredWebhookList:
       type: object
       required:
@@ -358,45 +391,6 @@ components:
           type: string
           format: date-time
           readOnly: true
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        detail: {}
-    TopicEnum:
-      enum:
-      - order/create
-      - order/update
-      - order/cancel
-      - product/create
-      - product/update
-      - fulfillment/create
-      - fulfillment/update
-      type: string
-      description: '* `order/create` - order/create
-
-        * `order/update` - order/update
-
-        * `order/cancel` - order/cancel
-
-        * `product/create` - product/create
-
-        * `product/update` - product/update
-
-        * `fulfillment/create` - fulfillment/create
-
-        * `fulfillment/update` - fulfillment/update'
-    CreateUpdateWebhook:
-      type: object
-      properties:
-        topic:
-          type: string
-        address:
-          type: string
-      required:
-      - address
-      - topic
     RegisteredWebhook:
       type: object
       properties:
@@ -423,6 +417,12 @@ components:
       - id
       - topic
       - updated_at
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
   securitySchemes:
     basicAuth:
       type: http

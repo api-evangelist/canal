@@ -107,6 +107,15 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    ShippingRateResponse:
+      type: object
+      properties:
+        shipping_rates:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShippingRate'
+      required:
+      - shipping_rates
     Address:
       type: object
       properties:
@@ -137,6 +146,18 @@ components:
       - name
       - province
       - zip
+    ShippingQuery:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        shipping_address:
+          $ref: '#/components/schemas/Address'
+      required:
+      - line_items
+      - shipping_address
     ShippingRate:
       type: object
       properties:
@@ -154,24 +175,6 @@ components:
       - code
       - price
       - title
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        detail: {}
-    ShippingQuery:
-      type: object
-      properties:
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateOrderLineItem'
-        shipping_address:
-          $ref: '#/components/schemas/Address'
-      required:
-      - line_items
-      - shipping_address
     CreateOrderLineItem:
       type: object
       properties:
@@ -187,15 +190,12 @@ components:
       required:
       - quantity
       - variant_id
-    ShippingRateResponse:
+    Error:
       type: object
       properties:
-        shipping_rates:
-          type: array
-          items:
-            $ref: '#/components/schemas/ShippingRate'
-      required:
-      - shipping_rates
+        message:
+          type: string
+        detail: {}
   securitySchemes:
     basicAuth:
       type: http

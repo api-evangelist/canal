@@ -194,6 +194,32 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+    TaxAndShippingResponseSerializerV1:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/TaxAndShippingLineItemResponse'
+          description: Dictionary mapping a line item's id to a list of tax line responses.
+        calculation_errors:
+          type: array
+          items:
+            type: string
+          description: Error messages
+        request_id:
+          type: string
+          format: uuid
+          description: The id of the tax request
+      required:
+      - calculation_errors
+      - line_items
     ShippingDetails:
       type: object
       properties:
@@ -215,7 +241,29 @@ components:
       - code
       - price
       - title
-    TaxLineResponse:
+    TaxCalculationQuerySerializerV1:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        shipping_address:
+          allOf:
+          - $ref: '#/components/schemas/TaxAndShippingAddress'
+          description: The destination address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
+        billing_address:
+          allOf:
+          - $ref: '#/components/schemas/TaxAndShippingAddress'
+          description: The billing address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
+        ppu_transaction_id:
+          type: string
+          description: The Post Purchase Upsell session id for the tax calculation. This will be reused at order creation time to match the tax calculation request.
+      required:
+      - line_items
+      - ppu_transaction_id
+      - shipping_address
+    TaxAndShippingLineItemResponse:
       type: object
       properties:
         tax_amount:
@@ -226,18 +274,25 @@ components:
         currency:
           type: string
           default: USD
-        title:
+        variant_id:
           type: string
-          description: The name of the tax line
-        rate:
+          format: uuid
+        quantity:
+          type: integer
+        shipping_amount:
           type: string
           format: decimal
           pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
-          description: The tax rate for the line item
+          description: The shipping amount for the line item
+        shipping_details:
+          allOf:
+          - $ref: '#/components/schemas/ShippingDetails'
+          description: Shipping details including price, code, and title
       required:
-      - rate
+      - quantity
+      - shipping_amount
       - tax_amount
-      - title
+      - variant_id
     TaxAndShippingResponse:
       type: object
       properties:
@@ -270,7 +325,7 @@ components:
       - shipping_rates
       - tax_amount
       - tax_lines_per_supplier
-    TaxAndShippingLineItemResponse:
+    TaxLineResponse:
       type: object
       properties:
         tax_amount:
@@ -281,40 +336,18 @@ components:
         currency:
           type: string
           default: USD
-        variant_id:
+        title:
           type: string
-          format: uuid
-        quantity:
-          type: integer
-        shipping_amount:
+          description: The name of the tax line
+        rate:
           type: string
           format: decimal
           pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
-          description: The shipping amount for the line item
-        shipping_details:
-          allOf:
-          - $ref: '#/components/schemas/ShippingDetails'
-          description: Shipping details including price, code, and title
+          description: The tax rate for the line item
       required:
-      - quantity
-      - shipping_amount
+      - rate
       - tax_amount
-      - variant_id
-    CreateOrderLineItem:
-      type: object
-      properties:
-        variant_id:
-          type: string
-          format: uuid
-        quantity:
-          type: integer
-        price:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
-      required:
-      - quantity
-      - variant_id
+      - title
     TaxCalculationQuery:
       type: object
       properties:
@@ -333,6 +366,38 @@ components:
       required:
       - line_items
       - shipping_address
+    ShippingRate:
+      type: object
+      properties:
+        code:
+          type: string
+        title:
+          type: string
+        price:
+          type: number
+          format: double
+        currency:
+          type: string
+          default: USD
+      required:
+      - code
+      - price
+      - title
+    CreateOrderLineItem:
+      type: object
+      properties:
+        variant_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+      required:
+      - quantity
+      - variant_id
     TaxAndShippingAddress:
       type: object
       description: Address serializer for tax and shipping calculations where address1 and name are optional
@@ -362,71 +427,6 @@ components:
       - country
       - province
       - zip
-    ShippingRate:
-      type: object
-      properties:
-        code:
-          type: string
-        title:
-          type: string
-        price:
-          type: number
-          format: double
-        currency:
-          type: string
-          default: USD
-      required:
-      - code
-      - price
-      - title
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        detail: {}
-    TaxCalculationQuerySerializerV1:
-      type: object
-      properties:
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateOrderLineItem'
-        shipping_address:
-          allOf:
-          - $ref: '#/components/schemas/TaxAndShippingAddress'
-          description: The destination address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
-        billing_address:
-          allOf:
-          - $ref: '#/components/schemas/TaxAndShippingAddress'
-          description: The billing address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
-        ppu_transaction_id:
-          type: string
-          description: The Post Purchase Upsell session id for the tax calculation. This will be reused at order creation time to match the tax calculation request.
-      required:
-      - line_items
-      - ppu_transaction_id
-      - shipping_address
-    TaxAndShippingResponseSerializerV1:
-      type: object
-      properties:
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/TaxAndShippingLineItemResponse'
-          description: Dictionary mapping a line item's id to a list of tax line responses.
-        calculation_errors:
-          type: array
-          items:
-            type: string
-          description: Error messages
-        request_id:
-          type: string
-          format: uuid
-          description: The id of the tax request
-      required:
-      - calculation_errors
-      - line_items
   securitySchemes:
     basicAuth:
       type: http

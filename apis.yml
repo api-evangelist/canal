@@ -75,7 +75,7 @@ tags_raw:
 - Webhooks
 apis:
 - aid: canal:canal-csv-api
-  name: Canal csv API
+  name: Canal CSV API
   description: The csv API from Canal — 3 operation(s) for csv.
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
@@ -89,7 +89,7 @@ apis:
   - type: APIReference
     url: https://docs.shopcanal.com/reference/brand
 - aid: canal:canal-fulfillments-api
-  name: Canal fulfillments API
+  name: Canal Fulfillments API
   description: The fulfillments API from Canal — 2 operation(s) for fulfillments.
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
@@ -103,7 +103,7 @@ apis:
   - type: APIReference
     url: https://docs.shopcanal.com/reference/brand
 - aid: canal:canal-markets-api
-  name: Canal markets API
+  name: Canal Markets API
   description: The markets API from Canal — 1 operation(s) for markets.
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
@@ -117,7 +117,7 @@ apis:
   - type: APIReference
     url: https://docs.shopcanal.com/reference/brand
 - aid: canal:canal-max-shipping-rates-api
-  name: Canal max-shipping-rates API
+  name: Canal Max Shipping Rates API
   description: The max-shipping-rates API from Canal — 1 operation(s) for max-shipping-rates.
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
@@ -129,7 +129,7 @@ apis:
   - type: APIReference
     url: https://docs.shopcanal.com/reference/brand
 - aid: canal:canal-orders-api
-  name: Canal orders API
+  name: Canal Orders API
   description: The orders API from Canal — 6 operation(s) for orders.
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
@@ -143,7 +143,7 @@ apis:
   - type: APIReference
     url: https://docs.shopcanal.com/reference/brand
 - aid: canal:canal-product-sets-api
-  name: Canal product_sets API
+  name: Canal Product Sets API
   description: The product_sets API from Canal — 2 operation(s) for product_sets.
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
@@ -157,7 +157,7 @@ apis:
   - type: APIReference
     url: https://docs.shopcanal.com/reference/brand
 - aid: canal:canal-products-api
-  name: Canal products API
+  name: Canal Products API
   description: The products API from Canal — 5 operation(s) for products.
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
@@ -171,7 +171,7 @@ apis:
   - type: APIReference
     url: https://docs.shopcanal.com/reference/brand
 - aid: canal:canal-refunds-api
-  name: Canal refunds API
+  name: Canal Refunds API
   description: The refunds API from Canal — 2 operation(s) for refunds.
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
@@ -185,7 +185,7 @@ apis:
   - type: APIReference
     url: https://docs.shopcanal.com/reference/brand
 - aid: canal:canal-returns-api
-  name: Canal returns API
+  name: Canal Returns API
   description: The returns API from Canal — 4 operation(s) for returns.
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
@@ -199,7 +199,7 @@ apis:
   - type: APIReference
     url: https://docs.shopcanal.com/reference/brand
 - aid: canal:canal-selection-api
-  name: Canal selection API
+  name: Canal Selection API
   description: The selection API from Canal — 1 operation(s) for selection.
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
@@ -213,7 +213,7 @@ apis:
   - type: APIReference
     url: https://docs.shopcanal.com/reference/brand
 - aid: canal:canal-shipping-api
-  name: Canal shipping API
+  name: Canal Shipping API
   description: The shipping API from Canal — 1 operation(s) for shipping.
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
@@ -227,7 +227,7 @@ apis:
   - type: APIReference
     url: https://docs.shopcanal.com/reference/brand
 - aid: canal:canal-shipping-rates-api
-  name: Canal shipping-rates API
+  name: Canal Shipping Rates API
   description: The shipping-rates API from Canal — 1 operation(s) for shipping-rates.
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
@@ -239,7 +239,7 @@ apis:
   - type: APIReference
     url: https://docs.shopcanal.com/reference/brand
 - aid: canal:canal-shops-api
-  name: Canal shops API
+  name: Canal Shops API
   description: The shops API from Canal — 2 operation(s) for shops.
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
@@ -253,7 +253,7 @@ apis:
   - type: APIReference
     url: https://docs.shopcanal.com/reference/brand
 - aid: canal:canal-tax-and-shipping-api
-  name: Canal tax-and-shipping API
+  name: Canal Tax And Shipping API
   description: The tax-and-shipping API from Canal — 2 operation(s) for tax-and-shipping.
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
@@ -265,7 +265,7 @@ apis:
   - type: APIReference
     url: https://docs.shopcanal.com/reference/brand
 - aid: canal:canal-tax-api
-  name: Canal tax API
+  name: Canal Tax API
   description: The tax API from Canal — 1 operation(s) for tax.
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
@@ -279,7 +279,7 @@ apis:
   - type: APIReference
     url: https://docs.shopcanal.com/reference/brand
 - aid: canal:canal-variants-api
-  name: Canal variants API
+  name: Canal Variants API
   description: The variants API from Canal — 2 operation(s) for variants.
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform
@@ -293,7 +293,7 @@ apis:
   - type: APIReference
     url: https://docs.shopcanal.com/reference/brand
 - aid: canal:canal-webhooks-api
-  name: Canal webhooks API
+  name: Canal Webhooks API
   description: The webhooks API from Canal — 2 operation(s) for webhooks.
   humanURL: https://docs.shopcanal.com/docs/getting-started
   baseURL: https://api.shopcanal.com/platform

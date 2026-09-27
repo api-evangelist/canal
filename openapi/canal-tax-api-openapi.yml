@@ -59,6 +59,39 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+    TaxLinePerSupplierResponse:
+      type: object
+      properties:
+        tax_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: The total tax amount for the order
+        currency:
+          type: string
+          default: USD
+        tax_lines_per_supplier:
+          type: object
+          additionalProperties:
+            type: array
+            items:
+              $ref: '#/components/schemas/TaxLineResponse'
+          description: Dictionary mapping a supplier's id to a list of tax line responses.
+        calculation_errors:
+          type: array
+          items:
+            type: string
+          description: Error messages
+      required:
+      - calculation_errors
+      - tax_amount
+      - tax_lines_per_supplier
     TaxLineResponse:
       type: object
       properties:
@@ -100,6 +133,21 @@ components:
       required:
       - line_items
       - shipping_address
+    CreateOrderLineItem:
+      type: object
+      properties:
+        variant_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+      required:
+      - quantity
+      - variant_id
     TaxAndShippingAddress:
       type: object
       description: Address serializer for tax and shipping calculations where address1 and name are optional
@@ -129,54 +177,6 @@ components:
       - country
       - province
       - zip
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        detail: {}
-    CreateOrderLineItem:
-      type: object
-      properties:
-        variant_id:
-          type: string
-          format: uuid
-        quantity:
-          type: integer
-        price:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
-      required:
-      - quantity
-      - variant_id
-    TaxLinePerSupplierResponse:
-      type: object
-      properties:
-        tax_amount:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
-          description: The total tax amount for the order
-        currency:
-          type: string
-          default: USD
-        tax_lines_per_supplier:
-          type: object
-          additionalProperties:
-            type: array
-            items:
-              $ref: '#/components/schemas/TaxLineResponse'
-          description: Dictionary mapping a supplier's id to a list of tax line responses.
-        calculation_errors:
-          type: array
-          items:
-            type: string
-          description: Error messages
-      required:
-      - calculation_errors
-      - tax_amount
-      - tax_lines_per_supplier
   securitySchemes:
     basicAuth:
       type: http

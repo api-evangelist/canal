@@ -386,27 +386,23 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    PaginatedReturnList:
-      type: object
-      required:
-      - results
-      properties:
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Return'
+    Status602Enum:
+      enum:
+      - canceled
+      - closed
+      - declined
+      - open
+      - requested
+      type: string
+      description: '* `canceled` - canceled
+
+        * `closed` - closed
+
+        * `declined` - declined
+
+        * `open` - open
+
+        * `requested` - requested'
     CreateReturnLineItem:
       type: object
       properties:
@@ -425,36 +421,6 @@ components:
       - line_item_id
       - quantity
       - return_reason
-    ReturnLineItem:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        line_item_id:
-          type: string
-          format: uuid
-        quantity:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        customer_note:
-          type:
-          - string
-          - 'null'
-          maxLength: 300
-        return_reason:
-          $ref: '#/components/schemas/ReturnReasonEnum'
-        return_reason_note:
-          type:
-          - string
-          - 'null'
-          maxLength: 255
-      required:
-      - id
-      - line_item_id
-      - quantity
     ReturnReasonEnum:
       enum:
       - color
@@ -487,29 +453,36 @@ components:
         * `unwanted` - unwanted
 
         * `wrong_item` - wrong_item'
-    Error:
+    ReturnLineItem:
       type: object
       properties:
-        message:
+        id:
           type: string
-        detail: {}
-    Status602Enum:
-      enum:
-      - canceled
-      - closed
-      - declined
-      - open
-      - requested
-      type: string
-      description: '* `canceled` - canceled
-
-        * `closed` - closed
-
-        * `declined` - declined
-
-        * `open` - open
-
-        * `requested` - requested'
+          format: uuid
+          readOnly: true
+        line_item_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        customer_note:
+          type:
+          - string
+          - 'null'
+          maxLength: 300
+        return_reason:
+          $ref: '#/components/schemas/ReturnReasonEnum'
+        return_reason_note:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+      required:
+      - id
+      - line_item_id
+      - quantity
     ReturnCreate:
       type: object
       properties:
@@ -538,58 +511,6 @@ components:
       - return_line_items
       - status
       - tracking
-    Return:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        order:
-          type: string
-          format: uuid
-        return_line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReturnLineItem'
-        status:
-          $ref: '#/components/schemas/Status602Enum'
-        name:
-          type:
-          - string
-          - 'null'
-          maxLength: 501
-        total_return_line_items:
-          type: integer
-          maximum: 32767
-          minimum: -32768
-          description: The sum of all return line item quantities for the return.
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-        tracking:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReverseDelivery'
-        rma:
-          type:
-          - string
-          - 'null'
-          description: '"Return merchandise authorization" -- used as reference number for SK to SUP comms'
-          maxLength: 501
-      required:
-      - created_at
-      - id
-      - order
-      - return_line_items
-      - total_return_line_items
-      - tracking
-      - updated_at
     ReverseDelivery:
       type: object
       properties:
@@ -652,6 +573,85 @@ components:
           maxLength: 1279
       required:
       - id
+    PaginatedReturnList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Return'
+    Return:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        order:
+          type: string
+          format: uuid
+        return_line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReturnLineItem'
+        status:
+          $ref: '#/components/schemas/Status602Enum'
+        name:
+          type:
+          - string
+          - 'null'
+          maxLength: 501
+        total_return_line_items:
+          type: integer
+          maximum: 32767
+          minimum: -32768
+          description: The sum of all return line item quantities for the return.
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        tracking:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReverseDelivery'
+        rma:
+          type:
+          - string
+          - 'null'
+          description: '"Return merchandise authorization" -- used as reference number for SK to SUP comms'
+          maxLength: 501
+      required:
+      - created_at
+      - id
+      - order
+      - return_line_items
+      - total_return_line_items
+      - tracking
+      - updated_at
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
   securitySchemes:
     basicAuth:
       type: http

@@ -242,6 +242,23 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+    LineItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+      required:
+      - id
+      - quantity
     RefundLineItem:
       type: object
       properties:
@@ -265,26 +282,6 @@ components:
       - id
       - line_item
       - quantity
-    RefundCreate:
-      type: object
-      properties:
-        order_id:
-          type: string
-          format: uuid
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/LineItem'
-        should_refund_shipping:
-          type: boolean
-        extra_amount:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
-          description: Only available to select retailers.
-      required:
-      - line_items
-      - order_id
     Refund:
       type: object
       properties:
@@ -330,27 +327,26 @@ components:
       - order_id
       - processed_at
       - refund_line_items
-    PaginatedRefundList:
+    RefundCreate:
       type: object
-      required:
-      - results
       properties:
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
-        results:
+        order_id:
+          type: string
+          format: uuid
+        line_items:
           type: array
           items:
-            $ref: '#/components/schemas/Refund'
+            $ref: '#/components/schemas/LineItem'
+        should_refund_shipping:
+          type: boolean
+        extra_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: Only available to select retailers.
+      required:
+      - line_items
+      - order_id
     LineItemRead:
       type: object
       properties:
@@ -379,23 +375,27 @@ components:
       - price
       - quantity
       - variant_id
-    LineItem:
+    PaginatedRefundList:
       type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        quantity:
-          type: integer
       required:
-      - id
-      - quantity
-    Error:
-      type: object
+      - results
       properties:
-        message:
-          type: string
-        detail: {}
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Refund'
   securitySchemes:
     basicAuth:
       type: http
