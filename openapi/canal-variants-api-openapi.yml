@@ -330,82 +330,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    CreateVariant:
-      type: object
-      properties:
-        title:
-          type: string
-        price:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
-          description: The price of the variant to be sold at.
-        compare_at_price:
-          type:
-          - string
-          - 'null'
-          format: decimal
-          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
-          description: The original price of the product from before the sale price. Should be greater than "price". If you elect to not allow sale price passthrough, Connected Storefronts will sell items at this price.
-        inventory_policy:
-          $ref: '#/components/schemas/InventoryPolicyEnum'
-        inventory_quantity:
-          type: integer
-        option1:
-          type: string
-        option2:
-          type: string
-        option3:
-          type: string
-        sku:
-          type: string
-        position:
-          type: integer
-        image_src:
-          type: string
-        weight:
-          type: number
-          format: double
-        weight_unit:
-          type: string
-        product_id:
-          type: string
-          format: uuid
-      required:
-      - inventory_policy
-      - inventory_quantity
-      - option1
-      - price
-      - product_id
-    PaginatedVariantList:
-      type: object
-      required:
-      - results
-      properties:
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Variant'
-    InventoryPolicyEnum:
-      enum:
-      - continue
-      - deny
-      type: string
-      description: '* `continue` - continue
-
-        * `deny` - deny'
     Shop:
       type: object
       properties:
@@ -471,20 +395,6 @@ components:
       - id
       - myshopify_domain
       - name
-    Status2eaEnum:
-      enum:
-      - active
-      - draft
-      - archived
-      - unlisted
-      type: string
-      description: '* `active` - active
-
-        * `draft` - draft
-
-        * `archived` - archived
-
-        * `unlisted` - unlisted'
     PatchedVariant:
       type: object
       properties:
@@ -606,6 +516,55 @@ components:
           - 'null'
           description: The connected supplier variant's compare-at price, sourced from the supplier directly.
           readOnly: true
+    PaginatedVariantList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Variant'
+    InventoryPolicyEnum:
+      enum:
+      - continue
+      - deny
+      type: string
+      description: '* `continue` - continue
+
+        * `deny` - deny'
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+    Status2eaEnum:
+      enum:
+      - active
+      - draft
+      - archived
+      - unlisted
+      type: string
+      description: '* `active` - active
+
+        * `draft` - draft
+
+        * `archived` - archived
+
+        * `unlisted` - unlisted'
     Image:
       type: object
       properties:
@@ -730,6 +689,53 @@ components:
       - title
       - updated_at
       - variants
+    CreateVariant:
+      type: object
+      properties:
+        title:
+          type: string
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          description: The price of the variant to be sold at.
+        compare_at_price:
+          type:
+          - string
+          - 'null'
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          description: The original price of the product from before the sale price. Should be greater than "price". If you elect to not allow sale price passthrough, Connected Storefronts will sell items at this price.
+        inventory_policy:
+          $ref: '#/components/schemas/InventoryPolicyEnum'
+        inventory_quantity:
+          type: integer
+        option1:
+          type: string
+        option2:
+          type: string
+        option3:
+          type: string
+        sku:
+          type: string
+        position:
+          type: integer
+        image_src:
+          type: string
+        weight:
+          type: number
+          format: double
+        weight_unit:
+          type: string
+        product_id:
+          type: string
+          format: uuid
+      required:
+      - inventory_policy
+      - inventory_quantity
+      - option1
+      - price
+      - product_id
     Variant:
       type: object
       properties:
@@ -866,12 +872,6 @@ components:
       - sup_price
       - supplier_sku
       - title
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        detail: {}
   securitySchemes:
     basicAuth:
       type: http

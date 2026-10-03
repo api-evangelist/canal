@@ -59,41 +59,7 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    ShippingCalculationResponse:
-      type: object
-      properties:
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ShippingLineItemData'
-          description: List of shipping calculation results per line item.
-        calculation_errors:
-          type: array
-          items:
-            type: string
-          description: Error messages
-      required:
-      - calculation_errors
-      - line_items
-    ShippingDetailsData:
-      type: object
-      properties:
-        price:
-          type: string
-        code:
-          type: string
-        title:
-          type: string
-        description:
-          type:
-          - string
-          - 'null'
-          default: ''
-      required:
-      - code
-      - price
-      - title
-    SupplierShippingLineItem:
+    ShippingLineItemData:
       type: object
       properties:
         supplier_variant_rid:
@@ -103,9 +69,14 @@ components:
           format: uuid
         quantity:
           type: integer
-          minimum: 1
+        shipping_amount:
+          type: string
+        shipping_details:
+          $ref: '#/components/schemas/ShippingDetailsData'
       required:
       - quantity
+      - shipping_amount
+      - shipping_details
       - supplier_id
       - supplier_variant_rid
     TaxAndShippingAddress:
@@ -137,7 +108,29 @@ components:
       - country
       - province
       - zip
-    ShippingLineItemData:
+    ShippingCalculationResponse:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShippingLineItemData'
+          description: List of shipping calculation results per line item.
+        calculation_errors:
+          type: array
+          items:
+            type: string
+          description: Error messages
+      required:
+      - calculation_errors
+      - line_items
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+    SupplierShippingLineItem:
       type: object
       properties:
         supplier_variant_rid:
@@ -147,16 +140,29 @@ components:
           format: uuid
         quantity:
           type: integer
-        shipping_amount:
-          type: string
-        shipping_details:
-          $ref: '#/components/schemas/ShippingDetailsData'
+          minimum: 1
       required:
       - quantity
-      - shipping_amount
-      - shipping_details
       - supplier_id
       - supplier_variant_rid
+    ShippingDetailsData:
+      type: object
+      properties:
+        price:
+          type: string
+        code:
+          type: string
+        title:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+          default: ''
+      required:
+      - code
+      - price
+      - title
     ShippingCalculationQuery:
       type: object
       properties:
@@ -171,12 +177,6 @@ components:
       required:
       - line_items
       - shipping_address
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        detail: {}
   securitySchemes:
     basicAuth:
       type: http

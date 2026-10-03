@@ -159,7 +159,48 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    PaginatedProductSetList:
+    ProductSet:
+      type: object
+      properties:
+        product_set_id:
+          type: string
+          format: uuid
+          readOnly: true
+        supplier_id:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        description:
+          type:
+          - string
+          - 'null'
+        type:
+          allOf:
+          - $ref: '#/components/schemas/TypeEnum'
+          description: 'Whether the product set is manual or rule-based.
+
+
+            * `MANUAL` - Manual
+
+            * `RULE_BASED` - Rule-based'
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+      required:
+      - created_at
+      - name
+      - product_set_id
+      - supplier_id
+      - updated_at
+    PaginatedProductSetItemList:
       type: object
       required:
       - results
@@ -179,7 +220,21 @@ components:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/ProductSet'
+            $ref: '#/components/schemas/ProductSetItem'
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+    TypeEnum:
+      enum:
+      - MANUAL
+      - RULE_BASED
+      type: string
+      description: '* `MANUAL` - Manual
+
+        * `RULE_BASED` - Rule-based'
     ProductSetItem:
       type: object
       properties:
@@ -229,7 +284,7 @@ components:
       - product_type_category
       - updated_at
       - variant_id
-    PaginatedProductSetItemList:
+    PaginatedProductSetList:
       type: object
       required:
       - results
@@ -249,62 +304,7 @@ components:
         results:
           type: array
           items:
-            $ref: '#/components/schemas/ProductSetItem'
-    ProductSet:
-      type: object
-      properties:
-        product_set_id:
-          type: string
-          format: uuid
-          readOnly: true
-        supplier_id:
-          type: string
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-          maxLength: 255
-        description:
-          type:
-          - string
-          - 'null'
-        type:
-          allOf:
-          - $ref: '#/components/schemas/TypeEnum'
-          description: 'Whether the product set is manual or rule-based.
-
-
-            * `MANUAL` - Manual
-
-            * `RULE_BASED` - Rule-based'
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-      required:
-      - created_at
-      - name
-      - product_set_id
-      - supplier_id
-      - updated_at
-    TypeEnum:
-      enum:
-      - MANUAL
-      - RULE_BASED
-      type: string
-      description: '* `MANUAL` - Manual
-
-        * `RULE_BASED` - Rule-based'
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        detail: {}
+            $ref: '#/components/schemas/ProductSet'
   securitySchemes:
     basicAuth:
       type: http

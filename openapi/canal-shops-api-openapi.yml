@@ -185,12 +185,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        detail: {}
     Shop:
       type: object
       properties:
@@ -256,6 +250,12 @@ components:
       - id
       - myshopify_domain
       - name
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
     PaginatedShopList:
       type: object
       required:

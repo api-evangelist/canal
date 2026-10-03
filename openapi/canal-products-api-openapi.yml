@@ -550,69 +550,88 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    ResyncShopkeepProductResponse:
+    PatchedProduct:
       type: object
       properties:
-        ok:
-          type: boolean
-        status:
-          type:
-          - string
-          - 'null'
-        shopify_product:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        shop:
           allOf:
-          - $ref: '#/components/schemas/Product'
-      required:
-      - ok
-    PushProduct:
-      type: object
-      properties:
-        title:
-          type: string
-        body_html:
-          type: string
+          - $ref: '#/components/schemas/Shop'
+          readOnly: true
         variants:
           type: array
           items:
-            $ref: '#/components/schemas/PushProductVariant'
-        permalink:
-          type: string
+            $ref: '#/components/schemas/Variant'
+          readOnly: true
+        body_html:
+          type:
+          - string
+          - 'null'
+          maxLength: 60000
         handle:
-          type: string
+          type:
+          - string
+          - 'null'
+          maxLength: 258
         image_src:
-          type: string
+          type:
+          - string
+          - 'null'
+          maxLength: 1043
         images:
           type: array
           items:
             $ref: '#/components/schemas/Image'
+        options: {}
         product_type:
-          type: string
-        tags:
-          type: string
-        vendor:
-          type: string
-        shopify_taxonomy:
           type:
           - string
           - 'null'
-        is_listed:
-          type: boolean
-          default: true
+          maxLength: 1044
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        published_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
         status:
-          allOf:
-          - $ref: '#/components/schemas/PushProductStatusEnum'
-          default: active
-      required:
-      - title
-      - variants
-    InventoryPolicyEnum:
-      enum:
-      - continue
-      - deny
-      type: string
-      description: '* `continue` - continue
-
-        * `deny` - deny'
+          $ref: '#/components/schemas/Status2eaEnum'
+        title:
+          type: string
+          maxLength: 1029
+        vendor:
+          type:
+          - string
+          - 'null'
+          maxLength: 227
+        tags:
+          type:
+          - string
+          - 'null'
+          maxLength: 63750
+        permalink:
+          type:
+          - string
+          - 'null'
+          format: uri
+          maxLength: 2000
+        number_of_reviews:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        star_rating:
+          type:
+          - number
+          - 'null'
+          format: double
     Shop:
       type: object
       properties:
@@ -678,6 +697,149 @@ components:
       - id
       - myshopify_domain
       - name
+    PaginatedExternalProductList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalProduct'
+    PushProduct:
+      type: object
+      properties:
+        title:
+          type: string
+        body_html:
+          type: string
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushProductVariant'
+        permalink:
+          type: string
+        handle:
+          type: string
+        image_src:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+        product_type:
+          type: string
+        tags:
+          type: string
+        vendor:
+          type: string
+        shopify_taxonomy:
+          type:
+          - string
+          - 'null'
+        is_listed:
+          type: boolean
+          default: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/PushProductStatusEnum'
+          default: active
+      required:
+      - title
+      - variants
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+    ReorderVariant:
+      type: object
+      properties:
+        variant_order:
+          type: array
+          items:
+            type: string
+            format: uuid
+      required:
+      - variant_order
+    PushProductVariant:
+      type: object
+      properties:
+        title:
+          type: string
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          description: The price of the variant to be sold at.
+        compare_at_price:
+          type:
+          - string
+          - 'null'
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          description: The original price of the product from before the sale price. Should be greater than "price". If you elect to not allow sale price passthrough, Connected Storefronts will sell items at this price.
+        inventory_policy:
+          $ref: '#/components/schemas/InventoryPolicyEnum'
+        inventory_quantity:
+          type: integer
+        option1:
+          type: string
+        option2:
+          type: string
+        option3:
+          type: string
+        sku:
+          type: string
+        position:
+          type: integer
+        image_src:
+          type: string
+        weight:
+          type: number
+          format: double
+        weight_unit:
+          type: string
+      required:
+      - inventory_policy
+      - inventory_quantity
+      - option1
+      - price
+    InventoryPolicyEnum:
+      enum:
+      - continue
+      - deny
+      type: string
+      description: '* `continue` - continue
+
+        * `deny` - deny'
+    Status2eaEnum:
+      enum:
+      - active
+      - draft
+      - archived
+      - unlisted
+      type: string
+      description: '* `active` - active
+
+        * `draft` - draft
+
+        * `archived` - archived
+
+        * `unlisted` - unlisted'
     ExternalProduct:
       type: object
       properties:
@@ -790,151 +952,6 @@ components:
       - title
       - updated_at
       - variants
-    Status2eaEnum:
-      enum:
-      - active
-      - draft
-      - archived
-      - unlisted
-      type: string
-      description: '* `active` - active
-
-        * `draft` - draft
-
-        * `archived` - archived
-
-        * `unlisted` - unlisted'
-    PushProductStatusEnum:
-      enum:
-      - active
-      - draft
-      - archived
-      type: string
-      description: '* `active` - active
-
-        * `draft` - draft
-
-        * `archived` - archived'
-    PaginatedExternalProductList:
-      type: object
-      required:
-      - results
-      properties:
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExternalProduct'
-    ResyncShopkeepProduct:
-      type: object
-      properties:
-        fields_to_resync:
-          type: array
-          items:
-            $ref: '#/components/schemas/FieldsToResyncEnum'
-    ReorderVariant:
-      type: object
-      properties:
-        variant_order:
-          type: array
-          items:
-            type: string
-            format: uuid
-      required:
-      - variant_order
-    PatchedProduct:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        shop:
-          allOf:
-          - $ref: '#/components/schemas/Shop'
-          readOnly: true
-        variants:
-          type: array
-          items:
-            $ref: '#/components/schemas/Variant'
-          readOnly: true
-        body_html:
-          type:
-          - string
-          - 'null'
-          maxLength: 60000
-        handle:
-          type:
-          - string
-          - 'null'
-          maxLength: 258
-        image_src:
-          type:
-          - string
-          - 'null'
-          maxLength: 1043
-        images:
-          type: array
-          items:
-            $ref: '#/components/schemas/Image'
-        options: {}
-        product_type:
-          type:
-          - string
-          - 'null'
-          maxLength: 1044
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-        published_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        status:
-          $ref: '#/components/schemas/Status2eaEnum'
-        title:
-          type: string
-          maxLength: 1029
-        vendor:
-          type:
-          - string
-          - 'null'
-          maxLength: 227
-        tags:
-          type:
-          - string
-          - 'null'
-          maxLength: 63750
-        permalink:
-          type:
-          - string
-          - 'null'
-          format: uri
-          maxLength: 2000
-        number_of_reviews:
-          type:
-          - integer
-          - 'null'
-          maximum: 2147483647
-          minimum: -2147483648
-        star_rating:
-          type:
-          - number
-          - 'null'
-          format: double
     Image:
       type: object
       properties:
@@ -971,49 +988,24 @@ components:
       required:
       - canal_variant_ids
       - src
-    PushProductVariant:
+    ResyncShopkeepProduct:
       type: object
       properties:
-        title:
-          type: string
-        price:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
-          description: The price of the variant to be sold at.
-        compare_at_price:
-          type:
-          - string
-          - 'null'
-          format: decimal
-          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
-          description: The original price of the product from before the sale price. Should be greater than "price". If you elect to not allow sale price passthrough, Connected Storefronts will sell items at this price.
-        inventory_policy:
-          $ref: '#/components/schemas/InventoryPolicyEnum'
-        inventory_quantity:
-          type: integer
-        option1:
-          type: string
-        option2:
-          type: string
-        option3:
-          type: string
-        sku:
-          type: string
-        position:
-          type: integer
-        image_src:
-          type: string
-        weight:
-          type: number
-          format: double
-        weight_unit:
-          type: string
-      required:
-      - inventory_policy
-      - inventory_quantity
-      - option1
-      - price
+        fields_to_resync:
+          type: array
+          items:
+            $ref: '#/components/schemas/FieldsToResyncEnum'
+    PushProductStatusEnum:
+      enum:
+      - active
+      - draft
+      - archived
+      type: string
+      description: '* `active` - active
+
+        * `draft` - draft
+
+        * `archived` - archived'
     Product:
       type: object
       properties:
@@ -1125,6 +1117,20 @@ components:
         * `vendor` - vendor
 
         * `permalink` - permalink'
+    ResyncShopkeepProductResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        status:
+          type:
+          - string
+          - 'null'
+        shopify_product:
+          allOf:
+          - $ref: '#/components/schemas/Product'
+      required:
+      - ok
     Variant:
       type: object
       properties:
@@ -1261,12 +1267,6 @@ components:
       - sup_price
       - supplier_sku
       - title
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        detail: {}
   securitySchemes:
     basicAuth:
       type: http

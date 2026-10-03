@@ -242,91 +242,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        detail: {}
-    LineItem:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        quantity:
-          type: integer
-      required:
-      - id
-      - quantity
-    RefundLineItem:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        line_item:
-          $ref: '#/components/schemas/LineItemRead'
-        quantity:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        subtotal:
-          type:
-          - string
-          - 'null'
-          format: decimal
-          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
-      required:
-      - id
-      - line_item
-      - quantity
-    Refund:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        order_id:
-          type: string
-        amount:
-          type: object
-          additionalProperties: {}
-          readOnly: true
-        note:
-          type:
-          - string
-          - 'null'
-          maxLength: 1025
-        duties: {}
-        restock:
-          type:
-          - boolean
-          - 'null'
-        processed_at:
-          type: string
-          format: date-time
-        refund_line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/RefundLineItem'
-        shipping_refund_amount:
-          type:
-          - string
-          - 'null'
-          maxLength: 128
-        failed_to_create_refund_line_items:
-          type: string
-          readOnly: true
-      required:
-      - amount
-      - failed_to_create_refund_line_items
-      - id
-      - order_id
-      - processed_at
-      - refund_line_items
     RefundCreate:
       type: object
       properties:
@@ -375,6 +290,80 @@ components:
       - price
       - quantity
       - variant_id
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+    Refund:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        order_id:
+          type: string
+        amount:
+          type: object
+          additionalProperties: {}
+          readOnly: true
+        note:
+          type:
+          - string
+          - 'null'
+          maxLength: 1025
+        duties: {}
+        restock:
+          type:
+          - boolean
+          - 'null'
+        processed_at:
+          type: string
+          format: date-time
+        refund_line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/RefundLineItem'
+        shipping_refund_amount:
+          type:
+          - string
+          - 'null'
+          maxLength: 128
+        failed_to_create_refund_line_items:
+          type: string
+          readOnly: true
+      required:
+      - amount
+      - failed_to_create_refund_line_items
+      - id
+      - order_id
+      - processed_at
+      - refund_line_items
+    RefundLineItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        line_item:
+          $ref: '#/components/schemas/LineItemRead'
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        subtotal:
+          type:
+          - string
+          - 'null'
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+      required:
+      - id
+      - line_item
+      - quantity
     PaginatedRefundList:
       type: object
       required:
@@ -396,6 +385,17 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Refund'
+    LineItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+      required:
+      - id
+      - quantity
   securitySchemes:
     basicAuth:
       type: http

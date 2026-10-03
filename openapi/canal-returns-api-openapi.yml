@@ -386,73 +386,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Status602Enum:
-      enum:
-      - canceled
-      - closed
-      - declined
-      - open
-      - requested
-      type: string
-      description: '* `canceled` - canceled
-
-        * `closed` - closed
-
-        * `declined` - declined
-
-        * `open` - open
-
-        * `requested` - requested'
-    CreateReturnLineItem:
-      type: object
-      properties:
-        line_item_id:
-          type: string
-          format: uuid
-        quantity:
-          type: integer
-        customer_note:
-          type:
-          - string
-          - 'null'
-        return_reason:
-          $ref: '#/components/schemas/ReturnReasonEnum'
-      required:
-      - line_item_id
-      - quantity
-      - return_reason
-    ReturnReasonEnum:
-      enum:
-      - color
-      - defective
-      - not_as_described
-      - other
-      - size_too_large
-      - size_too_small
-      - style
-      - unknown
-      - unwanted
-      - wrong_item
-      type: string
-      description: '* `color` - color
-
-        * `defective` - defective
-
-        * `not_as_described` - not_as_described
-
-        * `other` - other
-
-        * `size_too_large` - size_too_large
-
-        * `size_too_small` - size_too_small
-
-        * `style` - style
-
-        * `unknown` - unknown
-
-        * `unwanted` - unwanted
-
-        * `wrong_item` - wrong_item'
     ReturnLineItem:
       type: object
       properties:
@@ -483,117 +416,6 @@ components:
       - id
       - line_item_id
       - quantity
-    ReturnCreate:
-      type: object
-      properties:
-        order_id:
-          type: string
-          format: uuid
-        return_line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateReturnLineItem'
-        tracking:
-          $ref: '#/components/schemas/ReverseDeliveryCreate'
-        name:
-          type:
-          - string
-          - 'null'
-        status:
-          allOf:
-          - $ref: '#/components/schemas/Status602Enum'
-          readOnly: true
-          default: open
-        rma:
-          type: string
-      required:
-      - order_id
-      - return_line_items
-      - status
-      - tracking
-    ReverseDelivery:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        carrier_name:
-          type:
-          - string
-          - 'null'
-          maxLength: 100
-        tracking_number:
-          type:
-          - string
-          - 'null'
-          maxLength: 100
-        tracking_url:
-          type:
-          - string
-          - 'null'
-          format: uri
-          maxLength: 200
-        shipping_label_file_url:
-          type:
-          - string
-          - 'null'
-          format: uri
-          maxLength: 1279
-      required:
-      - id
-    ReverseDeliveryCreate:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        carrier_name:
-          type:
-          - string
-          - 'null'
-          maxLength: 100
-        tracking_number:
-          type:
-          - string
-          - 'null'
-          maxLength: 100
-        tracking_url:
-          type:
-          - string
-          - 'null'
-          format: uri
-          maxLength: 200
-        shipping_label_file_url:
-          type:
-          - string
-          - 'null'
-          format: uri
-          maxLength: 1279
-      required:
-      - id
-    PaginatedReturnList:
-      type: object
-      required:
-      - results
-      properties:
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Return'
     Return:
       type: object
       properties:
@@ -646,12 +468,190 @@ components:
       - total_return_line_items
       - tracking
       - updated_at
+    ReverseDelivery:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        carrier_name:
+          type:
+          - string
+          - 'null'
+          maxLength: 100
+        tracking_number:
+          type:
+          - string
+          - 'null'
+          maxLength: 100
+        tracking_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+          maxLength: 200
+        shipping_label_file_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+          maxLength: 1279
+      required:
+      - id
+    Status602Enum:
+      enum:
+      - canceled
+      - closed
+      - declined
+      - open
+      - requested
+      type: string
+      description: '* `canceled` - canceled
+
+        * `closed` - closed
+
+        * `declined` - declined
+
+        * `open` - open
+
+        * `requested` - requested'
+    ReverseDeliveryCreate:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        carrier_name:
+          type:
+          - string
+          - 'null'
+          maxLength: 100
+        tracking_number:
+          type:
+          - string
+          - 'null'
+          maxLength: 100
+        tracking_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+          maxLength: 200
+        shipping_label_file_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+          maxLength: 1279
+      required:
+      - id
+    CreateReturnLineItem:
+      type: object
+      properties:
+        line_item_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        customer_note:
+          type:
+          - string
+          - 'null'
+        return_reason:
+          $ref: '#/components/schemas/ReturnReasonEnum'
+      required:
+      - line_item_id
+      - quantity
+      - return_reason
     Error:
       type: object
       properties:
         message:
           type: string
         detail: {}
+    ReturnCreate:
+      type: object
+      properties:
+        order_id:
+          type: string
+          format: uuid
+        return_line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateReturnLineItem'
+        tracking:
+          $ref: '#/components/schemas/ReverseDeliveryCreate'
+        name:
+          type:
+          - string
+          - 'null'
+        status:
+          allOf:
+          - $ref: '#/components/schemas/Status602Enum'
+          readOnly: true
+          default: open
+        rma:
+          type: string
+      required:
+      - order_id
+      - return_line_items
+      - status
+      - tracking
+    ReturnReasonEnum:
+      enum:
+      - color
+      - defective
+      - not_as_described
+      - other
+      - size_too_large
+      - size_too_small
+      - style
+      - unknown
+      - unwanted
+      - wrong_item
+      type: string
+      description: '* `color` - color
+
+        * `defective` - defective
+
+        * `not_as_described` - not_as_described
+
+        * `other` - other
+
+        * `size_too_large` - size_too_large
+
+        * `size_too_small` - size_too_small
+
+        * `style` - style
+
+        * `unknown` - unknown
+
+        * `unwanted` - unwanted
+
+        * `wrong_item` - wrong_item'
+    PaginatedReturnList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Return'
   securitySchemes:
     basicAuth:
       type: http

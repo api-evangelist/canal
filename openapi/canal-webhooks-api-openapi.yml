@@ -317,39 +317,26 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    TopicEnum:
-      enum:
-      - order/create
-      - order/update
-      - order/cancel
-      - product/create
-      - product/update
-      - fulfillment/create
-      - fulfillment/update
-      type: string
-      description: '* `order/create` - order/create
-
-        * `order/update` - order/update
-
-        * `order/cancel` - order/cancel
-
-        * `product/create` - product/create
-
-        * `product/update` - product/update
-
-        * `fulfillment/create` - fulfillment/create
-
-        * `fulfillment/update` - fulfillment/update'
-    CreateUpdateWebhook:
+    PatchedRegisteredWebhook:
       type: object
       properties:
-        topic:
+        id:
           type: string
+          format: uuid
+          readOnly: true
+        topic:
+          $ref: '#/components/schemas/TopicEnum'
         address:
           type: string
-      required:
-      - address
-      - topic
+          maxLength: 512
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
     PaginatedRegisteredWebhookList:
       type: object
       required:
@@ -371,26 +358,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/RegisteredWebhook'
-    PatchedRegisteredWebhook:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        topic:
-          $ref: '#/components/schemas/TopicEnum'
-        address:
-          type: string
-          maxLength: 512
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
     RegisteredWebhook:
       type: object
       properties:
@@ -423,6 +390,39 @@ components:
         message:
           type: string
         detail: {}
+    CreateUpdateWebhook:
+      type: object
+      properties:
+        topic:
+          type: string
+        address:
+          type: string
+      required:
+      - address
+      - topic
+    TopicEnum:
+      enum:
+      - order/create
+      - order/update
+      - order/cancel
+      - product/create
+      - product/update
+      - fulfillment/create
+      - fulfillment/update
+      type: string
+      description: '* `order/create` - order/create
+
+        * `order/update` - order/update
+
+        * `order/cancel` - order/cancel
+
+        * `product/create` - product/create
+
+        * `product/update` - product/update
+
+        * `fulfillment/create` - fulfillment/create
+
+        * `fulfillment/update` - fulfillment/update'
   securitySchemes:
     basicAuth:
       type: http
