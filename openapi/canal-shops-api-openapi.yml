@@ -250,6 +250,16 @@ components:
       - id
       - myshopify_domain
       - name
+    BulkCreateSupplierPartnership:
+      type: object
+      properties:
+        canal_contact_emails:
+          type: array
+          items:
+            type: string
+            format: email
+      required:
+      - canal_contact_emails
     Error:
       type: object
       properties:
@@ -277,16 +287,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Shop'
-    BulkCreateSupplierPartnership:
-      type: object
-      properties:
-        canal_contact_emails:
-          type: array
-          items:
-            type: string
-            format: email
-      required:
-      - canal_contact_emails
   securitySchemes:
     basicAuth:
       type: http

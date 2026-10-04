@@ -317,26 +317,39 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    PatchedRegisteredWebhook:
+    TopicEnum:
+      enum:
+      - order/create
+      - order/update
+      - order/cancel
+      - product/create
+      - product/update
+      - fulfillment/create
+      - fulfillment/update
+      type: string
+      description: '* `order/create` - order/create
+
+        * `order/update` - order/update
+
+        * `order/cancel` - order/cancel
+
+        * `product/create` - product/create
+
+        * `product/update` - product/update
+
+        * `fulfillment/create` - fulfillment/create
+
+        * `fulfillment/update` - fulfillment/update'
+    CreateUpdateWebhook:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
         topic:
-          $ref: '#/components/schemas/TopicEnum'
+          type: string
         address:
           type: string
-          maxLength: 512
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
+      required:
+      - address
+      - topic
     PaginatedRegisteredWebhookList:
       type: object
       required:
@@ -384,45 +397,32 @@ components:
       - id
       - topic
       - updated_at
+    PatchedRegisteredWebhook:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        topic:
+          $ref: '#/components/schemas/TopicEnum'
+        address:
+          type: string
+          maxLength: 512
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
     Error:
       type: object
       properties:
         message:
           type: string
         detail: {}
-    CreateUpdateWebhook:
-      type: object
-      properties:
-        topic:
-          type: string
-        address:
-          type: string
-      required:
-      - address
-      - topic
-    TopicEnum:
-      enum:
-      - order/create
-      - order/update
-      - order/cancel
-      - product/create
-      - product/update
-      - fulfillment/create
-      - fulfillment/update
-      type: string
-      description: '* `order/create` - order/create
-
-        * `order/update` - order/update
-
-        * `order/cancel` - order/cancel
-
-        * `product/create` - product/create
-
-        * `product/update` - product/update
-
-        * `fulfillment/create` - fulfillment/create
-
-        * `fulfillment/update` - fulfillment/update'
   securitySchemes:
     basicAuth:
       type: http

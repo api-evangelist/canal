@@ -550,231 +550,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    PatchedProduct:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        shop:
-          allOf:
-          - $ref: '#/components/schemas/Shop'
-          readOnly: true
-        variants:
-          type: array
-          items:
-            $ref: '#/components/schemas/Variant'
-          readOnly: true
-        body_html:
-          type:
-          - string
-          - 'null'
-          maxLength: 60000
-        handle:
-          type:
-          - string
-          - 'null'
-          maxLength: 258
-        image_src:
-          type:
-          - string
-          - 'null'
-          maxLength: 1043
-        images:
-          type: array
-          items:
-            $ref: '#/components/schemas/Image'
-        options: {}
-        product_type:
-          type:
-          - string
-          - 'null'
-          maxLength: 1044
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-        published_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        status:
-          $ref: '#/components/schemas/Status2eaEnum'
-        title:
-          type: string
-          maxLength: 1029
-        vendor:
-          type:
-          - string
-          - 'null'
-          maxLength: 227
-        tags:
-          type:
-          - string
-          - 'null'
-          maxLength: 63750
-        permalink:
-          type:
-          - string
-          - 'null'
-          format: uri
-          maxLength: 2000
-        number_of_reviews:
-          type:
-          - integer
-          - 'null'
-          maximum: 2147483647
-          minimum: -2147483648
-        star_rating:
-          type:
-          - number
-          - 'null'
-          format: double
-    Shop:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        email:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        phone:
-          type:
-          - string
-          - 'null'
-          maxLength: 128
-        name:
-          type: string
-          maxLength: 129
-        description:
-          type:
-          - string
-          - 'null'
-          maxLength: 6144
-        myshopify_domain:
-          type: string
-          maxLength: 128
-        province:
-          type:
-          - string
-          - 'null'
-          maxLength: 122
-        country:
-          type: string
-          maxLength: 64
-        domain:
-          type:
-          - string
-          - 'null'
-          maxLength: 128
-        display_domain:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        privacy_policy_url:
-          type:
-          - string
-          - 'null'
-          format: uri
-          maxLength: 500
-        terms_of_service_url:
-          type:
-          - string
-          - 'null'
-          format: uri
-          maxLength: 500
-      required:
-      - country
-      - display_domain
-      - email
-      - id
-      - myshopify_domain
-      - name
-    PaginatedExternalProductList:
-      type: object
-      required:
-      - results
-      properties:
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/ExternalProduct'
-    PushProduct:
-      type: object
-      properties:
-        title:
-          type: string
-        body_html:
-          type: string
-        variants:
-          type: array
-          items:
-            $ref: '#/components/schemas/PushProductVariant'
-        permalink:
-          type: string
-        handle:
-          type: string
-        image_src:
-          type: string
-        images:
-          type: array
-          items:
-            $ref: '#/components/schemas/Image'
-        product_type:
-          type: string
-        tags:
-          type: string
-        vendor:
-          type: string
-        shopify_taxonomy:
-          type:
-          - string
-          - 'null'
-        is_listed:
-          type: boolean
-          default: true
-        status:
-          allOf:
-          - $ref: '#/components/schemas/PushProductStatusEnum'
-          default: active
-      required:
-      - title
-      - variants
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        detail: {}
-    ReorderVariant:
-      type: object
-      properties:
-        variant_order:
-          type: array
-          items:
-            type: string
-            format: uuid
-      required:
-      - variant_order
     PushProductVariant:
       type: object
       properties:
@@ -818,176 +593,6 @@ components:
       - inventory_quantity
       - option1
       - price
-    InventoryPolicyEnum:
-      enum:
-      - continue
-      - deny
-      type: string
-      description: '* `continue` - continue
-
-        * `deny` - deny'
-    Status2eaEnum:
-      enum:
-      - active
-      - draft
-      - archived
-      - unlisted
-      type: string
-      description: '* `active` - active
-
-        * `draft` - draft
-
-        * `archived` - archived
-
-        * `unlisted` - unlisted'
-    ExternalProduct:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        shop:
-          allOf:
-          - $ref: '#/components/schemas/Shop'
-          readOnly: true
-        variants:
-          type: array
-          items:
-            $ref: '#/components/schemas/Variant'
-          readOnly: true
-        body_html:
-          type:
-          - string
-          - 'null'
-          maxLength: 60000
-        handle:
-          type:
-          - string
-          - 'null'
-          maxLength: 258
-        image_src:
-          type:
-          - string
-          - 'null'
-          maxLength: 1043
-        images:
-          type: array
-          items:
-            type: object
-            additionalProperties: {}
-          readOnly: true
-        options:
-          type: array
-          items:
-            type: object
-            additionalProperties: {}
-          description: Flatten option.values into a list of strings
-          readOnly: true
-        product_type:
-          type:
-          - string
-          - 'null'
-          maxLength: 1044
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-        published_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        status:
-          $ref: '#/components/schemas/Status2eaEnum'
-        title:
-          type: string
-          maxLength: 1029
-        vendor:
-          type:
-          - string
-          - 'null'
-          maxLength: 227
-        tags:
-          type:
-          - string
-          - 'null'
-          maxLength: 63750
-        permalink:
-          type:
-          - string
-          - 'null'
-          format: uri
-          maxLength: 2000
-        number_of_reviews:
-          type:
-          - integer
-          - 'null'
-          maximum: 2147483647
-          minimum: -2147483648
-        star_rating:
-          type:
-          - number
-          - 'null'
-          format: double
-        product_type_category:
-          type:
-          - string
-          - 'null'
-          description: Get Shoppable Ads product type category breadcrumb path if available.
-          readOnly: true
-        customer_charge_amount:
-          type:
-          - object
-          - 'null'
-          additionalProperties: {}
-          readOnly: true
-      required:
-      - customer_charge_amount
-      - id
-      - images
-      - options
-      - product_type_category
-      - shop
-      - title
-      - updated_at
-      - variants
-    Image:
-      type: object
-      properties:
-        id:
-          type: string
-        position:
-          type: integer
-        src:
-          type: string
-          format: uri
-        display_src:
-          type:
-          - string
-          - 'null'
-          format: uri
-        width:
-          type: integer
-        height:
-          type: integer
-        canal_variant_ids:
-          type: array
-          items:
-            type: string
-          readOnly: true
-        variant_ids:
-          type: array
-          items:
-            type: string
-        origin_supplier_image_id:
-          type:
-          - string
-          - 'null'
-          format: uuid
-      required:
-      - canal_variant_ids
-      - src
     ResyncShopkeepProduct:
       type: object
       properties:
@@ -995,142 +600,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/FieldsToResyncEnum'
-    PushProductStatusEnum:
-      enum:
-      - active
-      - draft
-      - archived
-      type: string
-      description: '* `active` - active
-
-        * `draft` - draft
-
-        * `archived` - archived'
-    Product:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        shop:
-          allOf:
-          - $ref: '#/components/schemas/Shop'
-          readOnly: true
-        variants:
-          type: array
-          items:
-            $ref: '#/components/schemas/Variant'
-          readOnly: true
-        body_html:
-          type:
-          - string
-          - 'null'
-          maxLength: 60000
-        handle:
-          type:
-          - string
-          - 'null'
-          maxLength: 258
-        image_src:
-          type:
-          - string
-          - 'null'
-          maxLength: 1043
-        images:
-          type: array
-          items:
-            $ref: '#/components/schemas/Image'
-        options: {}
-        product_type:
-          type:
-          - string
-          - 'null'
-          maxLength: 1044
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-        published_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        status:
-          $ref: '#/components/schemas/Status2eaEnum'
-        title:
-          type: string
-          maxLength: 1029
-        vendor:
-          type:
-          - string
-          - 'null'
-          maxLength: 227
-        tags:
-          type:
-          - string
-          - 'null'
-          maxLength: 63750
-        permalink:
-          type:
-          - string
-          - 'null'
-          format: uri
-          maxLength: 2000
-        number_of_reviews:
-          type:
-          - integer
-          - 'null'
-          maximum: 2147483647
-          minimum: -2147483648
-        star_rating:
-          type:
-          - number
-          - 'null'
-          format: double
-      required:
-      - id
-      - shop
-      - title
-      - updated_at
-      - variants
-    FieldsToResyncEnum:
-      enum:
-      - images
-      - product_title
-      - description
-      - tags
-      - variants
-      - vendor
-      - permalink
-      type: string
-      description: '* `images` - images
-
-        * `product_title` - product_title
-
-        * `description` - description
-
-        * `tags` - tags
-
-        * `variants` - variants
-
-        * `vendor` - vendor
-
-        * `permalink` - permalink'
-    ResyncShopkeepProductResponse:
-      type: object
-      properties:
-        ok:
-          type: boolean
-        status:
-          type:
-          - string
-          - 'null'
-        shopify_product:
-          allOf:
-          - $ref: '#/components/schemas/Product'
-      required:
-      - ok
     Variant:
       type: object
       properties:
@@ -1267,6 +736,537 @@ components:
       - sup_price
       - supplier_sku
       - title
+    Status2eaEnum:
+      enum:
+      - active
+      - draft
+      - archived
+      - unlisted
+      type: string
+      description: '* `active` - active
+
+        * `draft` - draft
+
+        * `archived` - archived
+
+        * `unlisted` - unlisted'
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        shop:
+          allOf:
+          - $ref: '#/components/schemas/Shop'
+          readOnly: true
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/Variant'
+          readOnly: true
+        body_html:
+          type:
+          - string
+          - 'null'
+          maxLength: 60000
+        handle:
+          type:
+          - string
+          - 'null'
+          maxLength: 258
+        image_src:
+          type:
+          - string
+          - 'null'
+          maxLength: 1043
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+        options: {}
+        product_type:
+          type:
+          - string
+          - 'null'
+          maxLength: 1044
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        published_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        status:
+          $ref: '#/components/schemas/Status2eaEnum'
+        title:
+          type: string
+          maxLength: 1029
+        vendor:
+          type:
+          - string
+          - 'null'
+          maxLength: 227
+        tags:
+          type:
+          - string
+          - 'null'
+          maxLength: 63750
+        permalink:
+          type:
+          - string
+          - 'null'
+          format: uri
+          maxLength: 2000
+        number_of_reviews:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        star_rating:
+          type:
+          - number
+          - 'null'
+          format: double
+      required:
+      - id
+      - shop
+      - title
+      - updated_at
+      - variants
+    PushProduct:
+      type: object
+      properties:
+        title:
+          type: string
+        body_html:
+          type: string
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/PushProductVariant'
+        permalink:
+          type: string
+        handle:
+          type: string
+        image_src:
+          type: string
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+        product_type:
+          type: string
+        tags:
+          type: string
+        vendor:
+          type: string
+        shopify_taxonomy:
+          type:
+          - string
+          - 'null'
+        is_listed:
+          type: boolean
+          default: true
+        status:
+          allOf:
+          - $ref: '#/components/schemas/PushProductStatusEnum'
+          default: active
+      required:
+      - title
+      - variants
+    PaginatedExternalProductList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/ExternalProduct'
+    InventoryPolicyEnum:
+      enum:
+      - continue
+      - deny
+      type: string
+      description: '* `continue` - continue
+
+        * `deny` - deny'
+    PushProductStatusEnum:
+      enum:
+      - active
+      - draft
+      - archived
+      type: string
+      description: '* `active` - active
+
+        * `draft` - draft
+
+        * `archived` - archived'
+    Shop:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        phone:
+          type:
+          - string
+          - 'null'
+          maxLength: 128
+        name:
+          type: string
+          maxLength: 129
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 6144
+        myshopify_domain:
+          type: string
+          maxLength: 128
+        province:
+          type:
+          - string
+          - 'null'
+          maxLength: 122
+        country:
+          type: string
+          maxLength: 64
+        domain:
+          type:
+          - string
+          - 'null'
+          maxLength: 128
+        display_domain:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        privacy_policy_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+          maxLength: 500
+        terms_of_service_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+          maxLength: 500
+      required:
+      - country
+      - display_domain
+      - email
+      - id
+      - myshopify_domain
+      - name
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+    ReorderVariant:
+      type: object
+      properties:
+        variant_order:
+          type: array
+          items:
+            type: string
+            format: uuid
+      required:
+      - variant_order
+    ResyncShopkeepProductResponse:
+      type: object
+      properties:
+        ok:
+          type: boolean
+        status:
+          type:
+          - string
+          - 'null'
+        shopify_product:
+          allOf:
+          - $ref: '#/components/schemas/Product'
+      required:
+      - ok
+    FieldsToResyncEnum:
+      enum:
+      - images
+      - product_title
+      - description
+      - tags
+      - variants
+      - vendor
+      - permalink
+      type: string
+      description: '* `images` - images
+
+        * `product_title` - product_title
+
+        * `description` - description
+
+        * `tags` - tags
+
+        * `variants` - variants
+
+        * `vendor` - vendor
+
+        * `permalink` - permalink'
+    Image:
+      type: object
+      properties:
+        id:
+          type: string
+        position:
+          type: integer
+        src:
+          type: string
+          format: uri
+        display_src:
+          type:
+          - string
+          - 'null'
+          format: uri
+        width:
+          type: integer
+        height:
+          type: integer
+        canal_variant_ids:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        variant_ids:
+          type: array
+          items:
+            type: string
+        origin_supplier_image_id:
+          type:
+          - string
+          - 'null'
+          format: uuid
+      required:
+      - canal_variant_ids
+      - src
+    PatchedProduct:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        shop:
+          allOf:
+          - $ref: '#/components/schemas/Shop'
+          readOnly: true
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/Variant'
+          readOnly: true
+        body_html:
+          type:
+          - string
+          - 'null'
+          maxLength: 60000
+        handle:
+          type:
+          - string
+          - 'null'
+          maxLength: 258
+        image_src:
+          type:
+          - string
+          - 'null'
+          maxLength: 1043
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+        options: {}
+        product_type:
+          type:
+          - string
+          - 'null'
+          maxLength: 1044
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        published_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        status:
+          $ref: '#/components/schemas/Status2eaEnum'
+        title:
+          type: string
+          maxLength: 1029
+        vendor:
+          type:
+          - string
+          - 'null'
+          maxLength: 227
+        tags:
+          type:
+          - string
+          - 'null'
+          maxLength: 63750
+        permalink:
+          type:
+          - string
+          - 'null'
+          format: uri
+          maxLength: 2000
+        number_of_reviews:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        star_rating:
+          type:
+          - number
+          - 'null'
+          format: double
+    ExternalProduct:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        shop:
+          allOf:
+          - $ref: '#/components/schemas/Shop'
+          readOnly: true
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/Variant'
+          readOnly: true
+        body_html:
+          type:
+          - string
+          - 'null'
+          maxLength: 60000
+        handle:
+          type:
+          - string
+          - 'null'
+          maxLength: 258
+        image_src:
+          type:
+          - string
+          - 'null'
+          maxLength: 1043
+        images:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+          readOnly: true
+        options:
+          type: array
+          items:
+            type: object
+            additionalProperties: {}
+          description: Flatten option.values into a list of strings
+          readOnly: true
+        product_type:
+          type:
+          - string
+          - 'null'
+          maxLength: 1044
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        published_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        status:
+          $ref: '#/components/schemas/Status2eaEnum'
+        title:
+          type: string
+          maxLength: 1029
+        vendor:
+          type:
+          - string
+          - 'null'
+          maxLength: 227
+        tags:
+          type:
+          - string
+          - 'null'
+          maxLength: 63750
+        permalink:
+          type:
+          - string
+          - 'null'
+          format: uri
+          maxLength: 2000
+        number_of_reviews:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        star_rating:
+          type:
+          - number
+          - 'null'
+          format: double
+        product_type_category:
+          type:
+          - string
+          - 'null'
+          description: Get Shoppable Ads product type category breadcrumb path if available.
+          readOnly: true
+        customer_charge_amount:
+          type:
+          - object
+          - 'null'
+          additionalProperties: {}
+          readOnly: true
+      required:
+      - customer_charge_amount
+      - id
+      - images
+      - options
+      - product_type_category
+      - shop
+      - title
+      - updated_at
+      - variants
   securitySchemes:
     basicAuth:
       type: http

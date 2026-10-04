@@ -92,36 +92,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    CreateOrderLineItem:
-      type: object
-      properties:
-        variant_id:
-          type: string
-          format: uuid
-        quantity:
-          type: integer
-        price:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
-      required:
-      - quantity
-      - variant_id
-    MaxShippingQuery:
-      type: object
-      properties:
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateOrderLineItem'
-      required:
-      - line_items
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        detail: {}
     ShippingRate:
       type: object
       properties:
@@ -139,6 +109,21 @@ components:
       - code
       - price
       - title
+    CreateOrderLineItem:
+      type: object
+      properties:
+        variant_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+      required:
+      - quantity
+      - variant_id
     ShippingRateResponse:
       type: object
       properties:
@@ -148,6 +133,21 @@ components:
             $ref: '#/components/schemas/ShippingRate'
       required:
       - shipping_rates
+    MaxShippingQuery:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+      required:
+      - line_items
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
   securitySchemes:
     basicAuth:
       type: http

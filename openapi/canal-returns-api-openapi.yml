@@ -386,36 +386,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    ReturnLineItem:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        line_item_id:
-          type: string
-          format: uuid
-        quantity:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        customer_note:
-          type:
-          - string
-          - 'null'
-          maxLength: 300
-        return_reason:
-          $ref: '#/components/schemas/ReturnReasonEnum'
-        return_reason_note:
-          type:
-          - string
-          - 'null'
-          maxLength: 255
-      required:
-      - id
-      - line_item_id
-      - quantity
     Return:
       type: object
       properties:
@@ -468,37 +438,27 @@ components:
       - total_return_line_items
       - tracking
       - updated_at
-    ReverseDelivery:
+    PaginatedReturnList:
       type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        carrier_name:
-          type:
-          - string
-          - 'null'
-          maxLength: 100
-        tracking_number:
-          type:
-          - string
-          - 'null'
-          maxLength: 100
-        tracking_url:
-          type:
-          - string
-          - 'null'
-          format: uri
-          maxLength: 200
-        shipping_label_file_url:
-          type:
-          - string
-          - 'null'
-          format: uri
-          maxLength: 1279
       required:
-      - id
+      - results
+      properties:
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Return'
     Status602Enum:
       enum:
       - canceled
@@ -516,37 +476,6 @@ components:
         * `open` - open
 
         * `requested` - requested'
-    ReverseDeliveryCreate:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        carrier_name:
-          type:
-          - string
-          - 'null'
-          maxLength: 100
-        tracking_number:
-          type:
-          - string
-          - 'null'
-          maxLength: 100
-        tracking_url:
-          type:
-          - string
-          - 'null'
-          format: uri
-          maxLength: 200
-        shipping_label_file_url:
-          type:
-          - string
-          - 'null'
-          format: uri
-          maxLength: 1279
-      required:
-      - id
     CreateReturnLineItem:
       type: object
       properties:
@@ -565,12 +494,6 @@ components:
       - line_item_id
       - quantity
       - return_reason
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        detail: {}
     ReturnCreate:
       type: object
       properties:
@@ -631,27 +554,104 @@ components:
         * `unwanted` - unwanted
 
         * `wrong_item` - wrong_item'
-    PaginatedReturnList:
+    ReturnLineItem:
       type: object
-      required:
-      - results
       properties:
-        next:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        line_item_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        customer_note:
+          type:
+          - string
+          - 'null'
+          maxLength: 300
+        return_reason:
+          $ref: '#/components/schemas/ReturnReasonEnum'
+        return_reason_note:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+      required:
+      - id
+      - line_item_id
+      - quantity
+    ReverseDeliveryCreate:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        carrier_name:
+          type:
+          - string
+          - 'null'
+          maxLength: 100
+        tracking_number:
+          type:
+          - string
+          - 'null'
+          maxLength: 100
+        tracking_url:
           type:
           - string
           - 'null'
           format: uri
-          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
-        previous:
+          maxLength: 200
+        shipping_label_file_url:
           type:
           - string
           - 'null'
           format: uri
-          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Return'
+          maxLength: 1279
+      required:
+      - id
+    ReverseDelivery:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        carrier_name:
+          type:
+          - string
+          - 'null'
+          maxLength: 100
+        tracking_number:
+          type:
+          - string
+          - 'null'
+          maxLength: 100
+        tracking_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+          maxLength: 200
+        shipping_label_file_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+          maxLength: 1279
+      required:
+      - id
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
   securitySchemes:
     basicAuth:
       type: http

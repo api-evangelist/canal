@@ -59,6 +59,36 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    ShippingCalculationResponse:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShippingLineItemData'
+          description: List of shipping calculation results per line item.
+        calculation_errors:
+          type: array
+          items:
+            type: string
+          description: Error messages
+      required:
+      - calculation_errors
+      - line_items
+    ShippingCalculationQuery:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplierShippingLineItem'
+        shipping_address:
+          allOf:
+          - $ref: '#/components/schemas/TaxAndShippingAddress'
+          description: The destination address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
+      required:
+      - line_items
+      - shipping_address
     ShippingLineItemData:
       type: object
       properties:
@@ -108,28 +138,6 @@ components:
       - country
       - province
       - zip
-    ShippingCalculationResponse:
-      type: object
-      properties:
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ShippingLineItemData'
-          description: List of shipping calculation results per line item.
-        calculation_errors:
-          type: array
-          items:
-            type: string
-          description: Error messages
-      required:
-      - calculation_errors
-      - line_items
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        detail: {}
     SupplierShippingLineItem:
       type: object
       properties:
@@ -163,20 +171,12 @@ components:
       - code
       - price
       - title
-    ShippingCalculationQuery:
+    Error:
       type: object
       properties:
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/SupplierShippingLineItem'
-        shipping_address:
-          allOf:
-          - $ref: '#/components/schemas/TaxAndShippingAddress'
-          description: The destination address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
-      required:
-      - line_items
-      - shipping_address
+        message:
+          type: string
+        detail: {}
   securitySchemes:
     basicAuth:
       type: http

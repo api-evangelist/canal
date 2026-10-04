@@ -59,6 +59,29 @@ paths:
       x-summary-source: derived
 components:
   schemas:
+    TaxLineResponse:
+      type: object
+      properties:
+        tax_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: The tax amount for the line item
+        currency:
+          type: string
+          default: USD
+        title:
+          type: string
+          description: The name of the tax line
+        rate:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: The tax rate for the line item
+      required:
+      - rate
+      - tax_amount
+      - title
     CreateOrderLineItem:
       type: object
       properties:
@@ -74,24 +97,6 @@ components:
       required:
       - quantity
       - variant_id
-    TaxCalculationQuery:
-      type: object
-      properties:
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateOrderLineItem'
-        shipping_address:
-          allOf:
-          - $ref: '#/components/schemas/TaxAndShippingAddress'
-          description: The destination address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
-        billing_address:
-          allOf:
-          - $ref: '#/components/schemas/TaxAndShippingAddress'
-          description: The billing address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
-      required:
-      - line_items
-      - shipping_address
     TaxAndShippingAddress:
       type: object
       description: Address serializer for tax and shipping calculations where address1 and name are optional
@@ -121,35 +126,30 @@ components:
       - country
       - province
       - zip
+    TaxCalculationQuery:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        shipping_address:
+          allOf:
+          - $ref: '#/components/schemas/TaxAndShippingAddress'
+          description: The destination address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
+        billing_address:
+          allOf:
+          - $ref: '#/components/schemas/TaxAndShippingAddress'
+          description: The billing address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
+      required:
+      - line_items
+      - shipping_address
     Error:
       type: object
       properties:
         message:
           type: string
         detail: {}
-    TaxLineResponse:
-      type: object
-      properties:
-        tax_amount:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
-          description: The tax amount for the line item
-        currency:
-          type: string
-          default: USD
-        title:
-          type: string
-          description: The name of the tax line
-        rate:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
-          description: The tax rate for the line item
-      required:
-      - rate
-      - tax_amount
-      - title
     TaxLinePerSupplierResponse:
       type: object
       properties:

@@ -330,412 +330,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Shop:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        email:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        phone:
-          type:
-          - string
-          - 'null'
-          maxLength: 128
-        name:
-          type: string
-          maxLength: 129
-        description:
-          type:
-          - string
-          - 'null'
-          maxLength: 6144
-        myshopify_domain:
-          type: string
-          maxLength: 128
-        province:
-          type:
-          - string
-          - 'null'
-          maxLength: 122
-        country:
-          type: string
-          maxLength: 64
-        domain:
-          type:
-          - string
-          - 'null'
-          maxLength: 128
-        display_domain:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        privacy_policy_url:
-          type:
-          - string
-          - 'null'
-          format: uri
-          maxLength: 500
-        terms_of_service_url:
-          type:
-          - string
-          - 'null'
-          format: uri
-          maxLength: 500
-      required:
-      - country
-      - display_domain
-      - email
-      - id
-      - myshopify_domain
-      - name
-    PatchedVariant:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        shop:
-          allOf:
-          - $ref: '#/components/schemas/Shop'
-          readOnly: true
-        inventory_policy:
-          type:
-          - string
-          - 'null'
-          maxLength: 123
-        inventory_quantity:
-          type:
-          - integer
-          - 'null'
-          maximum: 2147483647
-          minimum: -2147483648
-        inventory_item_cost:
-          type: number
-          format: double
-        option1:
-          type:
-          - string
-          - 'null'
-          maxLength: 255
-        option2:
-          type:
-          - string
-          - 'null'
-          maxLength: 256
-        option3:
-          type:
-          - string
-          - 'null'
-          maxLength: 257
-        position:
-          type: integer
-          readOnly: true
-        price:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
-          description: The price of the variant to be sold at.
-        compare_at_price:
-          type:
-          - string
-          - 'null'
-          maxLength: 128
-        origin_supplier_currency:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        title:
-          type: string
-        sku:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        upc:
-          type:
-          - string
-          - 'null'
-          maxLength: 253
-        grams:
-          type:
-          - number
-          - 'null'
-          format: double
-        weight:
-          type:
-          - number
-          - 'null'
-          format: double
-        weight_unit:
-          type:
-          - string
-          - 'null'
-          maxLength: 3
-        pause_selling:
-          type: boolean
-        origin_supplier_id:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        origin_supplier_name:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        available_for_ordering:
-          type: boolean
-          readOnly: true
-        supplier_sku:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        is_exclusive_offer:
-          type: boolean
-          description: An exclusive offer is a variant that is discounted lower than the variant's actual price on the supplier's website.
-          readOnly: true
-        sup_price:
-          type:
-          - string
-          - 'null'
-          description: The connected supplier variant's price, sourced from the supplier directly.
-          readOnly: true
-        sup_compare_at_price:
-          type:
-          - string
-          - 'null'
-          description: The connected supplier variant's compare-at price, sourced from the supplier directly.
-          readOnly: true
-    PaginatedVariantList:
-      type: object
-      required:
-      - results
-      properties:
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Variant'
-    InventoryPolicyEnum:
-      enum:
-      - continue
-      - deny
-      type: string
-      description: '* `continue` - continue
-
-        * `deny` - deny'
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        detail: {}
-    Status2eaEnum:
-      enum:
-      - active
-      - draft
-      - archived
-      - unlisted
-      type: string
-      description: '* `active` - active
-
-        * `draft` - draft
-
-        * `archived` - archived
-
-        * `unlisted` - unlisted'
-    Image:
-      type: object
-      properties:
-        id:
-          type: string
-        position:
-          type: integer
-        src:
-          type: string
-          format: uri
-        display_src:
-          type:
-          - string
-          - 'null'
-          format: uri
-        width:
-          type: integer
-        height:
-          type: integer
-        canal_variant_ids:
-          type: array
-          items:
-            type: string
-          readOnly: true
-        variant_ids:
-          type: array
-          items:
-            type: string
-        origin_supplier_image_id:
-          type:
-          - string
-          - 'null'
-          format: uuid
-      required:
-      - canal_variant_ids
-      - src
-    Product:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        shop:
-          allOf:
-          - $ref: '#/components/schemas/Shop'
-          readOnly: true
-        variants:
-          type: array
-          items:
-            $ref: '#/components/schemas/Variant'
-          readOnly: true
-        body_html:
-          type:
-          - string
-          - 'null'
-          maxLength: 60000
-        handle:
-          type:
-          - string
-          - 'null'
-          maxLength: 258
-        image_src:
-          type:
-          - string
-          - 'null'
-          maxLength: 1043
-        images:
-          type: array
-          items:
-            $ref: '#/components/schemas/Image'
-        options: {}
-        product_type:
-          type:
-          - string
-          - 'null'
-          maxLength: 1044
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-        published_at:
-          type:
-          - string
-          - 'null'
-          format: date-time
-        status:
-          $ref: '#/components/schemas/Status2eaEnum'
-        title:
-          type: string
-          maxLength: 1029
-        vendor:
-          type:
-          - string
-          - 'null'
-          maxLength: 227
-        tags:
-          type:
-          - string
-          - 'null'
-          maxLength: 63750
-        permalink:
-          type:
-          - string
-          - 'null'
-          format: uri
-          maxLength: 2000
-        number_of_reviews:
-          type:
-          - integer
-          - 'null'
-          maximum: 2147483647
-          minimum: -2147483648
-        star_rating:
-          type:
-          - number
-          - 'null'
-          format: double
-      required:
-      - id
-      - shop
-      - title
-      - updated_at
-      - variants
-    CreateVariant:
-      type: object
-      properties:
-        title:
-          type: string
-        price:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
-          description: The price of the variant to be sold at.
-        compare_at_price:
-          type:
-          - string
-          - 'null'
-          format: decimal
-          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
-          description: The original price of the product from before the sale price. Should be greater than "price". If you elect to not allow sale price passthrough, Connected Storefronts will sell items at this price.
-        inventory_policy:
-          $ref: '#/components/schemas/InventoryPolicyEnum'
-        inventory_quantity:
-          type: integer
-        option1:
-          type: string
-        option2:
-          type: string
-        option3:
-          type: string
-        sku:
-          type: string
-        position:
-          type: integer
-        image_src:
-          type: string
-        weight:
-          type: number
-          format: double
-        weight_unit:
-          type: string
-        product_id:
-          type: string
-          format: uuid
-      required:
-      - inventory_policy
-      - inventory_quantity
-      - option1
-      - price
-      - product_id
     Variant:
       type: object
       properties:
@@ -872,6 +466,412 @@ components:
       - sup_price
       - supplier_sku
       - title
+    PaginatedVariantList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Variant'
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        shop:
+          allOf:
+          - $ref: '#/components/schemas/Shop'
+          readOnly: true
+        variants:
+          type: array
+          items:
+            $ref: '#/components/schemas/Variant'
+          readOnly: true
+        body_html:
+          type:
+          - string
+          - 'null'
+          maxLength: 60000
+        handle:
+          type:
+          - string
+          - 'null'
+          maxLength: 258
+        image_src:
+          type:
+          - string
+          - 'null'
+          maxLength: 1043
+        images:
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
+        options: {}
+        product_type:
+          type:
+          - string
+          - 'null'
+          maxLength: 1044
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        published_at:
+          type:
+          - string
+          - 'null'
+          format: date-time
+        status:
+          $ref: '#/components/schemas/Status2eaEnum'
+        title:
+          type: string
+          maxLength: 1029
+        vendor:
+          type:
+          - string
+          - 'null'
+          maxLength: 227
+        tags:
+          type:
+          - string
+          - 'null'
+          maxLength: 63750
+        permalink:
+          type:
+          - string
+          - 'null'
+          format: uri
+          maxLength: 2000
+        number_of_reviews:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        star_rating:
+          type:
+          - number
+          - 'null'
+          format: double
+      required:
+      - id
+      - shop
+      - title
+      - updated_at
+      - variants
+    Status2eaEnum:
+      enum:
+      - active
+      - draft
+      - archived
+      - unlisted
+      type: string
+      description: '* `active` - active
+
+        * `draft` - draft
+
+        * `archived` - archived
+
+        * `unlisted` - unlisted'
+    Image:
+      type: object
+      properties:
+        id:
+          type: string
+        position:
+          type: integer
+        src:
+          type: string
+          format: uri
+        display_src:
+          type:
+          - string
+          - 'null'
+          format: uri
+        width:
+          type: integer
+        height:
+          type: integer
+        canal_variant_ids:
+          type: array
+          items:
+            type: string
+          readOnly: true
+        variant_ids:
+          type: array
+          items:
+            type: string
+        origin_supplier_image_id:
+          type:
+          - string
+          - 'null'
+          format: uuid
+      required:
+      - canal_variant_ids
+      - src
+    PatchedVariant:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        shop:
+          allOf:
+          - $ref: '#/components/schemas/Shop'
+          readOnly: true
+        inventory_policy:
+          type:
+          - string
+          - 'null'
+          maxLength: 123
+        inventory_quantity:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
+        inventory_item_cost:
+          type: number
+          format: double
+        option1:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        option2:
+          type:
+          - string
+          - 'null'
+          maxLength: 256
+        option3:
+          type:
+          - string
+          - 'null'
+          maxLength: 257
+        position:
+          type: integer
+          readOnly: true
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          description: The price of the variant to be sold at.
+        compare_at_price:
+          type:
+          - string
+          - 'null'
+          maxLength: 128
+        origin_supplier_currency:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        title:
+          type: string
+        sku:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        upc:
+          type:
+          - string
+          - 'null'
+          maxLength: 253
+        grams:
+          type:
+          - number
+          - 'null'
+          format: double
+        weight:
+          type:
+          - number
+          - 'null'
+          format: double
+        weight_unit:
+          type:
+          - string
+          - 'null'
+          maxLength: 3
+        pause_selling:
+          type: boolean
+        origin_supplier_id:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        origin_supplier_name:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        available_for_ordering:
+          type: boolean
+          readOnly: true
+        supplier_sku:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        is_exclusive_offer:
+          type: boolean
+          description: An exclusive offer is a variant that is discounted lower than the variant's actual price on the supplier's website.
+          readOnly: true
+        sup_price:
+          type:
+          - string
+          - 'null'
+          description: The connected supplier variant's price, sourced from the supplier directly.
+          readOnly: true
+        sup_compare_at_price:
+          type:
+          - string
+          - 'null'
+          description: The connected supplier variant's compare-at price, sourced from the supplier directly.
+          readOnly: true
+    InventoryPolicyEnum:
+      enum:
+      - continue
+      - deny
+      type: string
+      description: '* `continue` - continue
+
+        * `deny` - deny'
+    Shop:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        phone:
+          type:
+          - string
+          - 'null'
+          maxLength: 128
+        name:
+          type: string
+          maxLength: 129
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 6144
+        myshopify_domain:
+          type: string
+          maxLength: 128
+        province:
+          type:
+          - string
+          - 'null'
+          maxLength: 122
+        country:
+          type: string
+          maxLength: 64
+        domain:
+          type:
+          - string
+          - 'null'
+          maxLength: 128
+        display_domain:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        privacy_policy_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+          maxLength: 500
+        terms_of_service_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+          maxLength: 500
+      required:
+      - country
+      - display_domain
+      - email
+      - id
+      - myshopify_domain
+      - name
+    CreateVariant:
+      type: object
+      properties:
+        title:
+          type: string
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          description: The price of the variant to be sold at.
+        compare_at_price:
+          type:
+          - string
+          - 'null'
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+          description: The original price of the product from before the sale price. Should be greater than "price". If you elect to not allow sale price passthrough, Connected Storefronts will sell items at this price.
+        inventory_policy:
+          $ref: '#/components/schemas/InventoryPolicyEnum'
+        inventory_quantity:
+          type: integer
+        option1:
+          type: string
+        option2:
+          type: string
+        option3:
+          type: string
+        sku:
+          type: string
+        position:
+          type: integer
+        image_src:
+          type: string
+        weight:
+          type: number
+          format: double
+        weight_unit:
+          type: string
+        product_id:
+          type: string
+          format: uuid
+      required:
+      - inventory_policy
+      - inventory_quantity
+      - option1
+      - price
+      - product_id
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
   securitySchemes:
     basicAuth:
       type: http

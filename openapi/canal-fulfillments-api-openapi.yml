@@ -310,24 +310,102 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    Status406Enum:
+    CreateFulfillment:
+      type: object
+      properties:
+        name:
+          type: string
+        service:
+          type: string
+        shipment_status:
+          $ref: '#/components/schemas/ShipmentStatusEnum'
+        status:
+          $ref: '#/components/schemas/Status406Enum'
+        tracking_company:
+          type:
+          - string
+          - 'null'
+        tracking_numbers:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        tracking_urls:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        order_id:
+          type: string
+          format: uuid
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItem'
+      required:
+      - line_items
+      - name
+      - order_id
+      - service
+      - shipment_status
+      - status
+    LineItemRead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        variant_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        fulfillable_quantity:
+          type: integer
+        price:
+          type: number
+          format: double
+        requires_shipping:
+          type: boolean
+        title:
+          type: string
+        sku:
+          type: string
+      required:
+      - fulfillable_quantity
+      - id
+      - price
+      - quantity
+      - variant_id
+    ShipmentStatusEnum:
       enum:
-      - pending
-      - open
-      - success
-      - cancelled
-      - error
+      - label_printed
+      - label_purchased
+      - attempted_delivery
+      - ready_for_pickup
+      - confirmed
+      - in_transit
+      - out_for_delivery
+      - delivered
       - failure
       type: string
-      description: '* `pending` - pending
+      description: '* `label_printed` - label_printed
 
-        * `open` - open
+        * `label_purchased` - label_purchased
 
-        * `success` - success
+        * `attempted_delivery` - attempted_delivery
 
-        * `cancelled` - cancelled
+        * `ready_for_pickup` - ready_for_pickup
 
-        * `error` - error
+        * `confirmed` - confirmed
+
+        * `in_transit` - in_transit
+
+        * `out_for_delivery` - out_for_delivery
+
+        * `delivered` - delivered
 
         * `failure` - failure'
     Shop:
@@ -395,59 +473,6 @@ components:
       - id
       - myshopify_domain
       - name
-    PatchedFulfillment:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-          maxLength: 255
-        order_id:
-          type: string
-          format: uuid
-        shop:
-          $ref: '#/components/schemas/Shop'
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/LineItemRead'
-        service:
-          type:
-          - string
-          - 'null'
-          maxLength: 258
-        shipment_status:
-          type:
-          - string
-          - 'null'
-          maxLength: 32
-        status:
-          type:
-          - string
-          - 'null'
-          maxLength: 32
-        tracking_company:
-          type:
-          - string
-          - 'null'
-          maxLength: 257
-        tracking_numbers:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-            maxLength: 128
-        tracking_urls:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-            maxLength: 256
     UpdateFulfillment:
       type: object
       properties:
@@ -501,53 +526,6 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Fulfillment'
-    CreateFulfillment:
-      type: object
-      properties:
-        name:
-          type: string
-        service:
-          type: string
-        shipment_status:
-          $ref: '#/components/schemas/ShipmentStatusEnum'
-        status:
-          $ref: '#/components/schemas/Status406Enum'
-        tracking_company:
-          type:
-          - string
-          - 'null'
-        tracking_numbers:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        tracking_urls:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        order_id:
-          type: string
-          format: uuid
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/LineItem'
-      required:
-      - line_items
-      - name
-      - order_id
-      - service
-      - shipment_status
-      - status
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        detail: {}
     LineItem:
       type: object
       properties:
@@ -559,63 +537,85 @@ components:
       required:
       - id
       - quantity
-    LineItemRead:
+    Status406Enum:
+      enum:
+      - pending
+      - open
+      - success
+      - cancelled
+      - error
+      - failure
+      type: string
+      description: '* `pending` - pending
+
+        * `open` - open
+
+        * `success` - success
+
+        * `cancelled` - cancelled
+
+        * `error` - error
+
+        * `failure` - failure'
+    PatchedFulfillment:
       type: object
       properties:
         id:
           type: string
           format: uuid
-        variant_id:
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        order_id:
           type: string
           format: uuid
-        quantity:
-          type: integer
-        fulfillable_quantity:
-          type: integer
-        price:
-          type: number
-          format: double
-        requires_shipping:
-          type: boolean
-        title:
+        shop:
+          $ref: '#/components/schemas/Shop'
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItemRead'
+        service:
+          type:
+          - string
+          - 'null'
+          maxLength: 258
+        shipment_status:
+          type:
+          - string
+          - 'null'
+          maxLength: 32
+        status:
+          type:
+          - string
+          - 'null'
+          maxLength: 32
+        tracking_company:
+          type:
+          - string
+          - 'null'
+          maxLength: 257
+        tracking_numbers:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            maxLength: 128
+        tracking_urls:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            maxLength: 256
+    Error:
+      type: object
+      properties:
+        message:
           type: string
-        sku:
-          type: string
-      required:
-      - fulfillable_quantity
-      - id
-      - price
-      - quantity
-      - variant_id
-    ShipmentStatusEnum:
-      enum:
-      - label_printed
-      - label_purchased
-      - attempted_delivery
-      - ready_for_pickup
-      - confirmed
-      - in_transit
-      - out_for_delivery
-      - delivered
-      - failure
-      type: string
-      description: '* `label_printed` - label_printed
-
-        * `label_purchased` - label_purchased
-
-        * `attempted_delivery` - attempted_delivery
-
-        * `ready_for_pickup` - ready_for_pickup
-
-        * `confirmed` - confirmed
-
-        * `in_transit` - in_transit
-
-        * `out_for_delivery` - out_for_delivery
-
-        * `delivered` - delivered
-
-        * `failure` - failure'
+        detail: {}
     Fulfillment:
       type: object
       properties:

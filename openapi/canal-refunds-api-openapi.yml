@@ -242,26 +242,29 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    RefundCreate:
+    RefundLineItem:
       type: object
       properties:
-        order_id:
+        id:
           type: string
           format: uuid
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/LineItem'
-        should_refund_shipping:
-          type: boolean
-        extra_amount:
-          type: string
+          readOnly: true
+        line_item:
+          $ref: '#/components/schemas/LineItemRead'
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        subtotal:
+          type:
+          - string
+          - 'null'
           format: decimal
-          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
-          description: Only available to select retailers.
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
       required:
-      - line_items
-      - order_id
+      - id
+      - line_item
+      - quantity
     LineItemRead:
       type: object
       properties:
@@ -290,12 +293,47 @@ components:
       - price
       - quantity
       - variant_id
-    Error:
+    RefundCreate:
       type: object
       properties:
-        message:
+        order_id:
           type: string
-        detail: {}
+          format: uuid
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItem'
+        should_refund_shipping:
+          type: boolean
+        extra_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          description: Only available to select retailers.
+      required:
+      - line_items
+      - order_id
+    PaginatedRefundList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Refund'
     Refund:
       type: object
       properties:
@@ -341,50 +379,12 @@ components:
       - order_id
       - processed_at
       - refund_line_items
-    RefundLineItem:
+    Error:
       type: object
       properties:
-        id:
+        message:
           type: string
-          format: uuid
-          readOnly: true
-        line_item:
-          $ref: '#/components/schemas/LineItemRead'
-        quantity:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        subtotal:
-          type:
-          - string
-          - 'null'
-          format: decimal
-          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
-      required:
-      - id
-      - line_item
-      - quantity
-    PaginatedRefundList:
-      type: object
-      required:
-      - results
-      properties:
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Refund'
+        detail: {}
     LineItem:
       type: object
       properties:
