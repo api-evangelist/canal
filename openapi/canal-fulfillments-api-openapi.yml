@@ -310,104 +310,6 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    CreateFulfillment:
-      type: object
-      properties:
-        name:
-          type: string
-        service:
-          type: string
-        shipment_status:
-          $ref: '#/components/schemas/ShipmentStatusEnum'
-        status:
-          $ref: '#/components/schemas/Status406Enum'
-        tracking_company:
-          type:
-          - string
-          - 'null'
-        tracking_numbers:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        tracking_urls:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-        order_id:
-          type: string
-          format: uuid
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/LineItem'
-      required:
-      - line_items
-      - name
-      - order_id
-      - service
-      - shipment_status
-      - status
-    LineItemRead:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        variant_id:
-          type: string
-          format: uuid
-        quantity:
-          type: integer
-        fulfillable_quantity:
-          type: integer
-        price:
-          type: number
-          format: double
-        requires_shipping:
-          type: boolean
-        title:
-          type: string
-        sku:
-          type: string
-      required:
-      - fulfillable_quantity
-      - id
-      - price
-      - quantity
-      - variant_id
-    ShipmentStatusEnum:
-      enum:
-      - label_printed
-      - label_purchased
-      - attempted_delivery
-      - ready_for_pickup
-      - confirmed
-      - in_transit
-      - out_for_delivery
-      - delivered
-      - failure
-      type: string
-      description: '* `label_printed` - label_printed
-
-        * `label_purchased` - label_purchased
-
-        * `attempted_delivery` - attempted_delivery
-
-        * `ready_for_pickup` - ready_for_pickup
-
-        * `confirmed` - confirmed
-
-        * `in_transit` - in_transit
-
-        * `out_for_delivery` - out_for_delivery
-
-        * `delivered` - delivered
-
-        * `failure` - failure'
     Shop:
       type: object
       properties:
@@ -473,7 +375,77 @@ components:
       - id
       - myshopify_domain
       - name
-    UpdateFulfillment:
+    ShipmentStatusEnum:
+      enum:
+      - label_printed
+      - label_purchased
+      - attempted_delivery
+      - ready_for_pickup
+      - confirmed
+      - in_transit
+      - out_for_delivery
+      - delivered
+      - failure
+      type: string
+      description: '* `label_printed` - label_printed
+
+        * `label_purchased` - label_purchased
+
+        * `attempted_delivery` - attempted_delivery
+
+        * `ready_for_pickup` - ready_for_pickup
+
+        * `confirmed` - confirmed
+
+        * `in_transit` - in_transit
+
+        * `out_for_delivery` - out_for_delivery
+
+        * `delivered` - delivered
+
+        * `failure` - failure'
+    PaginatedFulfillmentList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/Fulfillment'
+    Status406Enum:
+      enum:
+      - pending
+      - open
+      - success
+      - cancelled
+      - error
+      - failure
+      type: string
+      description: '* `pending` - pending
+
+        * `open` - open
+
+        * `success` - success
+
+        * `cancelled` - cancelled
+
+        * `error` - error
+
+        * `failure` - failure'
+    CreateFulfillment:
       type: object
       properties:
         name:
@@ -500,32 +472,20 @@ components:
           - 'null'
           items:
             type: string
+        order_id:
+          type: string
+          format: uuid
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItem'
       required:
+      - line_items
       - name
+      - order_id
       - service
       - shipment_status
       - status
-    PaginatedFulfillmentList:
-      type: object
-      required:
-      - results
-      properties:
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/Fulfillment'
     LineItem:
       type: object
       properties:
@@ -537,26 +497,6 @@ components:
       required:
       - id
       - quantity
-    Status406Enum:
-      enum:
-      - pending
-      - open
-      - success
-      - cancelled
-      - error
-      - failure
-      type: string
-      description: '* `pending` - pending
-
-        * `open` - open
-
-        * `success` - success
-
-        * `cancelled` - cancelled
-
-        * `error` - error
-
-        * `failure` - failure'
     PatchedFulfillment:
       type: object
       properties:
@@ -675,6 +615,66 @@ components:
       - name
       - order_id
       - shop
+    UpdateFulfillment:
+      type: object
+      properties:
+        name:
+          type: string
+        service:
+          type: string
+        shipment_status:
+          $ref: '#/components/schemas/ShipmentStatusEnum'
+        status:
+          $ref: '#/components/schemas/Status406Enum'
+        tracking_company:
+          type:
+          - string
+          - 'null'
+        tracking_numbers:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+        tracking_urls:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+      required:
+      - name
+      - service
+      - shipment_status
+      - status
+    LineItemRead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        variant_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        fulfillable_quantity:
+          type: integer
+        price:
+          type: number
+          format: double
+        requires_shipping:
+          type: boolean
+        title:
+          type: string
+        sku:
+          type: string
+      required:
+      - fulfillable_quantity
+      - id
+      - price
+      - quantity
+      - variant_id
   securitySchemes:
     basicAuth:
       type: http

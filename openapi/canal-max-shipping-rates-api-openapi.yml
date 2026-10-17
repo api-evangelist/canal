@@ -92,23 +92,21 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    ShippingRate:
+    Error:
       type: object
       properties:
-        code:
+        message:
           type: string
-        title:
-          type: string
-        price:
-          type: number
-          format: double
-        currency:
-          type: string
-          default: USD
+        detail: {}
+    MaxShippingQuery:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
       required:
-      - code
-      - price
-      - title
+      - line_items
     CreateOrderLineItem:
       type: object
       properties:
@@ -133,21 +131,23 @@ components:
             $ref: '#/components/schemas/ShippingRate'
       required:
       - shipping_rates
-    MaxShippingQuery:
+    ShippingRate:
       type: object
       properties:
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateOrderLineItem'
-      required:
-      - line_items
-    Error:
-      type: object
-      properties:
-        message:
+        code:
           type: string
-        detail: {}
+        title:
+          type: string
+        price:
+          type: number
+          format: double
+        currency:
+          type: string
+          default: USD
+      required:
+      - code
+      - price
+      - title
   securitySchemes:
     basicAuth:
       type: http

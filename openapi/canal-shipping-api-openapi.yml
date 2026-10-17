@@ -75,20 +75,27 @@ components:
       required:
       - calculation_errors
       - line_items
-    ShippingCalculationQuery:
+    SupplierShippingLineItem:
       type: object
       properties:
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/SupplierShippingLineItem'
-        shipping_address:
-          allOf:
-          - $ref: '#/components/schemas/TaxAndShippingAddress'
-          description: The destination address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
+        supplier_variant_rid:
+          type: string
+        supplier_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+          minimum: 1
       required:
-      - line_items
-      - shipping_address
+      - quantity
+      - supplier_id
+      - supplier_variant_rid
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
     ShippingLineItemData:
       type: object
       properties:
@@ -109,6 +116,20 @@ components:
       - shipping_details
       - supplier_id
       - supplier_variant_rid
+    ShippingCalculationQuery:
+      type: object
+      properties:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/SupplierShippingLineItem'
+        shipping_address:
+          allOf:
+          - $ref: '#/components/schemas/TaxAndShippingAddress'
+          description: The destination address, including fields like `city`, `province_code`, `country_code`, `zip`. `address1`, `name` and `phone` are optional but recommended.
+      required:
+      - line_items
+      - shipping_address
     TaxAndShippingAddress:
       type: object
       description: Address serializer for tax and shipping calculations where address1 and name are optional
@@ -138,21 +159,6 @@ components:
       - country
       - province
       - zip
-    SupplierShippingLineItem:
-      type: object
-      properties:
-        supplier_variant_rid:
-          type: string
-        supplier_id:
-          type: string
-          format: uuid
-        quantity:
-          type: integer
-          minimum: 1
-      required:
-      - quantity
-      - supplier_id
-      - supplier_variant_rid
     ShippingDetailsData:
       type: object
       properties:
@@ -171,12 +177,6 @@ components:
       - code
       - price
       - title
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        detail: {}
   securitySchemes:
     basicAuth:
       type: http

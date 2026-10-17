@@ -590,68 +590,133 @@ paths:
       x-summary-source: derived
 components:
   schemas:
-    ShippingRate:
+    OrderShippingDetails:
       type: object
       properties:
         code:
           type: string
-        title:
+        amount:
           type: string
-        price:
-          type: number
-          format: double
-        currency:
-          type: string
-          default: USD
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+          default: '0.0000'
+        use_override_amount:
+          type: boolean
+          default: false
+        shipping_address:
+          $ref: '#/components/schemas/TaxAndShippingAddress'
       required:
       - code
-      - price
-      - title
-    Address:
+      - shipping_address
+    OrderCreateAndCharge:
       type: object
       properties:
-        name:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        customer:
+          $ref: '#/components/schemas/OrderCreateCustomer'
+        order_name:
           type: string
-        address1:
+        total_tax:
           type: string
-        address2:
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+        note_attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderNoteAttribute'
+          description: 'This field is useful for passing customization options for Supplier products that support customization (gift messages, logos, custom text).
+
+            Example: {"name": "Variant 1 Custom Text", "value": "<custom text value>"}'
+        partner_name:
           type: string
-        city:
+        shipping_details:
+          $ref: '#/components/schemas/OrderShippingDetails'
+        ppu_transaction_id:
           type: string
-        province:
-          type: string
-        province_code:
-          type: string
-        country:
-          type: string
-        country_code:
-          type: string
-        zip:
-          type: string
-        phone:
-          type: string
+          description: The Post Purchase Upsell session id for the tax calculation. This matches the tax calculation request.
+        payment_details:
+          allOf:
+          - $ref: '#/components/schemas/PaymentDetailsWithTokenizedCardResponse'
+          description: This field is the response from the vault. It is used to charge the customer.
       required:
-      - address1
-      - city
-      - country
-      - name
-      - province
-      - zip
-    PartialAddressPaymentDetails:
+      - line_items
+      - payment_details
+      - ppu_transaction_id
+      - shipping_details
+    ConfirmationDetails:
       type: object
       properties:
-        billing_address:
-          $ref: '#/components/schemas/TaxAndShippingAddress'
-    OrderNoteAttribute:
-      type: object
-      properties:
-        name:
+        confirmation_number:
           type: string
-        value:
+        catalog_order_id:
           type: string
+        order_id:
+          type: string
+        order_date:
+          type: string
+          format: date-time
+        order_status:
+          type: string
+        fulfillment_status:
+          type: string
+        tracking_info:
+          type: array
+          items:
+            type: string
       required:
-      - name
-      - value
+      - confirmation_number
+      - order_date
+      - order_id
+    CreateOrderLineItem:
+      type: object
+      properties:
+        variant_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        price:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+      required:
+      - quantity
+      - variant_id
+    ReturnReasonEnum:
+      enum:
+      - color
+      - defective
+      - not_as_described
+      - other
+      - size_too_large
+      - size_too_small
+      - style
+      - unknown
+      - unwanted
+      - wrong_item
+      type: string
+      description: '* `color` - color
+
+        * `defective` - defective
+
+        * `not_as_described` - not_as_described
+
+        * `other` - other
+
+        * `size_too_large` - size_too_large
+
+        * `size_too_small` - size_too_small
+
+        * `style` - style
+
+        * `unknown` - unknown
+
+        * `unwanted` - unwanted
+
+        * `wrong_item` - wrong_item'
     ReturnLineItem:
       type: object
       properties:
@@ -682,6 +747,296 @@ components:
       - id
       - line_item_id
       - quantity
+    LineItemRead:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        variant_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+        fulfillable_quantity:
+          type: integer
+        price:
+          type: number
+          format: double
+        requires_shipping:
+          type: boolean
+        title:
+          type: string
+        sku:
+          type: string
+      required:
+      - fulfillable_quantity
+      - id
+      - price
+      - quantity
+      - variant_id
+    OrderInitializeAndChargeResponse:
+      type: object
+      properties:
+        confirmation_details:
+          $ref: '#/components/schemas/ConfirmationDetails'
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        customer:
+          $ref: '#/components/schemas/OrderCreateCustomer'
+        shipping_address:
+          $ref: '#/components/schemas/Address'
+        display_metadata:
+          type: object
+          additionalProperties: {}
+        payment_details:
+          $ref: '#/components/schemas/OrderInitializeAndChargePaymentDetailsResponse'
+      required:
+      - confirmation_details
+      - line_items
+      - payment_details
+    PartialAddressPaymentDetails:
+      type: object
+      properties:
+        billing_address:
+          $ref: '#/components/schemas/TaxAndShippingAddress'
+    Shop:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        email:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        phone:
+          type:
+          - string
+          - 'null'
+          maxLength: 128
+        name:
+          type: string
+          maxLength: 129
+        description:
+          type:
+          - string
+          - 'null'
+          maxLength: 6144
+        myshopify_domain:
+          type: string
+          maxLength: 128
+        province:
+          type:
+          - string
+          - 'null'
+          maxLength: 122
+        country:
+          type: string
+          maxLength: 64
+        domain:
+          type:
+          - string
+          - 'null'
+          maxLength: 128
+        display_domain:
+          type:
+          - string
+          - 'null'
+          readOnly: true
+        privacy_policy_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+          maxLength: 500
+        terms_of_service_url:
+          type:
+          - string
+          - 'null'
+          format: uri
+          maxLength: 500
+      required:
+      - country
+      - display_domain
+      - email
+      - id
+      - myshopify_domain
+      - name
+    OrderNoteAttribute:
+      type: object
+      properties:
+        name:
+          type: string
+        value:
+          type: string
+      required:
+      - name
+      - value
+    ShippingRate:
+      type: object
+      properties:
+        code:
+          type: string
+        title:
+          type: string
+        price:
+          type: number
+          format: double
+        currency:
+          type: string
+          default: USD
+      required:
+      - code
+      - price
+      - title
+    Return:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        order:
+          type: string
+          format: uuid
+        return_line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReturnLineItem'
+        status:
+          $ref: '#/components/schemas/Status602Enum'
+        name:
+          type:
+          - string
+          - 'null'
+          maxLength: 501
+        total_return_line_items:
+          type: integer
+          maximum: 32767
+          minimum: -32768
+          description: The sum of all return line item quantities for the return.
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        updated_at:
+          type: string
+          format: date-time
+          readOnly: true
+        tracking:
+          type: array
+          items:
+            $ref: '#/components/schemas/ReverseDelivery'
+        rma:
+          type:
+          - string
+          - 'null'
+          description: '"Return merchandise authorization" -- used as reference number for SK to SUP comms'
+          maxLength: 501
+      required:
+      - created_at
+      - id
+      - order
+      - return_line_items
+      - total_return_line_items
+      - tracking
+      - updated_at
+    TaxAndShippingAddress:
+      type: object
+      description: Address serializer for tax and shipping calculations where address1 and name are optional
+      properties:
+        name:
+          type: string
+        address1:
+          type: string
+        address2:
+          type: string
+        city:
+          type: string
+        province:
+          type: string
+        province_code:
+          type: string
+        country:
+          type: string
+        country_code:
+          type: string
+        zip:
+          type: string
+        phone:
+          type: string
+      required:
+      - city
+      - country
+      - province
+      - zip
+    RefundLineItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        line_item:
+          $ref: '#/components/schemas/LineItemRead'
+        quantity:
+          type: integer
+          maximum: 2147483647
+          minimum: -2147483648
+        subtotal:
+          type:
+          - string
+          - 'null'
+          format: decimal
+          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
+      required:
+      - id
+      - line_item
+      - quantity
+    PaymentDetailsWithTokenizedCardResponse:
+      type: object
+      properties:
+        tokenized_card_response:
+          $ref: '#/components/schemas/TokenizedCardResponse'
+        billing_address:
+          $ref: '#/components/schemas/Address'
+      required:
+      - tokenized_card_response
+    Address:
+      type: object
+      properties:
+        name:
+          type: string
+        address1:
+          type: string
+        address2:
+          type: string
+        city:
+          type: string
+        province:
+          type: string
+        province_code:
+          type: string
+        country:
+          type: string
+        country_code:
+          type: string
+        zip:
+          type: string
+        phone:
+          type: string
+      required:
+      - address1
+      - city
+      - country
+      - name
+      - province
+      - zip
     PaginatedOrderList:
       type: object
       required:
@@ -703,29 +1058,26 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Order'
-    OrderCreateAndChargeV1Response:
+    OrderCreateCustomer:
       type: object
       properties:
-        confirmation_details:
-          $ref: '#/components/schemas/ConfirmationDetails'
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateOrderLineItem'
-        customer:
-          $ref: '#/components/schemas/OrderCreateCustomer'
-        shipping_address:
-          $ref: '#/components/schemas/Address'
-        display_metadata:
-          type: object
-          additionalProperties: {}
-        payment_details:
-          type: object
-          additionalProperties:
-            $ref: '#/components/schemas/PaymentDetailsResponse'
+        email:
+          type: string
+          format: email
+        first_name:
+          type: string
+        last_name:
+          type: string
+          default: ''
       required:
-      - confirmation_details
-      - line_items
+      - email
+      - first_name
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
     ReverseDelivery:
       type: object
       properties:
@@ -757,141 +1109,102 @@ components:
           maxLength: 1279
       required:
       - id
-    OrderInitializeAndChargePaymentDetailsResponse:
-      type: object
-      properties:
-        payment_status:
-          type: string
-        payment_confirmation_id:
-          type: string
-        statement_descriptor:
-          type: string
-        client_secret:
-          type: string
-        line_item_total_amount:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
-        shipping_amount:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
-        tax_amount:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
-        currency:
-          type: string
-        brand_account_id:
-          type: string
-      required:
-      - brand_account_id
-      - client_secret
-      - currency
-      - line_item_total_amount
-      - payment_status
-      - shipping_amount
-      - statement_descriptor
-      - tax_amount
-    PaymentDetailsWithTokenizedCardResponse:
-      type: object
-      properties:
-        tokenized_card_response:
-          $ref: '#/components/schemas/TokenizedCardResponse'
-        billing_address:
-          $ref: '#/components/schemas/Address'
-      required:
-      - tokenized_card_response
-    Status602Enum:
-      enum:
-      - canceled
-      - closed
-      - declined
-      - open
-      - requested
-      type: string
-      description: '* `canceled` - canceled
-
-        * `closed` - closed
-
-        * `declined` - declined
-
-        * `open` - open
-
-        * `requested` - requested'
-    RefundLineItem:
+    Fulfillment:
       type: object
       properties:
         id:
           type: string
           format: uuid
           readOnly: true
-        line_item:
-          $ref: '#/components/schemas/LineItemRead'
-        quantity:
-          type: integer
-          maximum: 2147483647
-          minimum: -2147483648
-        subtotal:
-          type:
-          - string
-          - 'null'
-          format: decimal
-          pattern: ^-?\d{0,10}(?:\.\d{0,2})?$
-      required:
-      - id
-      - line_item
-      - quantity
-    Customer:
-      type: object
-      properties:
-        id:
+        name:
           type: string
-          format: uuid
-          readOnly: true
-        email:
-          type:
-          - string
-          - 'null'
-          format: email
-          title: Email address
-          maxLength: 403
-        first_name:
-          type:
-          - string
-          - 'null'
           maxLength: 255
-        last_name:
+        order_id:
+          type: string
+          format: uuid
+        shop:
+          $ref: '#/components/schemas/Shop'
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/LineItemRead'
+        service:
           type:
           - string
           - 'null'
-          maxLength: 256
-        orders_count:
+          maxLength: 258
+        shipment_status:
           type:
-          - integer
+          - string
           - 'null'
-          maximum: 2147483647
-          minimum: -2147483648
+          maxLength: 32
+        status:
+          type:
+          - string
+          - 'null'
+          maxLength: 32
+        tracking_company:
+          type:
+          - string
+          - 'null'
+          maxLength: 257
+        tracking_numbers:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            maxLength: 128
+        tracking_urls:
+          type:
+          - array
+          - 'null'
+          items:
+            type: string
+            maxLength: 256
       required:
       - id
-    OrderShippingDetails:
+      - line_items
+      - name
+      - order_id
+      - shop
+    PostPurchaseOrderCreate:
       type: object
       properties:
-        code:
+        line_items:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateOrderLineItem'
+        customer:
+          $ref: '#/components/schemas/OrderCreateCustomer'
+        order_name:
           type: string
-        amount:
+        total_tax:
           type: string
           format: decimal
           pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
-          default: '0.0000'
-        use_override_amount:
-          type: boolean
-          default: false
-        shipping_address:
-          $ref: '#/components/schemas/TaxAndShippingAddress'
+        note_attributes:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderNoteAttribute'
+          description: 'This field is useful for passing customization options for Supplier products that support customization (gift messages, logos, custom text).
+
+            Example: {"name": "Variant 1 Custom Text", "value": "<custom text value>"}'
+        partner_name:
+          type: string
+        shipping_details:
+          $ref: '#/components/schemas/OrderShippingDetails'
+        ppu_transaction_id:
+          type: string
+          description: The Post Purchase Upsell session id for the tax calculation. This matches the tax calculation request.
+        payment_details:
+          allOf:
+          - $ref: '#/components/schemas/PartialAddressPaymentDetails'
+          description: This field is the response from the vault. It is used to charge the customer.
       required:
-      - code
-      - shipping_address
+      - line_items
+      - ppu_transaction_id
+      - shipping_details
     Order:
       type: object
       properties:
@@ -991,12 +1304,6 @@ components:
       - shipping_lines
       - shop
       - total_price
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        detail: {}
     OrderCreate:
       type: object
       properties:
@@ -1026,227 +1333,6 @@ components:
       required:
       - line_items
       - shipping_address
-    Return:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        order:
-          type: string
-          format: uuid
-        return_line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReturnLineItem'
-        status:
-          $ref: '#/components/schemas/Status602Enum'
-        name:
-          type:
-          - string
-          - 'null'
-          maxLength: 501
-        total_return_line_items:
-          type: integer
-          maximum: 32767
-          minimum: -32768
-          description: The sum of all return line item quantities for the return.
-        created_at:
-          type: string
-          format: date-time
-          readOnly: true
-        updated_at:
-          type: string
-          format: date-time
-          readOnly: true
-        tracking:
-          type: array
-          items:
-            $ref: '#/components/schemas/ReverseDelivery'
-        rma:
-          type:
-          - string
-          - 'null'
-          description: '"Return merchandise authorization" -- used as reference number for SK to SUP comms'
-          maxLength: 501
-      required:
-      - created_at
-      - id
-      - order
-      - return_line_items
-      - total_return_line_items
-      - tracking
-      - updated_at
-    LineItemRead:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-        variant_id:
-          type: string
-          format: uuid
-        quantity:
-          type: integer
-        fulfillable_quantity:
-          type: integer
-        price:
-          type: number
-          format: double
-        requires_shipping:
-          type: boolean
-        title:
-          type: string
-        sku:
-          type: string
-      required:
-      - fulfillable_quantity
-      - id
-      - price
-      - quantity
-      - variant_id
-    CreateOrderLineItem:
-      type: object
-      properties:
-        variant_id:
-          type: string
-          format: uuid
-        quantity:
-          type: integer
-        price:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
-      required:
-      - quantity
-      - variant_id
-    ReturnReasonEnum:
-      enum:
-      - color
-      - defective
-      - not_as_described
-      - other
-      - size_too_large
-      - size_too_small
-      - style
-      - unknown
-      - unwanted
-      - wrong_item
-      type: string
-      description: '* `color` - color
-
-        * `defective` - defective
-
-        * `not_as_described` - not_as_described
-
-        * `other` - other
-
-        * `size_too_large` - size_too_large
-
-        * `size_too_small` - size_too_small
-
-        * `style` - style
-
-        * `unknown` - unknown
-
-        * `unwanted` - unwanted
-
-        * `wrong_item` - wrong_item'
-    Shop:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        email:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        phone:
-          type:
-          - string
-          - 'null'
-          maxLength: 128
-        name:
-          type: string
-          maxLength: 129
-        description:
-          type:
-          - string
-          - 'null'
-          maxLength: 6144
-        myshopify_domain:
-          type: string
-          maxLength: 128
-        province:
-          type:
-          - string
-          - 'null'
-          maxLength: 122
-        country:
-          type: string
-          maxLength: 64
-        domain:
-          type:
-          - string
-          - 'null'
-          maxLength: 128
-        display_domain:
-          type:
-          - string
-          - 'null'
-          readOnly: true
-        privacy_policy_url:
-          type:
-          - string
-          - 'null'
-          format: uri
-          maxLength: 500
-        terms_of_service_url:
-          type:
-          - string
-          - 'null'
-          format: uri
-          maxLength: 500
-      required:
-      - country
-      - display_domain
-      - email
-      - id
-      - myshopify_domain
-      - name
-    TaxAndShippingAddress:
-      type: object
-      description: Address serializer for tax and shipping calculations where address1 and name are optional
-      properties:
-        name:
-          type: string
-        address1:
-          type: string
-        address2:
-          type: string
-        city:
-          type: string
-        province:
-          type: string
-        province_code:
-          type: string
-        country:
-          type: string
-        country_code:
-          type: string
-        zip:
-          type: string
-        phone:
-          type: string
-      required:
-      - city
-      - country
-      - province
-      - zip
     TokenizedCardResponse:
       type: object
       properties:
@@ -1299,141 +1385,24 @@ components:
       - order_id
       - processed_at
       - refund_line_items
-    PostPurchaseOrderCreate:
-      type: object
-      properties:
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateOrderLineItem'
-        customer:
-          $ref: '#/components/schemas/OrderCreateCustomer'
-        order_name:
-          type: string
-        total_tax:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
-        note_attributes:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrderNoteAttribute'
-          description: 'This field is useful for passing customization options for Supplier products that support customization (gift messages, logos, custom text).
+    Status602Enum:
+      enum:
+      - canceled
+      - closed
+      - declined
+      - open
+      - requested
+      type: string
+      description: '* `canceled` - canceled
 
-            Example: {"name": "Variant 1 Custom Text", "value": "<custom text value>"}'
-        partner_name:
-          type: string
-        shipping_details:
-          $ref: '#/components/schemas/OrderShippingDetails'
-        ppu_transaction_id:
-          type: string
-          description: The Post Purchase Upsell session id for the tax calculation. This matches the tax calculation request.
-        payment_details:
-          allOf:
-          - $ref: '#/components/schemas/PartialAddressPaymentDetails'
-          description: This field is the response from the vault. It is used to charge the customer.
-      required:
-      - line_items
-      - ppu_transaction_id
-      - shipping_details
-    Fulfillment:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          readOnly: true
-        name:
-          type: string
-          maxLength: 255
-        order_id:
-          type: string
-          format: uuid
-        shop:
-          $ref: '#/components/schemas/Shop'
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/LineItemRead'
-        service:
-          type:
-          - string
-          - 'null'
-          maxLength: 258
-        shipment_status:
-          type:
-          - string
-          - 'null'
-          maxLength: 32
-        status:
-          type:
-          - string
-          - 'null'
-          maxLength: 32
-        tracking_company:
-          type:
-          - string
-          - 'null'
-          maxLength: 257
-        tracking_numbers:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-            maxLength: 128
-        tracking_urls:
-          type:
-          - array
-          - 'null'
-          items:
-            type: string
-            maxLength: 256
-      required:
-      - id
-      - line_items
-      - name
-      - order_id
-      - shop
-    ConfirmationDetails:
-      type: object
-      properties:
-        confirmation_number:
-          type: string
-        catalog_order_id:
-          type: string
-        order_id:
-          type: string
-        order_date:
-          type: string
-          format: date-time
-        order_status:
-          type: string
-        fulfillment_status:
-          type: string
-        tracking_info:
-          type: array
-          items:
-            type: string
-      required:
-      - confirmation_number
-      - order_date
-      - order_id
-    OrderCreateCustomer:
-      type: object
-      properties:
-        email:
-          type: string
-          format: email
-        first_name:
-          type: string
-        last_name:
-          type: string
-          default: ''
-      required:
-      - email
-      - first_name
-    OrderInitializeAndChargeResponse:
+        * `closed` - closed
+
+        * `declined` - declined
+
+        * `open` - open
+
+        * `requested` - requested'
+    OrderCreateAndChargeV1Response:
       type: object
       properties:
         confirmation_details:
@@ -1450,11 +1419,48 @@ components:
           type: object
           additionalProperties: {}
         payment_details:
-          $ref: '#/components/schemas/OrderInitializeAndChargePaymentDetailsResponse'
+          type: object
+          additionalProperties:
+            $ref: '#/components/schemas/PaymentDetailsResponse'
       required:
       - confirmation_details
       - line_items
-      - payment_details
+    OrderInitializeAndChargePaymentDetailsResponse:
+      type: object
+      properties:
+        payment_status:
+          type: string
+        payment_confirmation_id:
+          type: string
+        statement_descriptor:
+          type: string
+        client_secret:
+          type: string
+        line_item_total_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+        shipping_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+        tax_amount:
+          type: string
+          format: decimal
+          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
+        currency:
+          type: string
+        brand_account_id:
+          type: string
+      required:
+      - brand_account_id
+      - client_secret
+      - currency
+      - line_item_total_amount
+      - payment_status
+      - shipping_amount
+      - statement_descriptor
+      - tax_amount
     PaymentDetailsResponse:
       type: object
       properties:
@@ -1466,44 +1472,38 @@ components:
           type: string
       required:
       - payment_status
-    OrderCreateAndCharge:
+    Customer:
       type: object
       properties:
-        line_items:
-          type: array
-          items:
-            $ref: '#/components/schemas/CreateOrderLineItem'
-        customer:
-          $ref: '#/components/schemas/OrderCreateCustomer'
-        order_name:
+        id:
           type: string
-        total_tax:
-          type: string
-          format: decimal
-          pattern: ^-?\d{0,8}(?:\.\d{0,4})?$
-        note_attributes:
-          type: array
-          items:
-            $ref: '#/components/schemas/OrderNoteAttribute'
-          description: 'This field is useful for passing customization options for Supplier products that support customization (gift messages, logos, custom text).
-
-            Example: {"name": "Variant 1 Custom Text", "value": "<custom text value>"}'
-        partner_name:
-          type: string
-        shipping_details:
-          $ref: '#/components/schemas/OrderShippingDetails'
-        ppu_transaction_id:
-          type: string
-          description: The Post Purchase Upsell session id for the tax calculation. This matches the tax calculation request.
-        payment_details:
-          allOf:
-          - $ref: '#/components/schemas/PaymentDetailsWithTokenizedCardResponse'
-          description: This field is the response from the vault. It is used to charge the customer.
+          format: uuid
+          readOnly: true
+        email:
+          type:
+          - string
+          - 'null'
+          format: email
+          title: Email address
+          maxLength: 403
+        first_name:
+          type:
+          - string
+          - 'null'
+          maxLength: 255
+        last_name:
+          type:
+          - string
+          - 'null'
+          maxLength: 256
+        orders_count:
+          type:
+          - integer
+          - 'null'
+          maximum: 2147483647
+          minimum: -2147483648
       required:
-      - line_items
-      - payment_details
-      - ppu_transaction_id
-      - shipping_details
+      - id
   securitySchemes:
     basicAuth:
       type: http

@@ -340,37 +340,6 @@ components:
         * `fulfillment/create` - fulfillment/create
 
         * `fulfillment/update` - fulfillment/update'
-    CreateUpdateWebhook:
-      type: object
-      properties:
-        topic:
-          type: string
-        address:
-          type: string
-      required:
-      - address
-      - topic
-    PaginatedRegisteredWebhookList:
-      type: object
-      required:
-      - results
-      properties:
-        next:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
-        previous:
-          type:
-          - string
-          - 'null'
-          format: uri
-          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
-        results:
-          type: array
-          items:
-            $ref: '#/components/schemas/RegisteredWebhook'
     RegisteredWebhook:
       type: object
       properties:
@@ -397,6 +366,43 @@ components:
       - id
       - topic
       - updated_at
+    CreateUpdateWebhook:
+      type: object
+      properties:
+        topic:
+          type: string
+        address:
+          type: string
+      required:
+      - address
+      - topic
+    Error:
+      type: object
+      properties:
+        message:
+          type: string
+        detail: {}
+    PaginatedRegisteredWebhookList:
+      type: object
+      required:
+      - results
+      properties:
+        next:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cD00ODY%3D"
+        previous:
+          type:
+          - string
+          - 'null'
+          format: uri
+          example: http://api.example.org/accounts/?cursor=cj0xJnA9NDg3
+        results:
+          type: array
+          items:
+            $ref: '#/components/schemas/RegisteredWebhook'
     PatchedRegisteredWebhook:
       type: object
       properties:
@@ -417,12 +423,6 @@ components:
           type: string
           format: date-time
           readOnly: true
-    Error:
-      type: object
-      properties:
-        message:
-          type: string
-        detail: {}
   securitySchemes:
     basicAuth:
       type: http
